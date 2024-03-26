@@ -20,11 +20,13 @@ func ConnectToDB() *sql.DB {
 	db, err := sql.Open("mysql", cfg.FormatDSN())
 	if err != nil {
 		log.Fatalf("Cannot connect to database, error founded: %v", err)
+		return nil
 	}
 
 	err = db.Ping()
 	if err != nil {
 		log.Fatalf("Couldn't ping with the database, error detected: %v", err)
+		return nil
 	}
 
 	return db
