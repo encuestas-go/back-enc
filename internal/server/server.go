@@ -1,16 +1,17 @@
 package server
 
-// Agregar imports
+import (
+	"github.com/labstack/echo/v4"
+)
 
 type ServerHandler struct {
-	// aqui agregar el tipo de dato del servidor
-	ServerEcho int
+	ServerEcho *echo.Echo
 }
 
-func InitServer() *ServerHandler  {
+func InitServer() *ServerHandler {
 	e := echo.New()
 	return &ServerHandler{
-		ServerEcho: e
+		ServerEcho: e,
 	}
 }
 
