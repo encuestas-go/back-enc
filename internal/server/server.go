@@ -1,17 +1,24 @@
 package server
 
 import (
+	"github.com/encuestas-go/back-enc/internal/controllers"
 	"github.com/labstack/echo/v4"
 )
 
+// ServerHandler handles the server logic outside of the package
 type ServerHandler struct {
-	ServerEcho *echo.Echo
+	ServerEcho     *echo.Echo
+	RouterGroup    *echo.Group
+	UserController *controllers.UserController
 }
 
 func InitServer() *ServerHandler {
 	e := echo.New()
+	userController := controllers.InitUserController()
+
 	return &ServerHandler{
-		ServerEcho: e,
+		ServerEcho:     e,
+		UserController: userController,
 	}
 }
 
