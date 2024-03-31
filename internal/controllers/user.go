@@ -14,7 +14,7 @@ func InitUserController() *UserController {
 }
 
 func (u *UserController) CreateUser(c echo.Context) error {
-	return c.JSON(200, "User succesfully created ")
+	return c.JSON(http.StatusOK, "User succesfully created ")
 }
 
 func (u *UserController) UpdateUser(c echo.Context) error {
