@@ -19,7 +19,7 @@ func InitGenericController() *GenericController {
 		DemographicController:         InitDemographicController(),
 		EconomicStatusController:      InitEconomicController(),
 		EventManagementController:     InitEventManagementController(),
-		HouseInfrastructureController: InitHouseInfrastructureControllerController(),
+		HouseInfrastructureController: InitHouseInfrastructureController(),
 		SatisfactorySurveyController:  InitSatisfactorySurveyController(),
 		ServiceManagementController:   InitServiceManagementController(),
 		SocioeconomicStatusController: InitSocioeconomicController(),

@@ -13,14 +13,14 @@ func (s *ServerHandler) StartRoutes() *ServerHandler {
 //	/actualizar/usuario
 //	/eliminar/usuario
 //	/consultar/usuario
-func (s *ServerHandler) InitalizeUserRoutes() *ServerHandler {
+func (s *ServerHandler) StartUserRoutes() *ServerHandler {
 	s.RouterGroup.POST("/crear/usuario", s.GenericController.UserController.Create)
 	s.RouterGroup.PUT("/actualizar/usuario", s.GenericController.UserController.Update)
 	s.RouterGroup.DELETE("/eliminar/usuario", s.GenericController.UserController.Delete)
 	s.RouterGroup.GET("/consultar/usuario", s.GenericController.UserController.Get)
 
-	s.RouterGroup.POST("/login", nil)
-	s.RouterGroup.POST("/logOut", nil)
+	s.RouterGroup.POST("/login", s.GenericController.UserController.Login)
+	s.RouterGroup.POST("/logout", s.GenericController.UserController.LogOut)
 
 	return s
 }
