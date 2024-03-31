@@ -8,7 +8,7 @@ import (
 
 type HouseInfrastructureController struct{}
 
-func InitHouseInfrastructureControllerController() *HouseInfrastructureController {
+func InitHouseInfrastructureController() *HouseInfrastructureController {
 	return &HouseInfrastructureController{}
 }
 
