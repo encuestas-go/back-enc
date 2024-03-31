@@ -6,24 +6,24 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type EconomicController struct{}
+type EconomicStatusController struct{}
 
-func InitEconomicController() *EconomicController {
-	return &EconomicController{}
+func InitEconomicController() *EconomicStatusController {
+	return &EconomicStatusController{}
 }
 
-func (e *EconomicController) CreateEconomicStatus(c echo.Context) error {
+func (e *EconomicStatusController) Create(c echo.Context) error {
 	return c.JSON(http.StatusOK, "Economic Status survey succesfully created")
 }
 
-func (e *EconomicController) UpdateEconomicStatus(c echo.Context) error {
+func (e *EconomicStatusController) Update(c echo.Context) error {
 	return c.JSON(http.StatusOK, "Economic Status survey succesfully updated")
 }
 
-func (e *EconomicController) DeleteEconomicStatus(c echo.Context) error {
+func (e *EconomicStatusController) Delete(c echo.Context) error {
 	return c.JSON(http.StatusOK, "Economic Status survey succesfully deleted")
 }
 
-func (e *EconomicController) GetEconomicStatus(c echo.Context) error {
+func (e *EconomicStatusController) Get(c echo.Context) error {
 	return c.JSON(http.StatusOK, "Complete information of Economic Status survey :")
 }

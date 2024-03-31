@@ -6,24 +6,24 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-type ActivityController struct{}
+type ActivityManagementController struct{}
 
-func InitActivityController() *ActivityController {
-	return &ActivityController{}
+func InitActivityController() *ActivityManagementController {
+	return &ActivityManagementController{}
 }
 
-func (a *ActivityController) CreateActivityManagement(c echo.Context) error {
+func (a *ActivityManagementController) Create(c echo.Context) error {
 	return c.JSON(http.StatusOK, "Activities survey succesfully created")
 }
 
-func (a *ActivityController) UpdateActivityManagement(c echo.Context) error {
+func (a *ActivityManagementController) Update(c echo.Context) error {
 	return c.JSON(http.StatusOK, "Activities survey succesfully updated")
 }
 
-func (a *ActivityController) DeleteActivityManagement(c echo.Context) error {
+func (a *ActivityManagementController) Delete(c echo.Context) error {
 	return c.JSON(http.StatusOK, "Activities survey succesfully deleted")
 }
 
-func (a *ActivityController) GetActivityManagement(c echo.Context) error {
+func (a *ActivityManagementController) Get(c echo.Context) error {
 	return c.JSON(http.StatusOK, "Complete information of Activities survey:")
 }

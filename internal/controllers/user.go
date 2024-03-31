@@ -13,18 +13,26 @@ func InitUserController() *UserController {
 	return &UserController{}
 }
 
-func (u *UserController) CreateUser(c echo.Context) error {
+func (u *UserController) Login(c echo.Context) error {
+	return c.JSON(http.StatusOK, "Succesfully login  ")
+}
+
+func (u *UserController) LogOut(c echo.Context) error {
+	return c.JSON(http.StatusOK, "User succesfully log out")
+}
+
+func (u *UserController) Create(c echo.Context) error {
 	return c.JSON(http.StatusOK, "User succesfully created ")
 }
 
-func (u *UserController) UpdateUser(c echo.Context) error {
+func (u *UserController) Update(c echo.Context) error {
 	return c.JSON(http.StatusOK, "User succesfully updated")
 }
 
-func (u *UserController) DeleteUser(c echo.Context) error {
+func (u *UserController) Delete(c echo.Context) error {
 	return c.JSON(http.StatusOK, "User succesfully deleted")
 }
 
-func (u *UserController) GetUser(c echo.Context) error {
+func (u *UserController) Get(c echo.Context) error {
 	return c.JSON(http.StatusOK, "Here's the user selected")
 }
