@@ -18,7 +18,7 @@ func (u *UserController) Login(c echo.Context) error {
 }
 
 func (u *UserController) LogOut(c echo.Context) error {
-	return c.JSON(http.StatusOK, "User succesfully log out")
+	return c.JSON(http.StatusOK, "Succesfully log out")
 }
 
 func (u *UserController) Create(c echo.Context) error {
