@@ -1,5 +1,10 @@
 package controllers
 
+type ControllerMessageResponse struct {
+	StatusCode int    `json:"status_code"`
+	Message    string `json:"message"`
+}
+
 type GenericController struct {
 	ActivityManagementController  *ActivityManagementController
 	DemographicController         *DemographicStatusController

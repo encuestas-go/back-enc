@@ -1,7 +1,7 @@
 package server
 
 // StartRoutes initialize the routes to the group /api/v1
-func (s *ServerHandler) StartRoutes() *ServerHandler {
+func (s *ServerHandler) StartRouterGroup() *ServerHandler {
 	s.RouterGroup = s.ServerEcho.Group("/api/v1")
 	return s
 }
@@ -19,6 +19,7 @@ func (s *ServerHandler) StartUserRoutes() *ServerHandler {
 	s.RouterGroup.DELETE("/eliminar/usuario", s.GenericController.UserController.Delete)
 	s.RouterGroup.GET("/consultar/usuario", s.GenericController.UserController.Get)
 
+	// login
 	s.RouterGroup.POST("/login", s.GenericController.UserController.Login)
 	s.RouterGroup.POST("/logout", s.GenericController.UserController.LogOut)
 
