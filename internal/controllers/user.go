@@ -82,7 +82,7 @@ func (u *UserController) Update(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
 			StatusCode: http.StatusInternalServerError,
-			Message:    fmt.Sprintf("An error occurred while trying to update the user: %v", err),
+			Message:    fmt.Sprintf("An error occurred when trying to update the user: %v", err),
 		})
 	}
 

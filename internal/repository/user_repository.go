@@ -69,7 +69,7 @@ func (u *UserRepositoryService) Update(user domain.User, id int) error {
 		log.Println("Successfully updated into User table")
 		return nil
 	} else if rowsUpdated == 0 {
-		log.Println("Data could not be updated into User table")
+		log.Println("Data could not be update into User table")
 		return nil
 	}
 
