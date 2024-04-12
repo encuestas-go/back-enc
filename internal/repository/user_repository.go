@@ -55,7 +55,7 @@ func (u *UserRepositoryService) Update(user domain.User, id int) error {
                    CONTRASENA = ?,
                    ID_TIPO_USUARIO = ?
                    WHERE ID = ?;
-	`, user.Name, user.MiddleName, user.LastName, user.PhoneNumber, user.Username, user.IDUserType, id)
+	`, user.Name, user.MiddleName, user.LastName, user.Email, user.PhoneNumber, user.Username, user.Password, user.IDUserType, id)
 	if err != nil {
 		log.Println("Data could not be updated into User table, the error was:", err)
 		return err
