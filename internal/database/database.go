@@ -10,10 +10,10 @@ import (
 func ConnectToDB() *sql.DB {
 
 	cfg := mysql.Config{
-		User:   "",
-		Passwd: "",
-		Addr:   "",
-		DBName: "ENCUESTAS",
+		User:   "lorelval",
+		Passwd: "rockCcLl$1_",
+		Addr:   "localhost",
+		DBName: "ENCUESTA",
 		Net:    "tcp",
 	}
 
