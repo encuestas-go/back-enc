@@ -24,15 +24,43 @@ func InitUserController() *UserController {
 }
 
 func (u *UserController) Login(c echo.Context) error {
-	return c.JSON(http.StatusOK, "Succesfully login  ")
+	var email, password string
+
+	userLogin := domain.UserLogin{}
+	err := c.Bind(&userLogin)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("An error occurred while binding the request body: %v", err),
+		})
+	}
+
+	err = u.UserRepository.Login(userLogin)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("An error occurred while logging in: %v", err),
+		})
+	}
+	if userLogin.Email == email && userLogin.Password == password {
+		return c.JSON(http.StatusUnauthorized, ControllerMessageResponse{
+			StatusCode: http.StatusUnauthorized,
+			Message:    "Email or password is invalid",
+		})
+	}
+
+	return c.JSON(http.StatusOK, ControllerMessageResponse{
+		StatusCode: http.StatusOK,
+		Message:    "Successfully logged in",
+	})
+
 }
 
-func (u *UserController) LogOut(c echo.Context) error {
-	return c.JSON(http.StatusOK, "Succesfully log out")
+func (u *UserController) Logout(c echo.Context) error {
+	return c.JSON(http.StatusOK, "User succesfully logout")
 }
 
 func (u *UserController) Create(c echo.Context) error {
-	// get the request requirements
 	user := domain.User{}
 	err := c.Bind(&user)
 	if err != nil {
@@ -57,9 +85,6 @@ func (u *UserController) Create(c echo.Context) error {
 }
 
 func (u *UserController) Update(c echo.Context) error {
-	// que llega:
-	// body del usuario
-	// parametro del request
 	user := domain.User{}
 	userID := c.QueryParam("user_id")
 	userIDConverted, err := strconv.Atoi(userID)
@@ -90,11 +115,9 @@ func (u *UserController) Update(c echo.Context) error {
 		StatusCode: http.StatusCreated,
 		Message:    fmt.Sprintf("User with ID %s successfully updated", userID),
 	})
-	//return c.JSON(http.StatusOK, "User succesfully updated")
 }
 
 func (u *UserController) Delete(c echo.Context) error {
-	// paramatro del request: id del usuario
 	user := domain.User{}
 	userID := c.QueryParam("user_id")
 	userIDConverted, err := strconv.Atoi(userID)
@@ -116,7 +139,6 @@ func (u *UserController) Delete(c echo.Context) error {
 		StatusCode: http.StatusCreated,
 		Message:    fmt.Sprintf("User with ID %s successfully deleted", userID),
 	})
-	//return c.JSON(http.StatusOK, "User succesfully deleted")
 }
 
 func (u *UserController) Get(c echo.Context) error {

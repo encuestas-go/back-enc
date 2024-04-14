@@ -21,7 +21,7 @@ func (s *ServerHandler) StartUserRoutes() *ServerHandler {
 
 	// login
 	s.RouterGroup.POST("/login", s.GenericController.UserController.Login)
-	s.RouterGroup.POST("/logout", s.GenericController.UserController.LogOut)
+	s.RouterGroup.POST("/logout", s.GenericController.UserController.Logout)
 
 	return s
 }

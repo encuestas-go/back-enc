@@ -18,6 +18,20 @@ func InitializeUserRepository(db *sql.DB) *UserRepositoryService {
 	}
 }
 
+func (u *UserRepositoryService) Login(userlogin domain.UserLogin) error {
+	var (
+		email    string
+		password string
+	)
+	err := u.db.QueryRow(`
+	SELECT * FROM USUARIO WHERE CORREO_ELECTRONICO = ? AND CONTRASENA = SHA2(?,256);
+	`, userlogin.Email, userlogin.Password).Scan(&email, &password)
+	if err != nil {
+		log.Println("Could not retrieve information with requested email and password")
+	}
+	return nil
+}
+
 func (u *UserRepositoryService) Insert(user domain.User) error {
 	result, err := u.db.Exec(`
 	INSERT INTO USUARIO (NOMBRE, APELLIDO_PATERNO, APELLIDO_MATERNO, CORREO_ELECTRONICO, NUMERO_TELEFONO, USUARIO, CONTRASENA, ID_TIPO_USUARIO)
@@ -52,7 +66,7 @@ func (u *UserRepositoryService) Update(user domain.User, id int) error {
                    CORREO_ELECTRONICO = ?,
                    NUMERO_TELEFONO = ?,
                    USUARIO = ?,
-                   CONTRASENA = ?,
+                   CONTRASENA = SHA2(?,256),
                    ID_TIPO_USUARIO = ?
                    WHERE ID = ?;
 	`, user.Name, user.MiddleName, user.LastName, user.Email, user.PhoneNumber, user.Username, user.Password, user.IDUserType, id)
