@@ -41,7 +41,7 @@ func (u *UserRepositoryService) Insert(user domain.User) error {
 		return errors.New("cannot add data into the user table")
 	}
 
-	return err
+	return nil
 }
 
 func (u *UserRepositoryService) Update(user domain.User, id int) error {
@@ -74,7 +74,7 @@ func (u *UserRepositoryService) Update(user domain.User, id int) error {
 		return errors.New("data could not be update into User table")
 	}
 
-	return err
+	return nil
 }
 
 func (u *UserRepositoryService) Delete(user domain.User, id int) error {
@@ -96,7 +96,7 @@ func (u *UserRepositoryService) Delete(user domain.User, id int) error {
 	} else if rowsDeleted == 0 {
 		return errors.New("could not delete the requested ID in the user table")
 	}
-	return err
+	return nil
 }
 
 func (u *UserRepositoryService) Get(user domain.User) error {
