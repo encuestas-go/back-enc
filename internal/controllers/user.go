@@ -24,7 +24,7 @@ func InitUserController() *UserController {
 }
 
 func (u *UserController) Login(c echo.Context) error {
-	var email, password string
+	var id, id_user_type int
 
 	userLogin := domain.UserLogin{}
 	err := c.Bind(&userLogin)
@@ -35,17 +35,18 @@ func (u *UserController) Login(c echo.Context) error {
 		})
 	}
 
+	if id == 0 || id_user_type == 0 || err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    "Invalid user ID or user type ID provided",
+		})
+	}
+
 	err = u.UserRepository.Login(userLogin)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
 			StatusCode: http.StatusInternalServerError,
 			Message:    fmt.Sprintf("An error occurred while logging in: %v", err),
-		})
-	}
-	if userLogin.Email == email && userLogin.Password == password {
-		return c.JSON(http.StatusUnauthorized, ControllerMessageResponse{
-			StatusCode: http.StatusUnauthorized,
-			Message:    "Email or password is invalid",
 		})
 	}
 
