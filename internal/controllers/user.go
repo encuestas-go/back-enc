@@ -15,6 +15,9 @@ type UserController struct {
 	UserRepository *repository.UserRepositoryService
 }
 
+type responseLogin struct {
+}
+
 func InitUserController() *UserController {
 	repositories := repository.GetRepository()
 
@@ -55,10 +58,6 @@ func (u *UserController) Login(c echo.Context) error {
 		Message:    "Successfully logged in",
 	})
 
-}
-
-func (u *UserController) Logout(c echo.Context) error {
-	return c.JSON(http.StatusOK, "User succesfully logout")
 }
 
 func (u *UserController) Create(c echo.Context) error {
