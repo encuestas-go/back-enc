@@ -23,13 +23,13 @@ func InitUserController() *UserController {
 	}
 }
 
-type responseLogin struct {
-	ID_user      int `json:"id_user,omitempty"`
-	ID_user_type int `json:"id_user_type,omitempty"`
+type userLoginResponse struct {
+	IDUser     int `json:"id_user,omitempty"`
+	IDTypeUser int `json:"id_type_user,omitempty"`
 }
 
 func (u *UserController) Login(c echo.Context) error {
-	var email, password string
+	//var email, password string
 	userLogin := domain.UserLogin{}
 	err := c.Bind(&userLogin)
 	if err != nil {
@@ -39,24 +39,39 @@ func (u *UserController) Login(c echo.Context) error {
 		})
 	}
 
-	if userLogin.Email != email && userLogin.Password != password {
+	idUser, idTypeUser, err = u.UserRepository.Login(userLogin)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    fmt.Sprintf("An error happened when trying to login, the body is: %v, the error is: %v", userLogin, err),
+		})
+	}
+
+	if idUser == 0 || idTypeUser == 0 {
+		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    fmt.Sprintf("Invalid user ID or ID user type provided"),
+		})
+	}
+	/*if userLogin.Email != email && userLogin.Password != password {
 		return c.JSON(http.StatusUnauthorized, ControllerMessageResponse{
 			StatusCode: http.StatusUnauthorized,
 			Message:    "Email or password is invalid",
 		})
 	}
+	*/
 
-	if responseLogin.ID_user == 0 || responseLogin.ID_user_type == 0 {
-		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
-			StatusCode: http.StatusBadRequest,
-			Message:    "Invalid user ID or ID user type provided",
-		})
+	response := userLoginResponse{
+		IDUser:     idUser,
+		IDTypeUser: idTypeUser,
 	}
-	return c.JSON(http.StatusOK, ControllerMessageResponse{
-		StatusCode: http.StatusOK,
-		Message:    "Successfully logged in",
-	})
 
+	// Devolver la respuesta
+	return c.JSON(http.StatusOK, response)
+	return c.JSON(http.StatusOK, userLoginResponse{
+		IDUser:     id_user,
+		IDTypeUser: id_user_type,
+	})
 }
 
 func (u *UserController) Create(c echo.Context) error {
@@ -65,7 +80,7 @@ func (u *UserController) Create(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
 			StatusCode: http.StatusInternalServerError,
-			Message:    fmt.Sprintf("An error happening trying to bind the body, err: %v", err),
+			Message:    fmt.Sprintf("An error happened trying to bind the body, err: %v", err),
 		})
 	}
 
@@ -73,7 +88,7 @@ func (u *UserController) Create(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
 			StatusCode: http.StatusInternalServerError,
-			Message:    fmt.Sprintf("An error happening trying to insert the user, the body is: %v, the error is: %v", user, err),
+			Message:    fmt.Sprintf("An error happened when trying to insert the user, the body is: %v, the error is: %v", user, err),
 		})
 	}
 
@@ -98,7 +113,7 @@ func (u *UserController) Update(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
 			StatusCode: http.StatusInternalServerError,
-			Message:    fmt.Sprintf("An error happening trying to bind the body, err: %v", err),
+			Message:    fmt.Sprintf("An error happened trying to bind the body, err: %v", err),
 		})
 	}
 
