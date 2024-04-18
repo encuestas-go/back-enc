@@ -15,9 +15,6 @@ type UserController struct {
 	UserRepository *repository.UserRepositoryService
 }
 
-type responseLogin struct {
-}
-
 func InitUserController() *UserController {
 	repositories := repository.GetRepository()
 
@@ -26,9 +23,13 @@ func InitUserController() *UserController {
 	}
 }
 
-func (u *UserController) Login(c echo.Context) error {
-	var id, id_user_type int
+type responseLogin struct {
+	ID_user      int `json:"id_user,omitempty"`
+	ID_user_type int `json:"id_user_type,omitempty"`
+}
 
+func (u *UserController) Login(c echo.Context) error {
+	var email, password string
 	userLogin := domain.UserLogin{}
 	err := c.Bind(&userLogin)
 	if err != nil {
@@ -38,21 +39,19 @@ func (u *UserController) Login(c echo.Context) error {
 		})
 	}
 
-	if id == 0 || id_user_type == 0 || err != nil {
-		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
-			StatusCode: http.StatusInternalServerError,
-			Message:    "Invalid user ID or user type ID provided",
+	if userLogin.Email != email && userLogin.Password != password {
+		return c.JSON(http.StatusUnauthorized, ControllerMessageResponse{
+			StatusCode: http.StatusUnauthorized,
+			Message:    "Email or password is invalid",
 		})
 	}
 
-	err = u.UserRepository.Login(userLogin)
-	if err != nil {
-		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
-			StatusCode: http.StatusInternalServerError,
-			Message:    fmt.Sprintf("An error occurred while logging in: %v", err),
+	if responseLogin.ID_user == 0 || responseLogin.ID_user_type == 0 {
+		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    "Invalid user ID or ID user type provided",
 		})
 	}
-
 	return c.JSON(http.StatusOK, ControllerMessageResponse{
 		StatusCode: http.StatusOK,
 		Message:    "Successfully logged in",
