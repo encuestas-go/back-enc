@@ -1,8 +1,56 @@
 package server
 
+import (
+	"errors"
+	"log"
+	"net/http"
+	"strconv"
+
+	"github.com/labstack/echo/v4"
+)
+
+type errorUnauthorizedMessage struct {
+	Message string `json:"message,omitempty"`
+}
+
 // StartRoutes initialize the routes to the group /api/v1
 func (s *ServerHandler) StartRouterGroup() *ServerHandler {
 	s.RouterGroup = s.ServerEcho.Group("/api/v1")
+
+	s.RouterGroup.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			log.Println("hola")
+			cookieIDUser, err := c.Cookie("id_user")
+			if err != nil {
+				return c.JSON(http.StatusUnauthorized, errorUnauthorizedMessage{
+					Message: "Cookie doesn't exist",
+				})
+			}
+
+			IDUserConverted, err := strconv.Atoi(cookieIDUser.Value)
+			if err != nil {
+				return err
+			}
+
+			cookieIDTypeUser, err := c.Cookie("id_type_user")
+			if err != nil {
+				return err
+			}
+			//Agregar mensajes de error con el struct creado
+			IDTypeUserConverted, err := strconv.Atoi(cookieIDTypeUser.Value)
+			if err != nil {
+				return err
+			}
+
+			log.Println(IDUserConverted, IDTypeUserConverted)
+
+			if IDUserConverted == 0 || IDTypeUserConverted == 0 {
+				return errors.New("invalid cookie value")
+			}
+
+			return next(c)
+		}
+	})
 	return s
 }
 
@@ -14,13 +62,13 @@ func (s *ServerHandler) StartRouterGroup() *ServerHandler {
 //	/eliminar/usuario
 //	/consultar/usuario
 func (s *ServerHandler) StartUserRoutes() *ServerHandler {
-	s.RouterGroup.POST("/crear/usuario", s.GenericController.UserController.Create)
+	s.ServerEcho.POST("/crear/usuario", s.GenericController.UserController.Create)
 	s.RouterGroup.PUT("/actualizar/usuario", s.GenericController.UserController.Update)
 	s.RouterGroup.DELETE("/eliminar/usuario", s.GenericController.UserController.Delete)
 	s.RouterGroup.GET("/consultar/usuario", s.GenericController.UserController.Get)
 
 	// login
-	s.RouterGroup.POST("/login", s.GenericController.UserController.Login)
+	s.ServerEcho.POST("/login", s.GenericController.UserController.Login)
 
 	return s
 }

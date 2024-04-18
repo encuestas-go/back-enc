@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/encuestas-go/back-enc/internal/domain"
 	"github.com/encuestas-go/back-enc/internal/repository"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/gommon/log"
 )
 
 // UserController its a struct for User
@@ -39,7 +41,7 @@ func (u *UserController) Login(c echo.Context) error {
 		})
 	}
 
-	idUser, idTypeUser, err = u.UserRepository.Login(userLogin)
+	idUser, idTypeUser, err := u.UserRepository.Login(userLogin)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
 			StatusCode: http.StatusBadRequest,
@@ -48,29 +50,31 @@ func (u *UserController) Login(c echo.Context) error {
 	}
 
 	if idUser == 0 || idTypeUser == 0 {
+		log.Printf("ID user %d ,ID Type User %d", idUser, idTypeUser)
 		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
 			StatusCode: http.StatusBadRequest,
-			Message:    fmt.Sprintf("Invalid user ID or ID user type provided"),
+			Message:    "Invalid email or password provided",
 		})
 	}
-	/*if userLogin.Email != email && userLogin.Password != password {
-		return c.JSON(http.StatusUnauthorized, ControllerMessageResponse{
-			StatusCode: http.StatusUnauthorized,
-			Message:    "Email or password is invalid",
-		})
-	}
-	*/
 
-	response := userLoginResponse{
+	idUserConverted := strconv.Itoa(idUser)
+	idTypeUserConverted := strconv.Itoa(idTypeUser)
+
+	cookieIDUser := new(http.Cookie)
+	cookieIDUser.Name = "id_user"
+	cookieIDUser.Value = idUserConverted
+	cookieIDUser.Expires = time.Now().Add(24 * time.Hour)
+	c.SetCookie(cookieIDUser)
+
+	cookieIDTypeUser := new(http.Cookie)
+	cookieIDTypeUser.Name = "id_type_user"
+	cookieIDTypeUser.Value = idTypeUserConverted
+	cookieIDTypeUser.Expires = time.Now().Add(24 * time.Hour)
+	c.SetCookie(cookieIDTypeUser)
+
+	return c.JSON(http.StatusOK, userLoginResponse{
 		IDUser:     idUser,
 		IDTypeUser: idTypeUser,
-	}
-
-	// Devolver la respuesta
-	return c.JSON(http.StatusOK, response)
-	return c.JSON(http.StatusOK, userLoginResponse{
-		IDUser:     id_user,
-		IDTypeUser: id_user_type,
 	})
 }
 
