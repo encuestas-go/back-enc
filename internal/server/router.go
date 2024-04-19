@@ -1,7 +1,6 @@
 package server
 
 import (
-	"errors"
 	"log"
 	"net/http"
 	"strconv"
@@ -23,29 +22,37 @@ func (s *ServerHandler) StartRouterGroup() *ServerHandler {
 			cookieIDUser, err := c.Cookie("id_user")
 			if err != nil {
 				return c.JSON(http.StatusUnauthorized, errorUnauthorizedMessage{
-					Message: "Cookie doesn't exist",
+					Message: "Unable to retrieve ID User cookie",
 				})
 			}
 
 			IDUserConverted, err := strconv.Atoi(cookieIDUser.Value)
 			if err != nil {
-				return err
+				return c.JSON(http.StatusUnauthorized, errorUnauthorizedMessage{
+					Message: "ID User cannot be converted",
+				})
 			}
 
 			cookieIDTypeUser, err := c.Cookie("id_type_user")
 			if err != nil {
-				return err
+				return c.JSON(http.StatusUnauthorized, errorUnauthorizedMessage{
+					Message: "Unable to retrieve ID Type User cookie",
+				})
 			}
-			//Agregar mensajes de error con el struct creado
+
 			IDTypeUserConverted, err := strconv.Atoi(cookieIDTypeUser.Value)
 			if err != nil {
-				return err
+				return c.JSON(http.StatusUnauthorized, errorUnauthorizedMessage{
+					Message: "ID Type User cannot be converted",
+				})
 			}
 
 			log.Println(IDUserConverted, IDTypeUserConverted)
 
 			if IDUserConverted == 0 || IDTypeUserConverted == 0 {
-				return errors.New("invalid cookie value")
+				return c.JSON(http.StatusUnauthorized, errorUnauthorizedMessage{
+					Message: "Invalid ID's values for cookie information",
+				})
 			}
 
 			return next(c)
