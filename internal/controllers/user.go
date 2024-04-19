@@ -31,7 +31,6 @@ type userLoginResponse struct {
 }
 
 func (u *UserController) Login(c echo.Context) error {
-	//var email, password string
 	userLogin := domain.UserLogin{}
 	err := c.Bind(&userLogin)
 	if err != nil {

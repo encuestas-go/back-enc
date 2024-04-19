@@ -1,7 +1,6 @@
 package server
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 
@@ -18,7 +17,6 @@ func (s *ServerHandler) StartRouterGroup() *ServerHandler {
 
 	s.RouterGroup.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			log.Println("hola")
 			cookieIDUser, err := c.Cookie("id_user")
 			if err != nil {
 				return c.JSON(http.StatusUnauthorized, errorUnauthorizedMessage{
@@ -46,8 +44,6 @@ func (s *ServerHandler) StartRouterGroup() *ServerHandler {
 					Message: "ID Type User cannot be converted",
 				})
 			}
-
-			log.Println(IDUserConverted, IDTypeUserConverted)
 
 			if IDUserConverted == 0 || IDTypeUserConverted == 0 {
 				return c.JSON(http.StatusUnauthorized, errorUnauthorizedMessage{
