@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/encuestas-go/back-enc/internal/controllers"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 // ServerHandler handles the server logic outside of the package
@@ -14,6 +15,10 @@ type ServerHandler struct {
 
 func InitServer() *ServerHandler {
 	e := echo.New()
+
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+
 	return &ServerHandler{
 		ServerEcho:        e,
 		GenericController: controllers.InitGenericController(),
