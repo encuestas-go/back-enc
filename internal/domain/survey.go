@@ -20,3 +20,14 @@ type SocioeconomicStatus struct {
 	LastDegreeFather    string    `json:"last_degree_father,omitempty"`
 	LastDegreeMother    string    `json:"last_degree_mother,omitempty"`
 }
+
+type EconomicStatus struct {
+	IDUserType            int
+	CurrentStatus         string
+	JobTitle              string
+	EmployerEstablishment string
+	EmploymentType        string
+	Salary                float64
+	AmountType            string
+	WorkBenefitsType      string
+}

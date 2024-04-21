@@ -20,12 +20,12 @@ func InitializeSocioeconomicRepository(db *sql.DB) *SocioeconomicRepositoryServi
 
 func (s *SocioeconomicRepositoryService) Insert(socioeconomic domain.SocioeconomicStatus) error {
 	result, err := s.db.Exec(`
+	INSERT INTO ENCUESTA_NIVEL_SOCIOECONOMICO(
 		ID_USUARIO, NOMBRE_COMPLETO, FECHA_NACIMIENTO,
 		NACIONALIDAD, SEXO, EDAD, ESTADO_CIVIL, 
 		DIRECCION_RESIDENCIA, CIUDAD_RESIDENCIA, CODIGO_POSTAL, 
 		ENTIDAD_FEDERATIVA, ESTATUS_SOCIOECONOMICO, 
-		IDIOMA, GRADO_ESTUDIOS_ASPIRAR, ULTIMO_GRADO_PADRE, 
-		ULTIMO_GRADO_MADRE
+		IDIOMA, GRADO_ESTUDIOS_ASPIRAR, ULTIMO_GRADO_PADRE,ULTIMO_GRADO_MADRE)
     VALUES(?,?,?,?, ?,?, ?,?,?,?,?,?,?,?,?,?);
 	`, socioeconomic.IDUserType, socioeconomic.FullName, socioeconomic.BirthDate, socioeconomic.Nationality, socioeconomic.Gender,
 		socioeconomic.Age, socioeconomic.MaritalStatus, socioeconomic.ResidenceAddress, socioeconomic.ResidenceCity, socioeconomic.PostalCode,
