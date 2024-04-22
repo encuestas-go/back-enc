@@ -27,7 +27,7 @@ func (s *SocioeconomicRepositoryService) Insert(socioeconomic domain.Socioeconom
 		ENTIDAD_FEDERATIVA, ESTATUS_SOCIOECONOMICO, 
 		IDIOMA, GRADO_ESTUDIOS_ASPIRAR, ULTIMO_GRADO_PADRE,ULTIMO_GRADO_MADRE)
     VALUES(?,?,?,?, ?,?, ?,?,?,?,?,?,?,?,?,?);
-	`, socioeconomic.IDUserType, socioeconomic.FullName, socioeconomic.BirthDate, socioeconomic.Nationality, socioeconomic.Gender,
+	`, socioeconomic.IDUser, socioeconomic.FullName, socioeconomic.BirthDate, socioeconomic.Nationality, socioeconomic.Gender,
 		socioeconomic.Age, socioeconomic.MaritalStatus, socioeconomic.ResidenceAddress, socioeconomic.ResidenceCity, socioeconomic.PostalCode,
 		socioeconomic.State, socioeconomic.SocioeconomicStatus, socioeconomic.Language, socioeconomic.DegreeAspired,
 		socioeconomic.LastDegreeFather, socioeconomic.LastDegreeMother)
@@ -71,7 +71,7 @@ func (s *SocioeconomicRepositoryService) Update(socioeconomic domain.Socioeconom
                                      ULTIMO_GRADO_MADRE = ?
                                      WHERE ID = ?;
 
-	`, socioeconomic.IDUserType, socioeconomic.FullName, socioeconomic.BirthDate, socioeconomic.Nationality, socioeconomic.Gender,
+	`, socioeconomic.IDUser, socioeconomic.FullName, socioeconomic.BirthDate, socioeconomic.Nationality, socioeconomic.Gender,
 		socioeconomic.Age, socioeconomic.MaritalStatus, socioeconomic.ResidenceAddress, socioeconomic.ResidenceCity, socioeconomic.PostalCode,
 		socioeconomic.State, socioeconomic.SocioeconomicStatus, socioeconomic.Language, socioeconomic.DegreeAspired,
 		socioeconomic.LastDegreeFather, socioeconomic.LastDegreeMother, id)

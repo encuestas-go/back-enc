@@ -21,10 +21,10 @@ func InitializeEconomicRepository(db *sql.DB) *EconomicRepositoryService {
 func (e *EconomicRepositoryService) Insert(economic domain.EconomicStatus) error {
 	result, err := e.db.Exec(`
 	INSERT INTO ENCUESTA_NIVEL_ECONOMICO(
-		ID_USUARIO, SITUACIÓN_ACTUAL, NOMBRE_EMPLEO, EMPRESA_ESTABLECIMIENTO, 
-		TIPO_EMPLEO, SALARIO, TIPO_MONTO, TIPO_PRESTACIONES)
-    VALUES(?, ?,?,?,?,?,?,?);
-	`, economic.IDUserType, economic.CurrentStatus, economic.JobTitle, economic.EmployerEstablishment,
+		ID_USUARIO, SITUACION_ACTUAL, NOMBRE_EMPLEO, EMPRESA_ESTABLECIMIENTO, TIPO_EMPLEO, 
+		SALARIO, TIPO_MONTO, TIPO_PRESTACIONES)
+    VALUES(?, ?, ?, ?, ?, ?, ?, ?);
+	`, economic.IDUser, economic.CurrentStatus, economic.JobTitle, economic.EmployerEstablishment,
 		economic.EmploymentType, economic.Salary, economic.AmountType, economic.WorkBenefitsType)
 	if err != nil {
 		log.Println("Unable to insert into the ENCUESTA_NIVEL_ECONOMICO table, the error is:", err)
@@ -57,7 +57,7 @@ func (e *EconomicRepositoryService) Update(economic domain.EconomicStatus, id in
                                     TIPO_MONTO = ?,
                                     TIPO_PRESTACIONES = ?
                                     WHERE ID = 9;
-	`, economic.IDUserType, economic.CurrentStatus, economic.JobTitle, economic.EmployerEstablishment,
+	`, economic.IDUser, economic.CurrentStatus, economic.JobTitle, economic.EmployerEstablishment,
 		economic.EmploymentType, economic.Salary, economic.AmountType, economic.WorkBenefitsType, id)
 	if err != nil {
 		log.Println("Data could not be updated into ENCUESTA_NIVEL_ECONOMICO table, the error was:", err)
