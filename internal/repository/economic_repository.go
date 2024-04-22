@@ -49,14 +49,14 @@ func (e *EconomicRepositoryService) Insert(economic domain.EconomicStatus) error
 func (e *EconomicRepositoryService) Update(economic domain.EconomicStatus, id int) error {
 	result, err := e.db.Exec(`
 	UPDATE ENCUESTA_NIVEL_ECONOMICO SET ID_USUARIO = ?,
-                                    SITUACIÓN_ACTUAL = ?,
+                                    SITUACION_ACTUAL = ?,
                                     NOMBRE_EMPLEO = ?,
                                     EMPRESA_ESTABLECIMIENTO = ?,
                                     TIPO_EMPLEO = ?,
                                     SALARIO = ?,
                                     TIPO_MONTO = ?,
                                     TIPO_PRESTACIONES = ?
-                                    WHERE ID = 9;
+                                    WHERE ID = ?;
 	`, economic.IDUser, economic.CurrentStatus, economic.JobTitle, economic.EmployerEstablishment,
 		economic.EmploymentType, economic.Salary, economic.AmountType, economic.WorkBenefitsType, id)
 	if err != nil {
