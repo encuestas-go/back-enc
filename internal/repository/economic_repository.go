@@ -80,9 +80,7 @@ func (e *EconomicRepositoryService) Update(economic domain.EconomicStatus, id in
 }
 
 func (e *EconomicRepositoryService) Delete(economic domain.EconomicStatus, id int) error {
-	result, err := e.db.Exec(`
-	DELETE FROM ENCUESTA_NIVEL_ECONOMICO WHERE ID =?;
-	`, id)
+	result, err := e.db.Exec("DELETE FROM ENCUESTA_NIVEL_ECONOMICO WHERE ID =?;", id)
 	if err != nil {
 		log.Println("Could not delete the ID on ENCUESTA_NIVEL_ECONOMICO table, the error was: ", err)
 		return err
