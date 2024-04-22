@@ -8,7 +8,11 @@ func build() {
 	// start the group of the routes: v1/api
 	// start each routes by service ex: user routes -> /crear/usuario
 	// start other routes needed
-	s := server.InitServer().StartRouterGroup().StartUserRoutes().StartSocioeconomicStatusRoutes().StartEconomicStatusRoutes()
+	s := server.InitServer().StartRouterGroup().
+		StartUserRoutes().
+		StartSocioeconomicStatusRoutes().
+		StartEconomicStatusRoutes().
+		StartTransportManagementRoutes()
 
 	s.StartServer()
 }
