@@ -29,3 +29,13 @@ type EconomicStatus struct {
 	AmountType            string  `json:"amount_type,omitempty"`
 	WorkBenefitsType      string  `json:"work_benefits_type,omitempty"`
 }
+
+type TransportManagement struct {
+	UserID              int    `json:"user_id,omitempty"`
+	PrimaryTransport    string `json:"primary_transport,omitempty"`
+	SecondTransport     string `json:"second_transport,omitempty"`
+	UsageFrequency      string `json:"usage_frequency,omitempty"`
+	AccesiblePoints     bool   `json:"accesible_points,omitempty"`
+	FrequentDestination string `json:"frequent_destination,omitempty"`
+	TravelTime          string `json:"travel_time,omitempty"`
+}
