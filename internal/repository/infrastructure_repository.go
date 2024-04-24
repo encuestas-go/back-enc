@@ -3,7 +3,6 @@ package repository
 import (
 	"database/sql"
 	"errors"
-	"fmt"
 	"log"
 
 	"github.com/encuestas-go/back-enc/internal/domain"
@@ -24,13 +23,12 @@ func (h *HouseInfrastructureRepositoryService) Insert(infrastructure domain.Hous
 	INSERT INTO ENCUESTA_INFRAESTRUCTURA_HOGAR(
 		ID_USUARIO, ZONA, PERMANENCIA, ESTADO_INFRAESTRUCTURA, TIPO_SUELO, TIPO_TECHO, TIPO_PARED, NUMERO_INTEGRANTES,
 		NUMERO_HABITACIONES, EQUIPAMIENTO_HOGAR, SERVICIOS_BASICOS, OTRAS_PROPIEDADES)
-	VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, TRUE);
+	VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 	`, infrastructure.UserID, infrastructure.Zone, infrastructure.Permanence, infrastructure.InfraestructureStatus, infrastructure.FloorType, infrastructure.RoofType,
 		infrastructure.WallType, infrastructure.TotalMembers, infrastructure.TotalRooms, infrastructure.HouseholdEquipment, infrastructure.BasicServices,
 		infrastructure.OtherProperties)
 	if err != nil {
 		log.Println("Unable to insert into ENCUESTA_INFRAESTRUCTURA_HOGAR table, the error is:", err)
-		fmt.Println("FATAL")
 		return err
 	}
 
