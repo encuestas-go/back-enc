@@ -39,3 +39,52 @@ type TransportManagement struct {
 	FrequentDestination string `json:"frequent_destination,omitempty"`
 	TravelTime          string `json:"travel_time,omitempty"`
 }
+
+type HouseholdInfrastructure struct {
+	UserID                int    `json:"user_id,omitempty"`
+	Zone                  string `json:"zone,omitempty"`
+	Permanence            string `json:"permanence,omitempty"`
+	InfraestructureStatus string `json:"infraestructure_status,omitempty"`
+	FloorType             string `json:"floor_type,omitempty"`
+	RoofType              string `json:"roof_type,omitempty"`
+	WallType              string `json:"wall_type,omitempty"`
+	TotalMembers          int    `json:"total_members,omitempty"`
+	TotalRooms            int    `json:"total_rooms,omitempty"`
+	HouseholdEquipment    string `json:"household_equipment,omitempty"`
+	BasicServices         string `json:"basic_services,omitempty"`
+	OtherProperties       bool   `json:"other_properties,omitempty"`
+}
+
+type DemographicStatus struct {
+	UserID           int     `json:"user_id,omitempty"`
+	HousingType      string  `json:"housing_type,omitempty"`
+	HouseCondition   string  `json:"house_condition,omitempty"`
+	OwnTransport     bool    `json:"own_transport,omitempty"`
+	IncomeAmount     float64 `json:"income_amount,omitempty"`
+	WorkingMembers   int     `json:"working_members,omitempty"`
+	MembersUnderage  int     `json:"members_underage,omitempty"`
+	MonthlyExpenseb  float64 `json:"monthly_expenseb,omitempty"`
+	GovermentSupport bool    `json:"goverment_support,omitempty"`
+}
+
+type ActivityManagement struct {
+	UserID            int
+	FavoriteGames     string
+	Hobbies           string
+	SportInterest     string
+	ExerciseFrequency string
+	WorkshopTYpe      string
+	SocialEvents      string
+}
+
+type ServiceManagement struct {
+	UserID               int
+	ElectricityProviider bool
+	WaterProvider        bool
+	InternetProvider     bool
+	PhoneProvider        bool
+	TelevisionProvider   bool
+	PaymentDueDate       string
+	AdditionalPayments   string
+	AmountExpenses       float64
+}
