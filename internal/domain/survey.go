@@ -67,13 +67,14 @@ type DemographicStatus struct {
 	GovermentSupport bool    `json:"goverment_support,omitempty"`
 }
 
+// AGREGHAR TAGS CUANDO SE VAN HACIENDO LAS PRUEBAS Y SE AVANZAN LAS FUNCIONES DE LA GESTION
 type ActivityManagement struct {
 	UserID            int
 	FavoriteGames     string
 	Hobbies           string
 	SportInterest     string
 	ExerciseFrequency string
-	WorkshopTYpe      string
+	WorkshopType      string
 	SocialEvents      string
 }
 

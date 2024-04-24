@@ -75,7 +75,7 @@ func (d *DemographicRepositoryService) Update(demographic domain.DemographicStat
 		log.Println("Data Successfully updated into ENCUESTA_NIVEL_DEMOGRAFICO table")
 		return nil
 	} else if rowsUpdated == 0 {
-		return errors.New("data could not be update into ENCUESTA_NIVEL_DEMOGRAFICO table")
+		return errors.New("data could not be updated into ENCUESTA_NIVEL_DEMOGRAFICO table")
 	}
 	return nil
 }

@@ -12,7 +12,9 @@ func build() {
 		StartUserRoutes().
 		StartSocioeconomicStatusRoutes().
 		StartEconomicStatusRoutes().
-		StartTransportManagementRoutes()
+		StartTransportManagementRoutes().
+		StartHouseholdInfrastructureRoutes().
+		StartDemographicStatusRoutes()
 
 	s.StartServer()
 }
