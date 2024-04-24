@@ -63,7 +63,7 @@ type DemographicStatus struct {
 	IncomeAmount     float64 `json:"income_amount,omitempty"`
 	WorkingMembers   int     `json:"working_members,omitempty"`
 	MembersUnderage  int     `json:"members_underage,omitempty"`
-	MonthlyExpenseb  float64 `json:"monthly_expenseb,omitempty"`
+	MonthlyExpenses  float64 `json:"monthly_expenses,omitempty"`
 	GovermentSupport bool    `json:"goverment_support,omitempty"`
 }
 
@@ -78,13 +78,13 @@ type ActivityManagement struct {
 }
 
 type ServiceManagement struct {
-	UserID               int
-	ElectricityProviider bool
-	WaterProvider        bool
-	InternetProvider     bool
-	PhoneProvider        bool
-	TelevisionProvider   bool
-	PaymentDueDate       string
-	AdditionalPayments   string
-	AmountExpenses       float64
+	UserID              int
+	ElectricityProvider bool
+	WaterProvider       bool
+	InternetProvider    bool
+	PhoneProvider       bool
+	TelevisionProvider  bool
+	PaymentDueDate      string
+	AdditionalPayments  string
+	AmountExpenses      float64
 }
