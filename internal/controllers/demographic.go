@@ -1,27 +1,104 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 
+	"github.com/encuestas-go/back-enc/internal/domain"
+	"github.com/encuestas-go/back-enc/internal/repository"
 	"github.com/labstack/echo/v4"
 )
 
-type DemographicStatusController struct{}
+type DemographicStatusController struct {
+	DemographicRepository *repository.DemographicRepositoryService
+}
 
 func InitDemographicController() *DemographicStatusController {
-	return &DemographicStatusController{}
+	repositories := repository.GetRepository()
+	return &DemographicStatusController{
+		DemographicRepository: repositories.DemographicRepository,
+	}
 }
 
 func (d *DemographicStatusController) Create(c echo.Context) error {
-	return c.JSON(http.StatusOK, "Demographic status survey succesfully created")
+	demographicSurvey := domain.DemographicStatus{}
+	err := c.Bind(&demographicSurvey)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("An error happened trying to bind the body of the survey, err: %v", err),
+		})
+	}
+
+	err = d.DemographicRepository.Insert(demographicSurvey)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("An error happened when trying to insert the demographic status survey, the body is: %v, the error is: %v", demographicSurvey, err),
+		})
+	}
+
+	return c.JSON(http.StatusCreated, ControllerMessageResponse{
+		StatusCode: http.StatusCreated,
+		Message:    "Demographic status survey succesfully created",
+	})
 }
 
 func (d *DemographicStatusController) Update(c echo.Context) error {
-	return c.JSON(http.StatusOK, "Demographic Status survey succesfully updated")
+	demographicSurvey := domain.DemographicStatus{}
+	userID := c.QueryParam("user_id")
+	userIDConverted, err := strconv.Atoi(userID)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    fmt.Sprintf("Invalid userID requested: %v", err),
+		})
+	}
+
+	err = c.Bind(&demographicSurvey)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("An error happened trying to bind the body, err: %v", err),
+		})
+	}
+	err = d.DemographicRepository.Update(demographicSurvey, userIDConverted)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("An error occurred when trying to update the demographic status survey: %v", err),
+		})
+	}
+
+	return c.JSON(http.StatusCreated, ControllerMessageResponse{
+		StatusCode: http.StatusCreated,
+		Message:    "Demographic Status survey succesfully updated",
+	})
 }
 
 func (d *DemographicStatusController) Delete(c echo.Context) error {
-	return c.JSON(http.StatusOK, "Demographic Status survey succesfully deleted")
+	demographicSurvey := domain.DemographicStatus{}
+	userID := c.QueryParam("user_id")
+	userIDConverted, err := strconv.Atoi(userID)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    fmt.Sprintf("Invalid userID requested: %v", err),
+		})
+	}
+	err = d.DemographicRepository.Delete(demographicSurvey, userIDConverted)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("An unexpected error happened trying to delete the demographic  survey: %v", err),
+		})
+	}
+
+	return c.JSON(http.StatusCreated, ControllerMessageResponse{
+		StatusCode: http.StatusCreated,
+		Message:    "Demographic Status survey was deleted",
+	})
 }
 
 func (d *DemographicStatusController) Get(c echo.Context) error {
