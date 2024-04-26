@@ -47,9 +47,9 @@ func (h *HouseInfrastructureRepositoryService) Insert(infrastructure domain.Hous
 	return nil
 }
 
-func (h *HouseInfrastructureRepositoryService) Update(infrastructure domain.HouseholdInfrastructure, id int) error {
+func (h *HouseInfrastructureRepositoryService) Update(infrastructure domain.HouseholdInfrastructure) error {
 	result, err := h.db.Exec(`
-	UPDATE ENCUESTA_INFRAESTRUCTURA_HOGAR SET ID_USUARIO = ?,
+	UPDATE ENCUESTA_INFRAESTRUCTURA_HOGAR SET 
                                           ZONA = ?,
                                           PERMANENCIA = ?,
                                           ESTADO_INFRAESTRUCTURA = ?,
@@ -61,10 +61,10 @@ func (h *HouseInfrastructureRepositoryService) Update(infrastructure domain.Hous
                                           EQUIPAMIENTO_HOGAR = ?,
                                           SERVICIOS_BASICOS = ?,
                                           OTRAS_PROPIEDADES = ?
-                                          WHERE ID = ?;
-	`, infrastructure.UserID, infrastructure.Zone, infrastructure.Permanence, infrastructure.InfraestructureStatus, infrastructure.FloorType, infrastructure.RoofType,
+                                          WHERE ID_USUARIO = ?;
+	`, infrastructure.Zone, infrastructure.Permanence, infrastructure.InfraestructureStatus, infrastructure.FloorType, infrastructure.RoofType,
 		infrastructure.WallType, infrastructure.TotalMembers, infrastructure.TotalRooms, infrastructure.HouseholdEquipment, infrastructure.BasicServices,
-		infrastructure.OtherProperties, id)
+		infrastructure.OtherProperties, infrastructure.UserID)
 	if err != nil {
 		log.Println("Unable to update data into ENCUESTA_INFRAESTRUCTURA_HOGAR table, the error is:", err)
 		return err
@@ -85,24 +85,24 @@ func (h *HouseInfrastructureRepositoryService) Update(infrastructure domain.Hous
 	return nil
 }
 
-func (h *HouseInfrastructureRepositoryService) Delete(infrastructure domain.HouseholdInfrastructure, id int) error {
-	result, err := h.db.Exec("DELETE FROM ENCUESTA_INFRAESTRUCTURA_HOGAR WHERE ID = ?;", id)
+func (h *HouseInfrastructureRepositoryService) Delete(idUser int) error {
+	result, err := h.db.Exec("DELETE FROM ENCUESTA_INFRAESTRUCTURA_HOGAR WHERE ID_USUARIO =?;", idUser)
 	if err != nil {
-		log.Println("Could not delete the ID on ENCUESTA_INFRAESTRUCTURA_HOGAR table, the error was: ")
+		log.Println("Could not delete the ID on ENCUESTA_INFRAESTRUCTURA_HOGAR table, the error was: ", err)
 		return err
 	}
 
-	rowsInserted, err := result.RowsAffected()
+	rowsDeleted, err := result.RowsAffected()
 	if err != nil {
 		log.Println("Could not delete information with the requested ID: ", err)
 		return err
 	}
 
-	if rowsInserted > 0 {
-		log.Printf("ID %v was successfully deleted from ENCUESTA_INFRAESTRUCTURA_HOGAR table", id)
+	if rowsDeleted > 0 {
+		log.Printf("ID %v was successfully deleted from ENCUESTA_INFRAESTRUCTURA_HOGAR table", idUser)
 		return nil
-	} else if rowsInserted == 0 {
-		return errors.New("could not delete the requested ID in the ENCUESTA_INFRAESTRUCTURA_HOGAR table")
+	} else if rowsDeleted == 0 {
+		return errors.New("could not delete the requested ID ENCUESTA_INFRAESTRUCTURA_HOGAR table")
 	}
 	return nil
 }

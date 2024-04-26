@@ -46,23 +46,14 @@ func (t *TransportController) Create(c echo.Context) error {
 
 func (t *TransportController) Update(c echo.Context) error {
 	transportSurvey := domain.TransportManagement{}
-	userID := c.QueryParam("user_id")
-	userIDConverted, err := strconv.Atoi(userID)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
-			StatusCode: http.StatusBadRequest,
-			Message:    fmt.Sprintf("Invalid userID requested: %v", err),
-		})
-	}
-
-	err = c.Bind(&transportSurvey)
+	err := c.Bind(&transportSurvey)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
 			StatusCode: http.StatusInternalServerError,
 			Message:    fmt.Sprintf("Unexpected error happened trying to bind the body, err: %v", err),
 		})
 	}
-	err = t.TransportRepository.Update(transportSurvey, userIDConverted)
+	err = t.TransportRepository.Update(transportSurvey)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
 			StatusCode: http.StatusInternalServerError,
@@ -77,7 +68,6 @@ func (t *TransportController) Update(c echo.Context) error {
 }
 
 func (t *TransportController) Delete(c echo.Context) error {
-	transportSurvey := domain.TransportManagement{}
 	userID := c.QueryParam("user_id")
 	userIDConverted, err := strconv.Atoi(userID)
 	if err != nil {
@@ -86,7 +76,7 @@ func (t *TransportController) Delete(c echo.Context) error {
 			Message:    fmt.Sprintf("Invalid userID requested: %v", err),
 		})
 	}
-	err = t.TransportRepository.Delete(transportSurvey, userIDConverted)
+	err = t.TransportRepository.Delete(userIDConverted)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
 			StatusCode: http.StatusInternalServerError,

@@ -47,7 +47,6 @@ func (s *SocioeconomicStatusController) Create(c echo.Context) error {
 
 func (s *SocioeconomicStatusController) Update(c echo.Context) error {
 	socioeconomicSurvey := domain.SocioeconomicStatus{}
-
 	err := c.Bind(&socioeconomicSurvey)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
@@ -94,8 +93,30 @@ func (s *SocioeconomicStatusController) Delete(c echo.Context) error {
 }
 
 func (s *SocioeconomicStatusController) Get(c echo.Context) error {
-	return c.JSON(http.StatusCreated, ControllerMessageResponse{
-		StatusCode: http.StatusCreated,
-		Message:    "Complete information of Socioeconomic Status survey:",
+	userIDString := c.QueryParam("user_id")
+	if userIDString == "" {
+		userIDString = "0"
+	}
+
+	userID, err := strconv.Atoi(userIDString)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    fmt.Sprintf("invalid input data: %s", err),
+		})
+	}
+
+	res, err := s.SocioeconomicRepository.GetAllOrByID(userID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("Failed to get information of survey: %v", err),
+		})
+	}
+
+	return c.JSON(http.StatusOK, ControllerMessageResponse{
+		StatusCode: http.StatusOK,
+		Message:    "Socioeconomic Status successfully retrieved",
+		Data:       res,
 	})
 }

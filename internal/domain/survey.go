@@ -1,6 +1,7 @@
 package domain
 
 type SocioeconomicStatus struct {
+	ID                  int    `json:"id,omitempty"`
 	IDUser              int    `json:"id_user,omitempty"`
 	FullName            string `json:"full_name,omitempty"`
 	BirthDate           string `json:"birth_date,omitempty"`
@@ -20,6 +21,7 @@ type SocioeconomicStatus struct {
 }
 
 type EconomicStatus struct {
+	ID                    int     `json:"id,omitempty"`
 	IDUser                int     `json:"id_user,omitempty"`
 	CurrentStatus         string  `json:"current_status,omitempty"`
 	JobTitle              string  `json:"job_title,omitempty"`

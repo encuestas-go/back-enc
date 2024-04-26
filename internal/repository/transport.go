@@ -46,18 +46,18 @@ func (t *TransportRespositoryService) Insert(transport domain.TransportManagemen
 	return nil
 }
 
-func (t *TransportRespositoryService) Update(transport domain.TransportManagement, id int) error {
+func (t *TransportRespositoryService) Update(transport domain.TransportManagement) error {
 	result, err := t.db.Exec(`
-	UPDATE ENCUESTA_TRANSPORTE SET ID_USUARIO = ?,
+	UPDATE ENCUESTA_TRANSPORTE SET 
                                TRANSPORTE_PRINCIPAL = ?,
                                TRANSPORTE_SECUNDARIO = ?,
                                FRECUENCIA_USO = ?,
                                PUNTOS_ACCESIBLES = ?,
                                LUGAR_DESTINO_FRECUENTE = ?,
                                TIEMPO_TRASLADO = ?
-                               WHERE ID = ?;
-	`, transport.UserID, transport.PrimaryTransport, transport.SecondTransport, transport.UsageFrequency,
-		transport.AccesiblePoints, transport.FrequentDestination, transport.TravelTime, id)
+                               WHERE ID_USUARIO = ?;
+	`, transport.PrimaryTransport, transport.SecondTransport, transport.UsageFrequency,
+		transport.AccesiblePoints, transport.FrequentDestination, transport.TravelTime, transport.UserID)
 	if err != nil {
 		log.Println("Data could not be updated into ENCUESTA_TRANSPORTE table, the error was:", err)
 		return err
@@ -78,8 +78,8 @@ func (t *TransportRespositoryService) Update(transport domain.TransportManagemen
 	return nil
 }
 
-func (t *TransportRespositoryService) Delete(transport domain.TransportManagement, id int) error {
-	result, err := t.db.Exec("DELETE FROM ENCUESTA_TRANSPORTE WHERE ID =?;", id)
+func (t *TransportRespositoryService) Delete(idUser int) error {
+	result, err := t.db.Exec("DELETE FROM ENCUESTA_TRANSPORTE WHERE ID_USUARIO =?;")
 	if err != nil {
 		log.Println("Could not delete the ID on ENCUESTA_TRANSPORTE table, the error was: ", err)
 		return err
@@ -92,7 +92,7 @@ func (t *TransportRespositoryService) Delete(transport domain.TransportManagemen
 	}
 
 	if rowsDeleted > 0 {
-		log.Printf("ID %v was successfully deleted from ENCUESTA_NIVEL_ECONOMICO table", id)
+		log.Printf("ID %v was successfully deleted from ENCUESTA_NIVEL_ECONOMICO table", idUser)
 		return nil
 	} else if rowsDeleted == 0 {
 		return errors.New("could not delete the requested ID in the ENCUESTA_NIVEL_ECONOMICO table")

@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/encuestas-go/back-enc/internal/domain"
@@ -100,6 +101,29 @@ func (e *EconomicRepositoryService) Delete(idUser int) error {
 	return nil
 }
 
-func (e *EconomicRepositoryService) Get(economic domain.EconomicStatus) error {
-	return nil
+func (e *EconomicRepositoryService) GetAllOrByID(userID int) ([]domain.EconomicStatus, error) {
+	var query = `SELECT * FROM ENCUESTA_NIVEL_ECONOMICO;`
+
+	if userID > 0 {
+		query = fmt.Sprintf(`SELECT * FROM ENCUESTA_NIVEL_ECONOMICO WHERE ID_USUARIO = %v;`, userID)
+	}
+
+	rows, err := e.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	economicSurvey := []domain.EconomicStatus{}
+	for rows.Next() {
+		economic := domain.EconomicStatus{}
+		if err = rows.Scan(&economic.ID, &economic.IDUser, &economic.CurrentStatus, &economic.JobTitle,
+			&economic.EmployerEstablishment, &economic.EmploymentType, &economic.Salary, &economic.AmountType,
+			&economic.WorkBenefitsType); err != nil {
+			return nil, err
+		}
+		economicSurvey = append(economicSurvey, economic)
+	}
+	return economicSurvey, nil
 }

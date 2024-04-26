@@ -46,9 +46,9 @@ func (d *DemographicRepositoryService) Insert(demographic domain.DemographicStat
 	return nil
 }
 
-func (d *DemographicRepositoryService) Update(demographic domain.DemographicStatus, id int) error {
+func (d *DemographicRepositoryService) Update(demographic domain.DemographicStatus) error {
 	result, err := d.db.Exec(`
-	UPDATE ENCUESTA_NIVEL_DEMOGRAFICO SET ID_USUARIO = ?,
+	UPDATE ENCUESTA_NIVEL_DEMOGRAFICO SET 
                                       TIPO_VIVIENDA =  ?,
                                       TIPO_CONDICION =  ?,
                                       TRANSPORTE_PROPIO = ?,
@@ -57,9 +57,9 @@ func (d *DemographicRepositoryService) Update(demographic domain.DemographicStat
                                       NUM_INTEGRANTES_MENOR_EDAD = ?,
                                       DESPENSA_MENSUAL = ?,
                                       APOYOS_GOBIERNO = ?
-                                      WHERE ID = ?;
-	`, demographic.UserID, demographic.HousingType, demographic.HouseCondition, demographic.OwnTransport, demographic.IncomeAmount,
-		demographic.WorkingMembers, demographic.MembersUnderage, demographic.MonthlyExpenses, demographic.GovermentSupport, id)
+                                      WHERE ID_USUARIO = ?;
+	`, demographic.HousingType, demographic.HouseCondition, demographic.OwnTransport, demographic.IncomeAmount,
+		demographic.WorkingMembers, demographic.MembersUnderage, demographic.MonthlyExpenses, demographic.GovermentSupport, demographic.UserID)
 	if err != nil {
 		log.Println("Data could not be updated into ENCUESTA_NIVEL_DEMOGRAFICO table, the error was:", err)
 		return err
@@ -80,8 +80,8 @@ func (d *DemographicRepositoryService) Update(demographic domain.DemographicStat
 	return nil
 }
 
-func (d *DemographicRepositoryService) Delete(demographic domain.DemographicStatus, id int) error {
-	result, err := d.db.Exec("DELETE FROM ENCUESTA_NIVEL_DEMOGRAFICO WHERE ID = ?;", id)
+func (d *DemographicRepositoryService) Delete(idUser int) error {
+	result, err := d.db.Exec("DELETE FROM ENCUESTA_NIVEL_DEMOGRAFICO WHERE ID_USUARIO = ?;", idUser)
 	if err != nil {
 		log.Println("Could not delete the ID on ENCUESTA_NIVEL_DEMOGRAFICO table, the error was: ", err)
 		return err
@@ -94,7 +94,7 @@ func (d *DemographicRepositoryService) Delete(demographic domain.DemographicStat
 	}
 
 	if rowsDeleted > 0 {
-		log.Printf("ID %v was successfully deleted from ENCUESTA_NIVEL_DEMOGRAFICO table", id)
+		log.Printf("ID %v was successfully deleted from ENCUESTA_NIVEL_DEMOGRAFICO table", idUser)
 		return nil
 	} else if rowsDeleted == 0 {
 		return errors.New("could not delete the requested ID in the ENCUESTA_NIVEL_DEMOGRAFICO table")

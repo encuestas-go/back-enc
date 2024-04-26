@@ -93,5 +93,30 @@ func (e *EconomicStatusController) Delete(c echo.Context) error {
 }
 
 func (e *EconomicStatusController) Get(c echo.Context) error {
-	return c.JSON(http.StatusOK, "Complete information of Economic Status survey :")
+	userIDString := c.QueryParam("user_id")
+	if userIDString == "" {
+		userIDString = "0"
+	}
+
+	userID, err := strconv.Atoi(userIDString)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    fmt.Sprintf("invalid input data: %s", err),
+		})
+	}
+
+	res, err := e.EconomicRepository.GetAllOrByID(userID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("Failed to get information of survey: %v", err),
+		})
+	}
+
+	return c.JSON(http.StatusOK, ControllerMessageResponse{
+		StatusCode: http.StatusOK,
+		Message:    "Economic Status successfully retrieved",
+		Data:       res,
+	})
 }

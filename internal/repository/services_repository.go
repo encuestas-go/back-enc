@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+
 	"github.com/encuestas-go/back-enc/internal/domain"
 )
 

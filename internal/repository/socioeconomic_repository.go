@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/encuestas-go/back-enc/internal/domain"
@@ -70,7 +71,6 @@ func (s *SocioeconomicRepositoryService) Update(socioeconomic domain.Socioeconom
                                      ULTIMO_GRADO_PADRE = ?,
                                      ULTIMO_GRADO_MADRE = ?
                                      WHERE ID_USUARIO = ?;
-
 	`, socioeconomic.FullName, socioeconomic.BirthDate, socioeconomic.Nationality, socioeconomic.Gender,
 		socioeconomic.Age, socioeconomic.MaritalStatus, socioeconomic.ResidenceAddress, socioeconomic.ResidenceCity, socioeconomic.PostalCode,
 		socioeconomic.State, socioeconomic.SocioeconomicStatus, socioeconomic.Language, socioeconomic.DegreeAspired,
@@ -120,6 +120,32 @@ func (s *SocioeconomicRepositoryService) Delete(idUser int) error {
 	return nil
 }
 
-func (s *SocioeconomicRepositoryService) Get(socioeconomic domain.SocioeconomicStatus) error {
-	return nil
+func (s *SocioeconomicRepositoryService) GetAllOrByID(userID int) ([]domain.SocioeconomicStatus, error) {
+	var query = `SELECT * FROM ENCUESTA_NIVEL_SOCIOECONOMICO;`
+
+	if userID > 0 {
+		query = fmt.Sprintf(`SELECT * FROM ENCUESTA_NIVEL_SOCIOECONOMICO WHERE ID_USUARIO = %v;`, userID)
+	}
+
+	rows, err := s.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	socioeconomicSurvey := []domain.SocioeconomicStatus{}
+	for rows.Next() {
+		socioeconomic := domain.SocioeconomicStatus{}
+		if err = rows.Scan(&socioeconomic.ID, &socioeconomic.IDUser, &socioeconomic.FullName, &socioeconomic.BirthDate,
+			&socioeconomic.Nationality, &socioeconomic.Gender, &socioeconomic.Age, &socioeconomic.MaritalStatus,
+			&socioeconomic.ResidenceAddress, &socioeconomic.ResidenceCity, &socioeconomic.PostalCode, &socioeconomic.State,
+			&socioeconomic.SocioeconomicStatus, &socioeconomic.Language, &socioeconomic.DegreeAspired,
+			&socioeconomic.LastDegreeFather, &socioeconomic.LastDegreeMother); err != nil {
+			return nil, err
+		}
+
+		socioeconomicSurvey = append(socioeconomicSurvey, socioeconomic)
+	}
+	return socioeconomicSurvey, nil
 }

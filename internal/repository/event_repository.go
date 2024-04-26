@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"errors"
+
 	"github.com/encuestas-go/back-enc/internal/domain"
 )
 

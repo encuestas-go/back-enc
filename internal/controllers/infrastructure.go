@@ -47,23 +47,14 @@ func (h *HouseInfrastructureController) Create(c echo.Context) error {
 
 func (h *HouseInfrastructureController) Update(c echo.Context) error {
 	householdSurvey := domain.HouseholdInfrastructure{}
-	userID := c.QueryParam("user_id")
-	userIDConverted, err := strconv.Atoi(userID)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
-			StatusCode: http.StatusBadRequest,
-			Message:    fmt.Sprintf("Invalid userID requested: %v", err),
-		})
-	}
-
-	err = c.Bind(&householdSurvey)
+	err := c.Bind(&householdSurvey)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
 			StatusCode: http.StatusInternalServerError,
 			Message:    fmt.Sprintf("An error happened trying to bind the body, err: %v", err),
 		})
 	}
-	err = h.InfrastructureRepository.Update(householdSurvey, userIDConverted)
+	err = h.InfrastructureRepository.Update(householdSurvey)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
 			StatusCode: http.StatusInternalServerError,
@@ -78,7 +69,27 @@ func (h *HouseInfrastructureController) Update(c echo.Context) error {
 }
 
 func (h *HouseInfrastructureController) Delete(c echo.Context) error {
-	return c.JSON(http.StatusOK, "Household Infrastructure survey succesfully deleted")
+	userID := c.QueryParam("user_id")
+	userIDConverted, err := strconv.Atoi(userID)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    fmt.Sprintf("Invalid userID requested: %v", err),
+		})
+	}
+
+	err = h.InfrastructureRepository.Delete(userIDConverted)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("An error occurred while trying to delete the household infrastructure survey: %v", err),
+		})
+	}
+
+	return c.JSON(http.StatusCreated, ControllerMessageResponse{
+		StatusCode: http.StatusCreated,
+		Message:    "Household Infrastructure survey succesfully deleted",
+	})
 }
 
 func (h *HouseInfrastructureController) Get(c echo.Context) error {
