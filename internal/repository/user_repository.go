@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/encuestas-go/back-enc/internal/domain"
@@ -132,6 +133,31 @@ func (u *UserRepositoryService) UpdateOnlyPassword(email string, password string
 	return nil
 }
 
-func (u *UserRepositoryService) Get(user domain.User) error {
-	return nil
+func (u *UserRepositoryService) GetAllOrByID(id int) ([]domain.User, error) {
+	var query = `SELECT NOMBRE, APELLIDO_PATERNO, APELLIDO_MATERNO, CORREO_ELECTRONICO, NUMERO_TELEFONO, 
+				USUARIO,ID_TIPO_USUARIO FROM USUARIO;`
+
+	if id > 0 {
+		query = fmt.Sprintf(`SELECT NOMBRE, APELLIDO_PATERNO, APELLIDO_MATERNO, CORREO_ELECTRONICO,
+							 NUMERO_TELEFONO, USUARIO,ID_TIPO_USUARIO FROM USUARIO WHERE ID = %v;`, id)
+	}
+
+	rows, err := u.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	users := []domain.User{}
+	for rows.Next() {
+		user := domain.User{}
+		if err = rows.Scan(&user.Name, &user.MiddleName, &user.LastName, &user.Email,
+			&user.PhoneNumber, &user.Username, &user.IDUserType); err != nil {
+			return nil, err
+		}
+
+		users = append(users, user)
+	}
+	return users, nil
 }

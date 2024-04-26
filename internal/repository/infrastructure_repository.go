@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/encuestas-go/back-enc/internal/domain"
@@ -107,6 +108,31 @@ func (h *HouseInfrastructureRepositoryService) Delete(idUser int) error {
 	return nil
 }
 
-func (h *HouseInfrastructureRepositoryService) Get(infrastructure domain.HouseholdInfrastructure) error {
-	return nil
+func (h *HouseInfrastructureRepositoryService) GetAllOrByID(userID int) ([]domain.HouseholdInfrastructure, error) {
+	var query = `SELECT * FROM ENCUESTA_INFRAESTRUCTURA_HOGAR;`
+
+	if userID > 0 {
+		query = fmt.Sprintf(`SELECT * FROM ENCUESTA_INFRAESTRUCTURA_HOGAR WHERE ID_USUARIO = %v;`, userID)
+	}
+
+	rows, err := h.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	infrastructureSurvey := []domain.HouseholdInfrastructure{}
+	for rows.Next() {
+		infrastructure := domain.HouseholdInfrastructure{}
+		if err = rows.Scan(&infrastructure.ID, &infrastructure.UserID, &infrastructure.Zone, &infrastructure.Permanence,
+			&infrastructure.InfraestructureStatus, &infrastructure.FloorType, &infrastructure.RoofType, &infrastructure.WallType,
+			&infrastructure.TotalMembers, &infrastructure.TotalRooms, &infrastructure.HouseholdEquipment,
+			&infrastructure.BasicServices, &infrastructure.OtherProperties); err != nil {
+			return nil, err
+		}
+
+		infrastructureSurvey = append(infrastructureSurvey, infrastructure)
+	}
+	return infrastructureSurvey, nil
 }
