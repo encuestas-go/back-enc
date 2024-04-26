@@ -5,11 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d3e76652-4d20-4d31-92db-7a008584f449" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/controllers/economic.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/controllers/economic.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/controllers/socioeconomic.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/controllers/socioeconomic.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/economic_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/economic_repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/socioeconomic_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/socioeconomic_repository.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
