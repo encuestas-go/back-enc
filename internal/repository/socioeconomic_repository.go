@@ -51,9 +51,9 @@ func (s *SocioeconomicRepositoryService) Insert(socioeconomic domain.Socioeconom
 	return nil
 }
 
-func (s *SocioeconomicRepositoryService) Update(socioeconomic domain.SocioeconomicStatus, id int) error {
+func (s *SocioeconomicRepositoryService) Update(socioeconomic domain.SocioeconomicStatus) error {
 	result, err := s.db.Exec(`
-	UPDATE ENCUESTA_NIVEL_SOCIOECONOMICO SET ID_USUARIO = ?,
+	UPDATE ENCUESTA_NIVEL_SOCIOECONOMICO SET
                                      NOMBRE_COMPLETO = ?,
                                      FECHA_NACIMIENTO = ?,
                                      NACIONALIDAD = ?,
@@ -69,12 +69,12 @@ func (s *SocioeconomicRepositoryService) Update(socioeconomic domain.Socioeconom
                                      GRADO_ESTUDIOS_ASPIRAR = ?,
                                      ULTIMO_GRADO_PADRE = ?,
                                      ULTIMO_GRADO_MADRE = ?
-                                     WHERE ID = ?;
+                                     WHERE ID_USUARIO = ?;
 
-	`, socioeconomic.IDUser, socioeconomic.FullName, socioeconomic.BirthDate, socioeconomic.Nationality, socioeconomic.Gender,
+	`, socioeconomic.FullName, socioeconomic.BirthDate, socioeconomic.Nationality, socioeconomic.Gender,
 		socioeconomic.Age, socioeconomic.MaritalStatus, socioeconomic.ResidenceAddress, socioeconomic.ResidenceCity, socioeconomic.PostalCode,
 		socioeconomic.State, socioeconomic.SocioeconomicStatus, socioeconomic.Language, socioeconomic.DegreeAspired,
-		socioeconomic.LastDegreeFather, socioeconomic.LastDegreeMother, id)
+		socioeconomic.LastDegreeFather, socioeconomic.LastDegreeMother, socioeconomic.IDUser)
 	if err != nil {
 		log.Println("Data could not be updated into ENCUESTA_NIVEL_SOCIOECONOMICO table, the error was:", err)
 		return err
@@ -96,10 +96,10 @@ func (s *SocioeconomicRepositoryService) Update(socioeconomic domain.Socioeconom
 	return nil
 }
 
-func (s *SocioeconomicRepositoryService) Delete(socioeconomic domain.SocioeconomicStatus, id int) error {
+func (s *SocioeconomicRepositoryService) Delete(idUser int) error {
 	result, err := s.db.Exec(`
-	DELETE FROM ENCUESTA_NIVEL_SOCIOECONOMICO WHERE ID = ?;
-	`, id)
+	DELETE FROM ENCUESTA_NIVEL_SOCIOECONOMICO WHERE ID_USUARIO = ?;
+	`, idUser)
 	if err != nil {
 		log.Println("Could not delete the ID on ENCUESTA_NIVEL_SOCIOECONOMICO table, the error was: ", err)
 		return err
@@ -112,7 +112,7 @@ func (s *SocioeconomicRepositoryService) Delete(socioeconomic domain.Socioeconom
 	}
 
 	if rowsDeleted > 0 {
-		log.Printf("ID %v was successfully deleted from ENCUESTA_NIVEL_SOCIOECONOMICO table", id)
+		log.Printf("ID %v was successfully deleted from ENCUESTA_NIVEL_SOCIOECONOMICO table", idUser)
 		return nil
 	} else if rowsDeleted == 0 {
 		return errors.New("could not delete the requested ID in the ENCUESTA_NIVEL_SOCIOECONOMICO table")

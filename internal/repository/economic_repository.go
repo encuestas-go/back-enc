@@ -46,19 +46,18 @@ func (e *EconomicRepositoryService) Insert(economic domain.EconomicStatus) error
 	return nil
 }
 
-func (e *EconomicRepositoryService) Update(economic domain.EconomicStatus, id int) error {
+func (e *EconomicRepositoryService) Update(economic domain.EconomicStatus) error {
 	result, err := e.db.Exec(`
-	UPDATE ENCUESTA_NIVEL_ECONOMICO SET ID_USUARIO = ?,
-                                    SITUACION_ACTUAL = ?,
+	UPDATE ENCUESTA_NIVEL_ECONOMICO SET SITUACION_ACTUAL = ?,
                                     NOMBRE_EMPLEO = ?,
                                     EMPRESA_ESTABLECIMIENTO = ?,
                                     TIPO_EMPLEO = ?,
                                     SALARIO = ?,
                                     TIPO_MONTO = ?,
                                     TIPO_PRESTACIONES = ?
-                                    WHERE ID = ?;
-	`, economic.IDUser, economic.CurrentStatus, economic.JobTitle, economic.EmployerEstablishment,
-		economic.EmploymentType, economic.Salary, economic.AmountType, economic.WorkBenefitsType, id)
+                                    WHERE ID_USUARIO = ?;
+	`, economic.CurrentStatus, economic.JobTitle, economic.EmployerEstablishment,
+		economic.EmploymentType, economic.Salary, economic.AmountType, economic.WorkBenefitsType, economic.IDUser)
 	if err != nil {
 		log.Println("Data could not be updated into ENCUESTA_NIVEL_ECONOMICO table, the error was:", err)
 		return err
@@ -79,8 +78,8 @@ func (e *EconomicRepositoryService) Update(economic domain.EconomicStatus, id in
 	return nil
 }
 
-func (e *EconomicRepositoryService) Delete(economic domain.EconomicStatus, id int) error {
-	result, err := e.db.Exec("DELETE FROM ENCUESTA_NIVEL_ECONOMICO WHERE ID =?;", id)
+func (e *EconomicRepositoryService) Delete(idUser int) error {
+	result, err := e.db.Exec("DELETE FROM ENCUESTA_NIVEL_ECONOMICO WHERE ID_USUARIO = ?;", idUser)
 	if err != nil {
 		log.Println("Could not delete the ID on ENCUESTA_NIVEL_ECONOMICO table, the error was: ", err)
 		return err
@@ -93,7 +92,7 @@ func (e *EconomicRepositoryService) Delete(economic domain.EconomicStatus, id in
 	}
 
 	if rowsDeleted > 0 {
-		log.Printf("ID %v was successfully deleted from ENCUESTA_NIVEL_ECONOMICO table", id)
+		log.Printf("ID %v was successfully deleted from ENCUESTA_NIVEL_ECONOMICO table", idUser)
 		return nil
 	} else if rowsDeleted == 0 {
 		return errors.New("could not delete the requested ID in the ENCUESTA_NIVEL_ECONOMICO table")

@@ -47,23 +47,14 @@ func (e *EconomicStatusController) Create(c echo.Context) error {
 
 func (e *EconomicStatusController) Update(c echo.Context) error {
 	economicSurvey := domain.EconomicStatus{}
-	userID := c.QueryParam("user_id")
-	userIDConverted, err := strconv.Atoi(userID)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
-			StatusCode: http.StatusBadRequest,
-			Message:    fmt.Sprintf("Invalid userID requested: %v", err),
-		})
-	}
-
-	err = c.Bind(&economicSurvey)
+	err := c.Bind(&economicSurvey)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
 			StatusCode: http.StatusInternalServerError,
 			Message:    fmt.Sprintf("An error happened trying to bind the body, err: %v", err),
 		})
 	}
-	err = e.EconomicRepository.Update(economicSurvey, userIDConverted)
+	err = e.EconomicRepository.Update(economicSurvey)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
 			StatusCode: http.StatusInternalServerError,
@@ -78,7 +69,6 @@ func (e *EconomicStatusController) Update(c echo.Context) error {
 }
 
 func (e *EconomicStatusController) Delete(c echo.Context) error {
-	economicSurvey := domain.EconomicStatus{}
 	userID := c.QueryParam("user_id")
 	userIDConverted, err := strconv.Atoi(userID)
 	if err != nil {
@@ -87,7 +77,8 @@ func (e *EconomicStatusController) Delete(c echo.Context) error {
 			Message:    fmt.Sprintf("Invalid userID requested: %v", err),
 		})
 	}
-	err = e.EconomicRepository.Delete(economicSurvey, userIDConverted)
+
+	err = e.EconomicRepository.Delete(userIDConverted)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
 			StatusCode: http.StatusInternalServerError,
