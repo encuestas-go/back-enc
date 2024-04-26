@@ -73,6 +73,9 @@ func (s *ServerHandler) StartUserRoutes() *ServerHandler {
 	// login
 	s.ServerEcho.POST("/login", s.GenericController.UserController.Login)
 
+	// restore password
+	s.ServerEcho.POST("/login/reset-password", s.GenericController.UserController.ResetPassword)
+
 	return s
 }
 

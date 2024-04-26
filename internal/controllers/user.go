@@ -2,7 +2,10 @@ package controllers
 
 import (
 	"fmt"
+	"math/rand"
 	"net/http"
+	"net/smtp"
+	"os"
 	"strconv"
 	"time"
 
@@ -74,6 +77,28 @@ func (u *UserController) Login(c echo.Context) error {
 	return c.JSON(http.StatusOK, userLoginResponse{
 		IDUser:     idUser,
 		IDTypeUser: idTypeUser,
+	})
+}
+
+func (u *UserController) ResetPassword(c echo.Context) error {
+	email := c.QueryParam("email")
+	if len(email) == 0 {
+		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    fmt.Sprintf("Email is required"),
+		})
+	}
+
+	if err := u.sendEmailToUser(c, email); err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("An error occurred when sending email to user: %v", err),
+		})
+	}
+
+	return c.JSON(http.StatusOK, ControllerMessageResponse{
+		StatusCode: http.StatusOK,
+		Message:    "Password reset successfully",
 	})
 }
 
@@ -160,4 +185,66 @@ func (u *UserController) Delete(c echo.Context) error {
 
 func (u *UserController) Get(c echo.Context) error {
 	return c.JSON(http.StatusOK, "Here's the user selected")
+}
+
+func (u *UserController) sendEmailToUser(c echo.Context, email string) error {
+	smtpHost := "mail.privateemail.com"
+	smtpPort := "587"
+	username := os.Getenv("back_smtpUsername")
+	password := os.Getenv("back_smtpPassword")
+
+	from := username
+	to := []string{email}
+
+	rand.Seed(time.Now().UnixNano())
+
+	tmpPassword := strconv.Itoa(rand.Intn(10)) +
+		strconv.Itoa(rand.Intn(10)) +
+		strconv.Itoa(rand.Intn(10))
+
+	err := u.UserRepository.UpdateOnlyPassword(email, tmpPassword)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("An error occurred when trying to update the user: %v", err),
+		})
+	}
+
+	message := []byte(fmt.Sprintf("To: %v \r\n", email) +
+		fmt.Sprintf("Subject: ¡Cambio de contraseña!\r\n") +
+		"\r\n" +
+		fmt.Sprintf("Usa esta contraseña: %v para entrar a tu cuenta.\r\n", tmpPassword))
+
+	auth := smtp.PlainAuth("", username, password, smtpHost)
+
+	err = smtp.SendMail(smtpHost+":"+smtpPort, auth, from, to, message)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (u *UserController) getUserCookie(c echo.Context) (int, int) {
+	cookieIDUser, err := c.Cookie("id_user")
+	if err != nil {
+		return 0, 0
+	}
+
+	IDUserConverted, err := strconv.Atoi(cookieIDUser.Value)
+	if err != nil {
+		return 0, 0
+	}
+
+	cookieIDTypeUser, err := c.Cookie("id_type_user")
+	if err != nil {
+		return 0, 0
+	}
+
+	IDTypeUserConverted, err := strconv.Atoi(cookieIDTypeUser.Value)
+	if err != nil {
+		return 0, 0
+	}
+
+	return IDUserConverted, IDTypeUserConverted
 }

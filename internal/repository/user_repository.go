@@ -114,6 +114,24 @@ func (u *UserRepositoryService) Delete(user domain.User, id int) error {
 	return nil
 }
 
+func (u *UserRepositoryService) UpdateOnlyPassword(email string, password string) error {
+	res, err := u.db.Exec(`UPDATE USUARIO SET CONTRASENA = SHA2(?,256) WHERE CORREO_ELECTRONICO = ?;`, password, email)
+	if err != nil {
+		return err
+	}
+
+	rowsUpdated, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rowsUpdated == 0 {
+		return errors.New("could not update the password in the user table")
+	}
+
+	return nil
+}
+
 func (u *UserRepositoryService) Get(user domain.User) error {
 	return nil
 }
