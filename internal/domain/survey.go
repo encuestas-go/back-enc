@@ -67,25 +67,38 @@ type DemographicStatus struct {
 	GovermentSupport bool    `json:"goverment_support,omitempty"`
 }
 
-// AGREGHAR TAGS CUANDO SE VAN HACIENDO LAS PRUEBAS Y SE AVANZAN LAS FUNCIONES DE LA GESTION
-type ActivityManagement struct {
-	UserID            int
-	FavoriteGames     string
-	Hobbies           string
-	SportInterest     string
-	ExerciseFrequency string
-	WorkshopType      string
-	SocialEvents      string
+type CulturalActivity struct {
+	ID                   int    `json:"id,omitempty"`
+	UserID               int    `json:"user_id,omitempty"`
+	PreferredGame        string `json:"preferred_game,omitempty"`
+	Hobby                string `json:"hobby,omitempty"`
+	PreferredSport       string `json:"preferred_sport,omitempty"`
+	ExerciseFrequency    string `json:"exercise_frequency,omitempty"`
+	WorkshopType         string `json:"workshop_type,omitempty"`
+	PreferredSocialEvent string `json:"preferred_social_event,omitempty"`
 }
 
-type ServiceManagement struct {
-	UserID              int
-	ElectricityProvider bool
-	WaterProvider       bool
-	InternetProvider    bool
-	PhoneProvider       bool
-	TelevisionProvider  bool
-	PaymentDueDate      string
-	AdditionalPayments  string
-	AmountExpenses      float64
+type Services struct {
+	ID                 int    `json:"id,omitempty"`
+	UserID             int    `json:"user_id,omitempty"`
+	EnergyProvider     bool   `json:"energy_provider,omitempty"`
+	WaterProvider      bool   `json:"water_provider,omitempty"`
+	InternetProvider   string `json:"internet_provider,omitempty"`
+	PhoneProvider      bool   `json:"phone_provider,omitempty"`
+	TvProvider         bool   `json:"tv_provider,omitempty"`
+	PaymentDueDate     string `json:"payment_due_date,omitempty"`
+	AdditionalPayments string `json:"additional_payments,omitempty"`
+	ServicesBill       int    `json:"services_bill,omitempty"`
+}
+
+type Event struct {
+	ID          int    `json:"id,omitempty"`
+	EventName   string `json:"event_name,omitempty"`
+	Place       string `json:"place,omitempty"`
+	Date        string `json:"date,omitempty"`
+	Hour        string `json:"hour,omitempty"`
+	Location    string `json:"location,omitempty"`
+	Description string `json:"description,omitempty"`
+	Category    string `json:"category,omitempty"`
+	IDUser      int    `json:"id_user,omitempty"`
 }

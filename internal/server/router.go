@@ -11,7 +11,7 @@ type errorUnauthorizedMessage struct {
 	Message string `json:"message,omitempty"`
 }
 
-// StartRoutes initialize the routes to the group /api/v1
+// StartRouterGroup StartRoutes initialize the routes to the group /api/v1
 func (s *ServerHandler) StartRouterGroup() *ServerHandler {
 	s.RouterGroup = s.ServerEcho.Group("/api/v1")
 
@@ -57,7 +57,7 @@ func (s *ServerHandler) StartRouterGroup() *ServerHandler {
 	return s
 }
 
-// 1.-InitalizeUserRoutes creates the routes for the user requirement based on the group: /v1/api.
+// StartUserRoutes 1.-InitalizeUserRoutes creates the routes for the user requirement based on the group: /v1/api.
 // The routes are:
 //
 //	/crear/usuario
@@ -76,7 +76,7 @@ func (s *ServerHandler) StartUserRoutes() *ServerHandler {
 	return s
 }
 
-// 2.-StartSocioeconomicStatusRoutes creates the routes for the user requirement based on the group: /v1/api.
+// StartSocioeconomicStatusRoutes 2.-StartSocioeconomicStatusRoutes creates the routes for the user requirement based on the group: /v1/api.
 // The routes are:
 //
 //	/crear/nivelSocioeconomico
@@ -92,7 +92,7 @@ func (s *ServerHandler) StartSocioeconomicStatusRoutes() *ServerHandler {
 	return s
 }
 
-// 3.-StartEconomicStatusRoutes creates the routes for the user requirement based on the group: /v1/api.
+// StartEconomicStatusRoutes 3.-StartEconomicStatusRoutes creates the routes for the user requirement based on the group: /v1/api.
 // The routes are:
 //
 //	/crear/nivelEconomico
@@ -108,7 +108,7 @@ func (s *ServerHandler) StartEconomicStatusRoutes() *ServerHandler {
 	return s
 }
 
-// 4.- StartTransportManagementRoutes creates the routes for the user requirement based on the group: /v1/api.
+// StartTransportManagementRoutes 4.- StartTransportManagementRoutes creates the routes for the user requirement based on the group: /v1/api.
 // The routes are:
 //
 //	/crear/medioTransporte
@@ -124,7 +124,7 @@ func (s *ServerHandler) StartTransportManagementRoutes() *ServerHandler {
 	return s
 }
 
-// 5.-StartHouseholdInfrastructureRoutes creates the routes for the user requirement based on the group: /v1/api.
+// StartHouseholdInfrastructureRoutes 5.-StartHouseholdInfrastructureRoutes creates the routes for the user requirement based on the group: /v1/api.
 // The routes are:
 //
 //	/crear/InfraestructuraCasa
@@ -140,7 +140,7 @@ func (s *ServerHandler) StartHouseholdInfrastructureRoutes() *ServerHandler {
 	return s
 }
 
-// 6.-StartDemographicStatusRoutes creates the routes for the user requirement based on the group: /v1/api.
+// StartDemographicStatusRoutes 6.-StartDemographicStatusRoutes creates the routes for the user requirement based on the group: /v1/api.
 // The routes are:
 //
 //	/crear/nivelDemografico
@@ -156,7 +156,7 @@ func (s *ServerHandler) StartDemographicStatusRoutes() *ServerHandler {
 	return s
 }
 
-// 7.-StartActivitiesManagementRoutes creates the routes for the user requirement based on the group: /v1/api.
+// StartActivityManagementRoutes 7.-StartActivitiesManagementRoutes creates the routes for the user requirement based on the group: /v1/api.
 // The routes are:
 //
 //	/crear/actividad
@@ -172,7 +172,7 @@ func (s *ServerHandler) StartActivityManagementRoutes() *ServerHandler {
 	return s
 }
 
-// 8.-StartActivitiesManagementRoutes creates the routes for the user requirement based on the group: /v1/api.
+// StartServiceManagementRoutes 8.-StartActivitiesManagementRoutes creates the routes for the user requirement based on the group: /v1/api.
 // The routes are:
 //
 //	/crear/servicio
@@ -188,7 +188,7 @@ func (s *ServerHandler) StartServiceManagementRoutes() *ServerHandler {
 	return s
 }
 
-// 9.- StartEventManagementRoutes creates the routes for the user requirement based on the group: /v1/api.
+// StartEventManagementRoutes 9.- StartEventManagementRoutes creates the routes for the user requirement based on the group: /v1/api.
 // The routes are:
 //
 //	/crear/evento
@@ -196,15 +196,15 @@ func (s *ServerHandler) StartServiceManagementRoutes() *ServerHandler {
 //	/eliminar/evento
 //	/consultar/evento
 func (s *ServerHandler) StartEventManagementRoutes() *ServerHandler {
-	s.RouterGroup.POST("/crear/evento", s.GenericController.EventManagementController.Create)
-	s.RouterGroup.PUT("/actualizar/evento", s.GenericController.EventManagementController.Update)
-	s.RouterGroup.DELETE("/eliminar/evento", s.GenericController.EventManagementController.Delete)
+	s.RouterGroup.POST("/crear/evento", s.GenericController.EventManagementController.Create, NeedAdmin)
+	s.RouterGroup.PUT("/actualizar/evento", s.GenericController.EventManagementController.Update, NeedAdmin)
+	s.RouterGroup.DELETE("/eliminar/evento", s.GenericController.EventManagementController.Delete, NeedAdmin)
 	s.RouterGroup.GET("/consultar/evento", s.GenericController.EconomicStatusController.Get)
 
 	return s
 }
 
-// 10.- StartSatisfactorySurveysRoutes creates the routes for the user requirement based on the group: /v1/api.
+// StartSatisfactorySurveysRoutes 10.- StartSatisfactorySurveysRoutes creates the routes for the user requirement based on the group: /v1/api.
 // The routes are:
 //
 //	/crear/encuestaSatisfaccion
