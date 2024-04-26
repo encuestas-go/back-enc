@@ -3,12 +3,15 @@ package repository
 import "github.com/encuestas-go/back-enc/internal/database"
 
 type RepositoryStorage struct {
-	UserRespository          *UserRepositoryService
-	SocioeconomicRepository  *SocioeconomicRepositoryService
-	EconomicRepository       *EconomicRepositoryService
-	TransportRepository      *TransportRespositoryService
-	InfrastructureRepository *HouseInfrastructureRepositoryService
-	DemographicRepository    *DemographicRepositoryService
+	UserRespository            *UserRepositoryService
+	SocioeconomicRepository    *SocioeconomicRepositoryService
+	EconomicRepository         *EconomicRepositoryService
+	TransportRepository        *TransportRespositoryService
+	InfrastructureRepository   *HouseInfrastructureRepositoryService
+	DemographicRepository      *DemographicRepositoryService
+	CulturalActivityRepository *CulturalActivityRepositoryService
+	ServicesRepository         *ServicesRepositoryService
+	EventRepository            *EventRepositoryService
 }
 
 func GetRepository() *RepositoryStorage {
@@ -20,13 +23,19 @@ func GetRepository() *RepositoryStorage {
 	transportRepositoryStorage := InitializeTransportRepository(db)
 	infrastructureRepositoryStorage := InitializeInfrastructureRepository(db)
 	demographicRepositoryStorage := InitializeDemographicRepository(db)
+	activityRepositoryStorage := InitializeCulturalActivityRepository(db)
+	servicesRepositoryStorage := InitializeServicesRepository(db)
+	eventRepositoryStorage := InitializeEventRepository(db)
 
 	return &RepositoryStorage{
-		UserRespository:          userRespositoryStorage,
-		SocioeconomicRepository:  socioeconomicRepositoryStorage,
-		EconomicRepository:       economicRepositoryStorage,
-		TransportRepository:      transportRepositoryStorage,
-		InfrastructureRepository: infrastructureRepositoryStorage,
-		DemographicRepository:    demographicRepositoryStorage,
+		UserRespository:            userRespositoryStorage,
+		SocioeconomicRepository:    socioeconomicRepositoryStorage,
+		EconomicRepository:         economicRepositoryStorage,
+		TransportRepository:        transportRepositoryStorage,
+		InfrastructureRepository:   infrastructureRepositoryStorage,
+		DemographicRepository:      demographicRepositoryStorage,
+		CulturalActivityRepository: activityRepositoryStorage,
+		ServicesRepository:         servicesRepositoryStorage,
+		EventRepository:            eventRepositoryStorage,
 	}
 }
