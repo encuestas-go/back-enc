@@ -23,6 +23,7 @@ func (u *UserRepositoryService) Login(userlogin domain.UserLogin) (int, int, err
 		id           int
 		id_user_type int
 	)
+
 	err := u.db.QueryRow(`
 	SELECT ID, ID_TIPO_USUARIO FROM USUARIO WHERE CORREO_ELECTRONICO = ? AND CONTRASENA = SHA2(?,256);
 	`, userlogin.Email, userlogin.Password).Scan(&id, &id_user_type)
@@ -30,6 +31,7 @@ func (u *UserRepositoryService) Login(userlogin domain.UserLogin) (int, int, err
 		log.Println("Could not retrieve information with requested email and password")
 		return 0, 0, err
 	}
+
 	return id, id_user_type, nil
 }
 
@@ -132,6 +134,24 @@ func (u *UserRepositoryService) UpdateOnlyPassword(email string, password string
 	return nil
 }
 
-func (u *UserRepositoryService) Get(user domain.User) error {
-	return nil
+func (u *UserRepositoryService) Get(userID int) ([]domain.User, error) {
+	rows, err := u.db.Query(`SELECT * FROM USUARIO WHERE ID = ?;`, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	var users []domain.User
+	for rows.Next() {
+		var user domain.User
+		if err = rows.Scan(&user.ID, &user.Name, &user.MiddleName, &user.LastName, &user.Email,
+			&user.PhoneNumber, &user.Username, &user.IDUserType, &user.Password); err != nil {
+			return nil, err
+		}
+
+		users = append(users, user)
+	}
+
+	return users, rows.Err()
 }

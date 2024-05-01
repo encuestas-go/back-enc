@@ -15,16 +15,14 @@ import (
 	"github.com/labstack/gommon/log"
 )
 
-// UserController its a struct for User
+// UserController it's a struct for User
 type UserController struct {
 	UserRepository *repository.UserRepositoryService
 }
 
-func InitUserController() *UserController {
-	repositories := repository.GetRepository()
-
+func InitUserController(repo *repository.UserRepositoryService) *UserController {
 	return &UserController{
-		UserRepository: repositories.UserRespository,
+		UserRepository: repo,
 	}
 }
 
@@ -184,7 +182,28 @@ func (u *UserController) Delete(c echo.Context) error {
 }
 
 func (u *UserController) Get(c echo.Context) error {
-	return c.JSON(http.StatusOK, "Here's the user selected")
+	userID := c.QueryParam("user_id")
+	userIDConverted, err := strconv.Atoi(userID)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    fmt.Sprintf("Invalid userID requested: %v", err),
+		})
+	}
+
+	data, err := u.UserRepository.Get(userIDConverted)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("An error occurred when trying to get the user: %v", err),
+		})
+	}
+
+	return c.JSON(http.StatusOK, ControllerMessageResponse{
+		StatusCode: http.StatusOK,
+		Message:    fmt.Sprintf("User with ID %d successfully retrieved", userIDConverted),
+		Data:       data,
+	})
 }
 
 func (u *UserController) sendEmailToUser(c echo.Context, email string) error {

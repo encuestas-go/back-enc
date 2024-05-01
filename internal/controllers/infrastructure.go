@@ -14,10 +14,9 @@ type HouseInfrastructureController struct {
 	InfrastructureRepository *repository.HouseInfrastructureRepositoryService
 }
 
-func InitHouseInfrastructureController() *HouseInfrastructureController {
-	repositories := *repository.GetRepository()
+func InitHouseInfrastructureController(repo *repository.HouseInfrastructureRepositoryService) *HouseInfrastructureController {
 	return &HouseInfrastructureController{
-		InfrastructureRepository: repositories.InfrastructureRepository,
+		InfrastructureRepository: repo,
 	}
 }
 

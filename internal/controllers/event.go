@@ -13,10 +13,9 @@ type EventManagementController struct {
 	EventRepository *repository.EventRepositoryService
 }
 
-func InitEventManagementController() *EventManagementController {
-	repos := repository.GetRepository()
+func InitEventManagementController(repo *repository.EventRepositoryService) *EventManagementController {
 	return &EventManagementController{
-		EventRepository: repos.EventRepository,
+		EventRepository: repo,
 	}
 }
 

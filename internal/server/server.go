@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/encuestas-go/back-enc/internal/controllers"
+	"github.com/encuestas-go/back-enc/internal/database"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -19,13 +20,17 @@ func InitServer() *ServerHandler {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"*"},
-		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+		AllowOrigins:     []string{"*"},
+		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+		AllowCredentials: true,
+		ExposeHeaders:    []string{"*"},
 	}))
+
+	db := database.ConnectToDB()
 
 	return &ServerHandler{
 		ServerEcho:        e,
-		GenericController: controllers.InitGenericController(),
+		GenericController: controllers.InitGenericController(db),
 	}
 }
 

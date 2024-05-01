@@ -15,10 +15,9 @@ type ActivityManagementController struct {
 	ActivityRepository *repository.CulturalActivityRepositoryService
 }
 
-func InitActivityController() *ActivityManagementController {
-	repositories := repository.GetRepository()
+func InitActivityController(repo *repository.CulturalActivityRepositoryService) *ActivityManagementController {
 	return &ActivityManagementController{
-		ActivityRepository: repositories.CulturalActivityRepository,
+		ActivityRepository: repo,
 	}
 }
 

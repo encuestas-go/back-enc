@@ -1,6 +1,8 @@
 package repository
 
-import "github.com/encuestas-go/back-enc/internal/database"
+import (
+	"database/sql"
+)
 
 type RepositoryStorage struct {
 	UserRespository            *UserRepositoryService
@@ -14,9 +16,7 @@ type RepositoryStorage struct {
 	EventRepository            *EventRepositoryService
 }
 
-func GetRepository() *RepositoryStorage {
-	db := database.ConnectToDB()
-
+func GetRepository(db *sql.DB) *RepositoryStorage {
 	userRespositoryStorage := InitializeUserRepository(db)
 	socioeconomicRepositoryStorage := InitializeSocioeconomicRepository(db)
 	economicRepositoryStorage := InitializeEconomicRepository(db)

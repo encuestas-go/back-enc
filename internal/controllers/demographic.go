@@ -14,10 +14,9 @@ type DemographicStatusController struct {
 	DemographicRepository *repository.DemographicRepositoryService
 }
 
-func InitDemographicController() *DemographicStatusController {
-	repositories := repository.GetRepository()
+func InitDemographicController(repo *repository.DemographicRepositoryService) *DemographicStatusController {
 	return &DemographicStatusController{
-		DemographicRepository: repositories.DemographicRepository,
+		DemographicRepository: repo,
 	}
 }
 

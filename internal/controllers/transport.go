@@ -14,10 +14,9 @@ type TransportController struct {
 	TransportRepository *repository.TransportRespositoryService
 }
 
-func InitTransportController() *TransportController {
-	repositories := repository.GetRepository()
+func InitTransportController(repo *repository.TransportRespositoryService) *TransportController {
 	return &TransportController{
-		TransportRepository: repositories.TransportRepository,
+		TransportRepository: repo,
 	}
 }
 

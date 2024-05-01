@@ -1,5 +1,10 @@
 package controllers
 
+import (
+	"database/sql"
+	"github.com/encuestas-go/back-enc/internal/repository"
+)
+
 type ControllerMessageResponse struct {
 	StatusCode int         `json:"status_code"`
 	Message    string      `json:"message"`
@@ -19,17 +24,19 @@ type GenericController struct {
 	UserController                *UserController
 }
 
-func InitGenericController() *GenericController {
+func InitGenericController(db *sql.DB) *GenericController {
+	repositories := repository.GetRepository(db)
+
 	return &GenericController{
-		ActivityManagementController:  InitActivityController(),
-		DemographicController:         InitDemographicController(),
-		EconomicStatusController:      InitEconomicController(),
-		EventManagementController:     InitEventManagementController(),
-		HouseInfrastructureController: InitHouseInfrastructureController(),
+		ActivityManagementController:  InitActivityController(repositories.CulturalActivityRepository),
+		DemographicController:         InitDemographicController(repositories.DemographicRepository),
+		EconomicStatusController:      InitEconomicController(repositories.EconomicRepository),
+		EventManagementController:     InitEventManagementController(repositories.EventRepository),
+		HouseInfrastructureController: InitHouseInfrastructureController(repositories.InfrastructureRepository),
 		SatisfactorySurveyController:  InitSatisfactorySurveyController(),
-		ServiceManagementController:   InitServiceManagementController(),
-		SocioeconomicStatusController: InitSocioeconomicController(),
-		TransportController:           InitTransportController(),
-		UserController:                InitUserController(),
+		ServiceManagementController:   InitServiceManagementController(repositories.ServicesRepository),
+		SocioeconomicStatusController: InitSocioeconomicController(repositories.SocioeconomicRepository),
+		TransportController:           InitTransportController(repositories.TransportRepository),
+		UserController:                InitUserController(repositories.UserRespository),
 	}
 }

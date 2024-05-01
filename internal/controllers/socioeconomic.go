@@ -14,10 +14,9 @@ type SocioeconomicStatusController struct {
 	SocioeconomicRepository *repository.SocioeconomicRepositoryService
 }
 
-func InitSocioeconomicController() *SocioeconomicStatusController {
-	repositories := repository.GetRepository()
+func InitSocioeconomicController(repo *repository.SocioeconomicRepositoryService) *SocioeconomicStatusController {
 	return &SocioeconomicStatusController{
-		SocioeconomicRepository: repositories.SocioeconomicRepository,
+		SocioeconomicRepository: repo,
 	}
 }
 

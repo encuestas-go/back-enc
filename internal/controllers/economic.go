@@ -14,10 +14,9 @@ type EconomicStatusController struct {
 	EconomicRepository *repository.EconomicRepositoryService
 }
 
-func InitEconomicController() *EconomicStatusController {
-	repositories := repository.GetRepository()
+func InitEconomicController(repo *repository.EconomicRepositoryService) *EconomicStatusController {
 	return &EconomicStatusController{
-		EconomicRepository: repositories.EconomicRepository,
+		EconomicRepository: repo,
 	}
 }
 

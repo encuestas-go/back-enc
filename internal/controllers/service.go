@@ -14,10 +14,9 @@ type ServiceManagementController struct {
 	ServiceRepository *repository.ServicesRepositoryService
 }
 
-func InitServiceManagementController() *ServiceManagementController {
-	repositories := repository.GetRepository()
+func InitServiceManagementController(repo *repository.ServicesRepositoryService) *ServiceManagementController {
 	return &ServiceManagementController{
-		ServiceRepository: repositories.ServicesRepository,
+		ServiceRepository: repo,
 	}
 }
 

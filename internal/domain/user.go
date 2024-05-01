@@ -2,6 +2,7 @@ package domain
 
 // User domain contains all the informacion from a user
 type User struct {
+	ID          int    `json:"id,omitempty"`
 	Name        string `json:"name,omitempty"`
 	MiddleName  string `json:"middle_name,omitempty"`
 	LastName    string `json:"last_name,omitempty"`
