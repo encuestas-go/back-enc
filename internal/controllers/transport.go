@@ -90,5 +90,30 @@ func (t *TransportController) Delete(c echo.Context) error {
 }
 
 func (t *TransportController) Get(c echo.Context) error {
-	return c.JSON(http.StatusOK, "Complete information of Transport Management survey")
+	userIDString := c.QueryParam("user_id")
+	if userIDString == "" {
+		userIDString = "0"
+	}
+
+	userID, err := strconv.Atoi(userIDString)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    fmt.Sprintf("invalid input data: %s", err),
+		})
+	}
+
+	res, err := t.TransportRepository.GetAllOrByID(userID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("Failed to get information of survey: %v", err),
+		})
+	}
+
+	return c.JSON(http.StatusOK, ControllerMessageResponse{
+		StatusCode: http.StatusOK,
+		Message:    "Transport Management survey successfully retrieved",
+		Data:       res,
+	})
 }

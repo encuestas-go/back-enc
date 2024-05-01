@@ -33,6 +33,7 @@ type EconomicStatus struct {
 }
 
 type TransportManagement struct {
+	ID                  int    `json:"id,omitempty"`
 	UserID              int    `json:"user_id,omitempty"`
 	PrimaryTransport    string `json:"primary_transport,omitempty"`
 	SecondTransport     string `json:"second_transport,omitempty"`
@@ -43,6 +44,7 @@ type TransportManagement struct {
 }
 
 type HouseholdInfrastructure struct {
+	ID                    int    `json:"id,omitempty"`
 	UserID                int    `json:"user_id,omitempty"`
 	Zone                  string `json:"zone,omitempty"`
 	Permanence            string `json:"permanence,omitempty"`
@@ -58,6 +60,7 @@ type HouseholdInfrastructure struct {
 }
 
 type DemographicStatus struct {
+	ID               int     `json:"id,omitempty"`
 	UserID           int     `json:"user_id,omitempty"`
 	HousingType      string  `json:"housing_type,omitempty"`
 	HouseCondition   string  `json:"house_condition,omitempty"`

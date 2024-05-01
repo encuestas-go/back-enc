@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/encuestas-go/back-enc/internal/domain"
@@ -100,6 +101,29 @@ func (t *TransportRespositoryService) Delete(idUser int) error {
 	return nil
 }
 
-func (t *TransportRespositoryService) Get(domain.TransportManagement) error {
-	return nil
+func (t *TransportRespositoryService) GetAllOrByID(userID int) ([]domain.TransportManagement, error) {
+	var query = `SELECT * FROM ENCUESTA_TRANSPORTE;`
+
+	if userID > 0 {
+		query = fmt.Sprintf(`SELECT * FROM ENCUESTA_TRANSPORTE WHERE ID_USUARIO = %v;`, userID)
+	}
+
+	rows, err := t.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	transportSurvey := []domain.TransportManagement{}
+	for rows.Next() {
+		transport := domain.TransportManagement{}
+		if err = rows.Scan(&transport.ID, &transport.UserID, &transport.PrimaryTransport, &transport.SecondTransport,
+			&transport.UsageFrequency, &transport.AccesiblePoints, &transport.FrequentDestination, &transport.TravelTime); err != nil {
+			return nil, err
+		}
+
+		transportSurvey = append(transportSurvey, transport)
+	}
+	return transportSurvey, nil
 }

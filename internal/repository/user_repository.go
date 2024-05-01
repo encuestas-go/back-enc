@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/encuestas-go/back-enc/internal/domain"
@@ -134,24 +135,32 @@ func (u *UserRepositoryService) UpdateOnlyPassword(email string, password string
 	return nil
 }
 
-func (u *UserRepositoryService) Get(userID int) ([]domain.User, error) {
-	rows, err := u.db.Query(`SELECT * FROM USUARIO WHERE ID = ?;`, userID)
+func (u *UserRepositoryService) GetAllOrByID(id int) ([]domain.User, error) {
+	var query = `SELECT NOMBRE, APELLIDO_PATERNO, APELLIDO_MATERNO, CORREO_ELECTRONICO, NUMERO_TELEFONO, 
+				USUARIO,ID_TIPO_USUARIO FROM USUARIO;`
+
+	if id > 0 {
+		query = fmt.Sprintf(`SELECT NOMBRE, APELLIDO_PATERNO, APELLIDO_MATERNO, CORREO_ELECTRONICO,
+							 NUMERO_TELEFONO, USUARIO,ID_TIPO_USUARIO FROM USUARIO WHERE ID = %v;`, id)
+	}
+
+	rows, err := u.db.Query(query)
 	if err != nil {
 		return nil, err
 	}
 
 	defer rows.Close()
 
-	var users []domain.User
+	users := []domain.User{}
 	for rows.Next() {
-		var user domain.User
-		if err = rows.Scan(&user.ID, &user.Name, &user.MiddleName, &user.LastName, &user.Email,
-			&user.PhoneNumber, &user.Username, &user.IDUserType, &user.Password); err != nil {
+		user := domain.User{}
+		if err = rows.Scan(&user.Name, &user.MiddleName, &user.LastName, &user.Email,
+			&user.PhoneNumber, &user.Username, &user.IDUserType); err != nil {
 			return nil, err
 		}
 
 		users = append(users, user)
 	}
 
-	return users, rows.Err()
+	return users, nil
 }

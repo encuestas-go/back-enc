@@ -182,27 +182,31 @@ func (u *UserController) Delete(c echo.Context) error {
 }
 
 func (u *UserController) Get(c echo.Context) error {
-	userID := c.QueryParam("user_id")
-	userIDConverted, err := strconv.Atoi(userID)
+	userIDString := c.QueryParam("id")
+	if userIDString == "" {
+		userIDString = "0"
+	}
+
+	userID, err := strconv.Atoi(userIDString)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
 			StatusCode: http.StatusBadRequest,
-			Message:    fmt.Sprintf("Invalid userID requested: %v", err),
+			Message:    fmt.Sprintf("invalid input data: %s", err),
 		})
 	}
 
-	data, err := u.UserRepository.Get(userIDConverted)
+	res, err := u.UserRepository.GetAllOrByID(userID)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
 			StatusCode: http.StatusInternalServerError,
-			Message:    fmt.Sprintf("An error occurred when trying to get the user: %v", err),
+			Message:    fmt.Sprintf("Failed to get information of USER: %v", err),
 		})
 	}
 
 	return c.JSON(http.StatusOK, ControllerMessageResponse{
 		StatusCode: http.StatusOK,
-		Message:    fmt.Sprintf("User with ID %d successfully retrieved", userIDConverted),
-		Data:       data,
+		Message:    "Information of the user succesfully retrieved",
+		Data:       res,
 	})
 }
 

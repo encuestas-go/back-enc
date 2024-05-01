@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 	"log"
 
 	"github.com/encuestas-go/back-enc/internal/domain"
@@ -102,6 +103,30 @@ func (d *DemographicRepositoryService) Delete(idUser int) error {
 	return nil
 }
 
-func (d *DemographicRepositoryService) Get(demographic domain.DemographicStatus, id int) error {
-	return nil
+func (d *DemographicRepositoryService) GetAllOrByID(userID int) ([]domain.DemographicStatus, error) {
+	var query = `SELECT * FROM ENCUESTA_NIVEL_DEMOGRAFICO;`
+
+	if userID > 0 {
+		query = fmt.Sprintf(`SELECT * FROM ENCUESTA_NIVEL_DEMOGRAFICO WHERE ID_USUARIO = %v;`, userID)
+	}
+
+	rows, err := d.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	demographicSurvey := []domain.DemographicStatus{}
+	for rows.Next() {
+		demographic := domain.DemographicStatus{}
+		if err = rows.Scan(&demographic.ID, &demographic.UserID, &demographic.HousingType, &demographic.HouseCondition,
+			&demographic.OwnTransport, &demographic.IncomeAmount, &demographic.WorkingMembers, &demographic.MembersUnderage,
+			&demographic.MonthlyExpenses, &demographic.GovermentSupport); err != nil {
+			return nil, err
+		}
+
+		demographicSurvey = append(demographicSurvey, demographic)
+	}
+	return demographicSurvey, nil
 }
