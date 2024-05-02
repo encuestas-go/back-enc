@@ -58,7 +58,6 @@ func TestInsert(t *testing.T) {
 		WithArgs(user.Name, user.MiddleName, user.LastName, user.Email, user.PhoneNumber, user.Username,
 			user.Password, user.IDUserType).
 		WillReturnResult(sqlmock.NewResult(1, 1))
-	mock.ExpectCommit()
 
 	// THEN
 	err = userRepository.Insert(user)
@@ -101,7 +100,6 @@ func TestUpdate(t *testing.T) {
 
 }
 
-// REVIEW THIS TEST DELETE FOR USER
 func TestDelete(t *testing.T) {
 	// GIVEN
 	db, mock, err := sqlmock.New()

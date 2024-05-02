@@ -158,7 +158,6 @@ func (u *UserController) Update(c echo.Context) error {
 }
 
 func (u *UserController) Delete(c echo.Context) error {
-	user := domain.User{}
 	userID := c.QueryParam("user_id")
 	userIDConverted, err := strconv.Atoi(userID)
 	if err != nil {
@@ -167,7 +166,7 @@ func (u *UserController) Delete(c echo.Context) error {
 			Message:    fmt.Sprintf("Invalid userID requested: %v", err),
 		})
 	}
-	err = u.UserRepository.Delete(user, userIDConverted)
+	err = u.UserRepository.Delete(userIDConverted)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
 			StatusCode: http.StatusInternalServerError,
