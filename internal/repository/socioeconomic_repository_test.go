@@ -112,32 +112,6 @@ func Test_Socioeconomic_Delete(t *testing.T) {
 	assert.NoError(t, err)
 }
 
-/*
-func Test_Socioeconomic_Get(t *testing.T) {
-	// GIVEN
-	db, mock, err := sqlmock.New()
-	assert.NoError(t, err)
-	defer db.Close()
-
-	socioeconomicRepository := InitializeSocioeconomicRepository(db)
-
-	userID := 1
-
-	rows := sqlmock.NewRows([]string{"ID_USER", "FULL_NAME", "BIRTH_DATE", "NATIONALITY", "GENDER", "AGE",
-		"MARITAL_STATUS", "RESIDENCE_ADDRESS", "RESIDENCE_CITY", "POSTAL_CODE", "STATE", "SOCIOECONOMIC_STATUS",
-		"LANGUAGE", "DEGREE_ASPIRED", "LAST_DEGREE_FATHER", "LAST_DEGREE_MOTHER"}).AddRow(1, 1)
-	mock.ExpectQuery(`SELECT * FROM ENCUESTA_NIVEL_SOCIOECONOMICO`).WillReturnRows(rows)
-
-	// THEN
-	result, err := socioeconomicRepository.GetAllOrByID(userID)
-
-	// EXPECT
-	assert.NoError(t, err)
-	assert.NotNil(t, result)
-	assert.Equal(t, userID, result.IDUser)
-}
-*/
-
 func Test_Socioeconomic_Get(t *testing.T) {
 	// GIVEN
 	db, mock, err := sqlmock.New()
