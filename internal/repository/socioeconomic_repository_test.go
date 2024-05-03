@@ -131,12 +131,10 @@ func Test_Socioeconomic_Get(t *testing.T) {
 	mock.ExpectQuery(`SELECT \* FROM ENCUESTA_NIVEL_SOCIOECONOMICO`).WillReturnRows(rows)
 
 	// THEN
-	results, err := socioeconomicRepository.GetAllOrByID(userID)
+	result, err := socioeconomicRepository.GetAllOrByID(userID)
 
 	// EXPECT
 	assert.NoError(t, err)
-	assert.NotNil(t, results)
-	for _, result := range results {
-		assert.Equal(t, userID, result.IDUser)
-	}
+	assert.NotNil(t, result)
+	assert.Equal(t, userID, result[0].IDUser)
 }
