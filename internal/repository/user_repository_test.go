@@ -43,7 +43,6 @@ func TestInsert(t *testing.T) {
 	userRepository := InitializeUserRepository(db)
 
 	user := domain.User{
-		ID:          1,
 		Name:        "Lorena",
 		MiddleName:  "Valle",
 		LastName:    "Gonzalez",
@@ -86,7 +85,6 @@ func TestUpdate(t *testing.T) {
 		IDUserType:  1,
 	}
 
-	//mock.ExpectExec("UPDATE USUARIO").WillReturnResult(sqlmock.NewResult(1, 1))
 	mock.ExpectExec("UPDATE USUARIO").
 		WithArgs(user.Name, user.MiddleName, user.LastName, user.Email, user.PhoneNumber, user.Username,
 			user.Password, user.IDUserType, user.ID).
@@ -112,7 +110,7 @@ func TestDelete(t *testing.T) {
 
 	mock.ExpectExec("DELETE FROM USUARIO").
 		WithArgs(userID).
-		WillReturnResult(sqlmock.NewResult(0, 1)) // Se espera que una fila sea afectada
+		WillReturnResult(sqlmock.NewResult(0, 1))
 
 	// THEN
 	err = userRepository.Delete(userID)
