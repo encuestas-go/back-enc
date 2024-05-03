@@ -95,7 +95,7 @@ func (u *UserRepositoryService) Update(user domain.User, id int) error {
 	return nil
 }
 
-func (u *UserRepositoryService) Delete(user domain.User, id int) error {
+func (u *UserRepositoryService) Delete(id int) error {
 	result, err := u.db.Exec("DELETE FROM USUARIO WHERE ID = ?;", id)
 	if err != nil {
 		log.Println("Could not delete the id on user table, the error was: ", err)
