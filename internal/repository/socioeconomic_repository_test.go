@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
@@ -137,4 +138,9 @@ func Test_Socioeconomic_Get(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
 	assert.Equal(t, userID, result[0].IDUser)
+}
+
+func Test_Socioeconomic_GetAll(t *testing.T) {
+	e := errors.New("error")
+	assert.NoError(t, e)
 }
