@@ -120,7 +120,7 @@ func (u *UserController) Create(c echo.Context) error {
 
 	return c.JSON(http.StatusCreated, ControllerMessageResponse{
 		StatusCode: http.StatusCreated,
-		Message:    fmt.Sprintf("Creater %v successfully", user.Username),
+		Message:    fmt.Sprintf("Created %v successfully", user.Username),
 	})
 }
 
@@ -131,7 +131,7 @@ func (u *UserController) Update(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
 			StatusCode: http.StatusBadRequest,
-			Message:    fmt.Sprintf("Invalid userID requested: %v", err),
+			Message:    fmt.Sprintf("Invalid ID user requested: %v", err),
 		})
 	}
 
@@ -151,8 +151,8 @@ func (u *UserController) Update(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusCreated, ControllerMessageResponse{
-		StatusCode: http.StatusCreated,
+	return c.JSON(http.StatusOK, ControllerMessageResponse{
+		StatusCode: http.StatusOK,
 		Message:    fmt.Sprintf("User with ID %s successfully updated", userID),
 	})
 }
@@ -174,8 +174,8 @@ func (u *UserController) Delete(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusCreated, ControllerMessageResponse{
-		StatusCode: http.StatusCreated,
+	return c.JSON(http.StatusOK, ControllerMessageResponse{
+		StatusCode: http.StatusOK,
 		Message:    fmt.Sprintf("User with ID %s successfully deleted", userID),
 	})
 }
