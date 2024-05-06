@@ -1,6 +1,7 @@
 package server
 
 import (
+	"log"
 	"net/http"
 	"strconv"
 
@@ -17,6 +18,11 @@ func (s *ServerHandler) StartRouterGroup() *ServerHandler {
 
 	s.RouterGroup.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
+
+			for i, v := range c.Cookies() {
+				log.Println("cookie value", i, v)
+			}
+
 			cookieIDUser, err := c.Cookie("id_user")
 			if err != nil {
 				return c.JSON(http.StatusUnauthorized, errorUnauthorizedMessage{

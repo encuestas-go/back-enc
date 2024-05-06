@@ -60,16 +60,28 @@ func (u *UserController) Login(c echo.Context) error {
 	idUserConverted := strconv.Itoa(idUser)
 	idTypeUserConverted := strconv.Itoa(idTypeUser)
 
+	expires := time.Now().Add(24 * time.Hour)
+
 	cookieIDUser := new(http.Cookie)
 	cookieIDUser.Name = "id_user"
 	cookieIDUser.Value = idUserConverted
-	cookieIDUser.Expires = time.Now().Add(24 * time.Hour)
+	cookieIDUser.Expires = expires
+	cookieIDUser.Path = "/"
+	cookieIDUser.Domain = ""
+	cookieIDUser.HttpOnly = false
+	cookieIDUser.Secure = false
+	cookieIDUser.SameSite = http.SameSiteNoneMode
 	c.SetCookie(cookieIDUser)
 
 	cookieIDTypeUser := new(http.Cookie)
 	cookieIDTypeUser.Name = "id_type_user"
 	cookieIDTypeUser.Value = idTypeUserConverted
-	cookieIDTypeUser.Expires = time.Now().Add(24 * time.Hour)
+	cookieIDTypeUser.Expires = expires
+	cookieIDTypeUser.Path = "/"
+	cookieIDTypeUser.Domain = ""
+	cookieIDTypeUser.HttpOnly = false
+	cookieIDTypeUser.Secure = false
+	cookieIDTypeUser.SameSite = http.SameSiteNoneMode
 	c.SetCookie(cookieIDTypeUser)
 
 	return c.JSON(http.StatusOK, userLoginResponse{
