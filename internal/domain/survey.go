@@ -107,3 +107,22 @@ type Event struct {
 	Category    string `json:"category,omitempty"`
 	IDUser      int    `json:"id_user,omitempty"`
 }
+
+type AnswerResponseForum struct {
+	Questions []Question `json:"questions,omitempty"`
+}
+
+type Question struct {
+	ID           int      `json:"id,omitempty"`
+	IDUser       int      `json:"id_user,omitempty"`
+	Name         string   `json:"name,omitempty"`
+	QuestionText string   `json:"question_text,omitempty"`
+	Answers      []Answer `json:"answers,omitempty"`
+}
+
+type Answer struct {
+	ID         int    `json:"id,omitempty"`
+	IDUser     int    `json:"id_user,omitempty"`
+	Name       string `json:"name,omitempty"`
+	AnswerText string `json:"answer_text,omitempty"`
+}
