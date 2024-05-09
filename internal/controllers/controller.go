@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"database/sql"
+
 	"github.com/encuestas-go/back-enc/internal/repository"
 )
 
@@ -22,6 +23,7 @@ type GenericController struct {
 	SocioeconomicStatusController *SocioeconomicStatusController
 	TransportController           *TransportController
 	UserController                *UserController
+	ForumController               *ForumController
 }
 
 func InitGenericController(db *sql.DB) *GenericController {
@@ -38,5 +40,6 @@ func InitGenericController(db *sql.DB) *GenericController {
 		SocioeconomicStatusController: InitSocioeconomicController(repositories.SocioeconomicRepository),
 		TransportController:           InitTransportController(repositories.TransportRepository),
 		UserController:                InitUserController(repositories.UserRespository),
+		ForumController:               InitForumController(repositories.ForumRepository),
 	}
 }

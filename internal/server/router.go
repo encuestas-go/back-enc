@@ -228,3 +228,14 @@ func (s *ServerHandler) StartSatisfactorySurveysRoutes() *ServerHandler {
 
 	return s
 }
+
+// StartForumRoutes  11.-StartForumRoutes creates de routes for the forum, to publish a question by part of an user,
+// and answers from other user.
+// The routes are:
+//
+//	/ingresar/foro
+func (s *ServerHandler) StartForumRoutes() *ServerHandler {
+	s.RouterGroup.GET("/ingresar/foro", s.GenericController.ForumController.Get)
+
+	return s
+}
