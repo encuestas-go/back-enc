@@ -16,7 +16,7 @@ func InitializeForumRepository(db *sql.DB) *ForumRepositoryService {
 	}
 }
 
-func (f *ForumRepositoryService) GetAll() (domain.AnswerResponseForum{}, error) {
+func (f *ForumRepositoryService) GetAll() (*domain.AnswerResponseForum, error) {
 	questionsQuery := `
 	SELECT FORO_PREGUNTA.ID, FORO_PREGUNTA.PREGUNTA, USUARIO.NOMBRE
 	FROM FORO_PREGUNTA
@@ -70,5 +70,5 @@ func (f *ForumRepositoryService) GetAll() (domain.AnswerResponseForum{}, error) 
 		Questions: questions,
 	}
 
-	return forumResponse, nil
+	return &forumResponse, nil
 }
