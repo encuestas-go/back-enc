@@ -32,7 +32,7 @@ func (f *ForumRepositoryService) GetAll() (*domain.AnswerResponseForum, error) {
 	questions := []domain.Question{}
 	for questionRows.Next() {
 		question := domain.Question{}
-		if err = questionRows.Scan(&question.ID, &question.IDUser, &question.QuestionText, &question.Name); err != nil {
+		if err = questionRows.Scan(&question.ID, &question.QuestionText, &question.Name); err != nil {
 			return nil, err
 		}
 		questions = append(questions, question)

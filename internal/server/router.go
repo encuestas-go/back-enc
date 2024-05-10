@@ -235,7 +235,7 @@ func (s *ServerHandler) StartSatisfactorySurveysRoutes() *ServerHandler {
 //
 //	/ingresar/foro
 func (s *ServerHandler) StartForumRoutes() *ServerHandler {
-	s.RouterGroup.GET("/ingresar/foro", s.GenericController.ForumController.Get)
+	s.RouterGroup.GET("/datos/foro", s.GenericController.ForumController.Get)
 
 	return s
 }
