@@ -61,8 +61,8 @@ func (s *SocioeconomicStatusController) Update(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusCreated, ControllerMessageResponse{
-		StatusCode: http.StatusCreated,
+	return c.JSON(http.StatusOK, ControllerMessageResponse{
+		StatusCode: http.StatusOK,
 		Message:    "Socioeconomic survey succesfully updated",
 	})
 }
@@ -85,8 +85,8 @@ func (s *SocioeconomicStatusController) Delete(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusCreated, ControllerMessageResponse{
-		StatusCode: http.StatusCreated,
+	return c.JSON(http.StatusOK, ControllerMessageResponse{
+		StatusCode: http.StatusOK,
 		Message:    "Socioeconomic Status survey succesfully deleted",
 	})
 }

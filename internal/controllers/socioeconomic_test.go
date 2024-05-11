@@ -101,7 +101,6 @@ func TestUpdateSocioeconomicSurvey(t *testing.T) {
 		//GIVEN
 		socioeconomic := domain.SocioeconomicStatus{
 			ID:                  1,
-			IDUser:              1,
 			FullName:            "",
 			BirthDate:           "",
 			Nationality:         "",
@@ -123,7 +122,7 @@ func TestUpdateSocioeconomicSurvey(t *testing.T) {
 		socioeconomicJSON, err := json.Marshal(socioeconomic)
 		assert.NoError(t, err)
 
-		request := httptest.NewRequest(http.MethodPost, "/crear/nivelSocioeconomico", strings.NewReader(string(socioeconomicJSON)))
+		request := httptest.NewRequest(http.MethodPost, "/actualizar/nivelSocioeconomico/", strings.NewReader(string(socioeconomicJSON)))
 		request.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		recorder := httptest.NewRecorder()
 		echoContext := e.NewContext(request, recorder)
@@ -134,23 +133,23 @@ func TestUpdateSocioeconomicSurvey(t *testing.T) {
 		socioeconomicRepository := repository.InitializeSocioeconomicRepository(db)
 
 		mock.ExpectExec(`UPDATE ENCUESTA_NIVEL_SOCIOECONOMICO`).
-			WithArgs(socioeconomic.IDUser, socioeconomic.FullName, socioeconomic.BirthDate,
+			WithArgs(socioeconomic.FullName, socioeconomic.BirthDate,
 				socioeconomic.Nationality, socioeconomic.Gender, socioeconomic.Age, socioeconomic.MaritalStatus,
 				socioeconomic.ResidenceAddress, socioeconomic.ResidenceCity, socioeconomic.PostalCode,
 				socioeconomic.State, socioeconomic.SocioeconomicStatus, socioeconomic.Language, socioeconomic.DegreeAspired,
-				socioeconomic.LastDegreeFather, socioeconomic.LastDegreeMother).
+				socioeconomic.LastDegreeFather, socioeconomic.LastDegreeMother, socioeconomic.IDUser).
 			WillReturnResult(sqlmock.NewResult(1, 1))
 
 		//WHEN
-		err = InitSocioeconomicController(socioeconomicRepository).Create((echoContext))
+		err = InitSocioeconomicController(socioeconomicRepository).Update((echoContext))
 
 		//THEN
 		if assert.NoError(t, err) {
-			assert.Equal(t, http.StatusCreated, recorder.Code)
+			assert.Equal(t, http.StatusOK, recorder.Code)
 
 			expectedControllerMessage := ControllerMessageResponse{
-				StatusCode: http.StatusCreated,
-				Message:    fmt.Sprintf("Socioeconomic Status survey succesfully created"),
+				StatusCode: http.StatusOK,
+				Message:    fmt.Sprintf("Socioeconomic survey succesfully updated"),
 			}
 			expectedBody, err := json.Marshal(expectedControllerMessage)
 			assert.Nil(t, err)
@@ -158,5 +157,52 @@ func TestUpdateSocioeconomicSurvey(t *testing.T) {
 			assert.Contains(t, recorder.Body.String(), string(expectedBody))
 		}
 	})
+}
+
+func TestDeleteSocioeconomicSurvey(t *testing.T) {
+	t.Run("Delete Socioeconomic Survey Succesfully", func(t *testing.T) {
+		//GIVEN
+		e := echo.New()
+
+		request := httptest.NewRequest(http.MethodPost, "/eliminar/nivelSocioeconomico?user_id=1", nil)
+		request.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		recorder := httptest.NewRecorder()
+		echoContext := e.NewContext(request, recorder)
+
+		db, mock, err := sqlmock.New()
+		assert.NoError(t, err)
+		defer db.Close()
+		socioeconomicRepository := repository.InitializeSocioeconomicRepository(db)
+
+		mock.ExpectExec(`DELETE FROM ENCUESTA_NIVEL_SOCIOECONOMICO`).
+			WithArgs(1).
+			WillReturnResult(sqlmock.NewResult(0, 1))
+
+		//WHEN
+		err = InitSocioeconomicController(socioeconomicRepository).Delete(echoContext)
+
+		//THEN
+		assert.NoError(t, err)
+		assert.Equal(t, http.StatusOK, recorder.Result().StatusCode)
+	})
+
+	t.Run("Delete Socioeconomic survey when ID is invalid", func(t *testing.T) {
+		//GIVEN
+		e := echo.New()
+		request := httptest.NewRequest(http.MethodDelete, "/eliminar/nivelSocioeconomico", nil)
+		request.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		recorder := httptest.NewRecorder()
+		echoContext := e.NewContext(request, recorder)
+
+		// WHEN
+		err := InitSocioeconomicController(nil).Delete((echoContext))
+
+		// THEN
+		assert.Nil(t, err)
+		assert.Equal(t, http.StatusBadRequest, recorder.Result().StatusCode)
+	})
+}
+
+func TestGetSocioeconomicSurvey(t *testing.T) {
 
 }
