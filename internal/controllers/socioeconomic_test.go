@@ -16,27 +16,25 @@ import (
 )
 
 func TestCreateSocioeconomicSurvey(t *testing.T) {
-
 	t.Run("Created Socioeconomic Survey Succesfully", func(t *testing.T) {
 		//GIVEN
 		socioeconomic := domain.SocioeconomicStatus{
-			ID:                  1,
 			IDUser:              1,
-			FullName:            "",
-			BirthDate:           "",
-			Nationality:         "",
-			Gender:              "",
+			FullName:            "Paula Hierro Narvarez",
+			BirthDate:           "30/04/2000",
+			Nationality:         "Mexicana",
+			Gender:              "Femenino",
 			Age:                 23,
-			MaritalStatus:       "",
-			ResidenceAddress:    "",
-			ResidenceCity:       "",
+			MaritalStatus:       "Soltera",
+			ResidenceAddress:    "Calle Juarez",
+			ResidenceCity:       "Cuernavaca",
 			PostalCode:          62345,
 			State:               "Morelos",
-			SocioeconomicStatus: "",
-			Language:            "",
-			DegreeAspired:       "",
-			LastDegreeFather:    "",
-			LastDegreeMother:    "",
+			SocioeconomicStatus: "Media-Baja",
+			Language:            "Ruso",
+			DegreeAspired:       "Doctorado",
+			LastDegreeFather:    "Secundaria",
+			LastDegreeMother:    "Primaria",
 		}
 
 		e := echo.New()
@@ -97,32 +95,32 @@ func TestCreateSocioeconomicSurvey(t *testing.T) {
 }
 
 func TestUpdateSocioeconomicSurvey(t *testing.T) {
-	t.Run("Created Socioeconomic Survey Succesfully", func(t *testing.T) {
+	t.Run("Updated Socioeconomic Survey Succesfully", func(t *testing.T) {
 		//GIVEN
 		socioeconomic := domain.SocioeconomicStatus{
 			ID:                  1,
-			FullName:            "",
-			BirthDate:           "",
-			Nationality:         "",
-			Gender:              "",
-			Age:                 23,
-			MaritalStatus:       "",
-			ResidenceAddress:    "",
-			ResidenceCity:       "",
+			FullName:            "Paula Hierro Narvarez",
+			BirthDate:           "30/04/2000",
+			Nationality:         "Mexicana",
+			Gender:              "Femenino",
+			Age:                 24,
+			MaritalStatus:       "Soltera",
+			ResidenceAddress:    "Calle Juarez",
+			ResidenceCity:       "Cuernavaca",
 			PostalCode:          62345,
 			State:               "Morelos",
-			SocioeconomicStatus: "",
-			Language:            "",
-			DegreeAspired:       "",
-			LastDegreeFather:    "",
-			LastDegreeMother:    "",
+			SocioeconomicStatus: "Media-Baja",
+			Language:            "Ruso",
+			DegreeAspired:       "Doctorado",
+			LastDegreeFather:    "Secundaria",
+			LastDegreeMother:    "Secundaria",
 		}
 
 		e := echo.New()
 		socioeconomicJSON, err := json.Marshal(socioeconomic)
 		assert.NoError(t, err)
 
-		request := httptest.NewRequest(http.MethodPost, "/actualizar/nivelSocioeconomico/", strings.NewReader(string(socioeconomicJSON)))
+		request := httptest.NewRequest(http.MethodPost, "/actualizar/nivelSocioeconomico", strings.NewReader(string(socioeconomicJSON)))
 		request.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		recorder := httptest.NewRecorder()
 		echoContext := e.NewContext(request, recorder)
@@ -156,6 +154,22 @@ func TestUpdateSocioeconomicSurvey(t *testing.T) {
 
 			assert.Contains(t, recorder.Body.String(), string(expectedBody))
 		}
+	})
+
+	t.Run("Update socioeconomic status fails due to invalid JSON", func(t *testing.T) {
+		// GIVEN
+		e := echo.New()
+		request := httptest.NewRequest(http.MethodPut, "/actualizar/nivelSocioeconomico", strings.NewReader(`{"}`))
+		request.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+		recorder := httptest.NewRecorder()
+		echoContext := e.NewContext(request, recorder)
+
+		// WHEN
+		err := InitSocioeconomicController(nil).Update((echoContext))
+
+		// THEN
+		assert.Nil(t, err)
+		assert.Equal(t, http.StatusInternalServerError, recorder.Result().StatusCode)
 	})
 }
 
@@ -204,5 +218,38 @@ func TestDeleteSocioeconomicSurvey(t *testing.T) {
 }
 
 func TestGetSocioeconomicSurvey(t *testing.T) {
+	t.Run("Retrieve Socioeconomic Survey data Successfully", func(t *testing.T) {
+		//GIVEN
+		socioeconomic := domain.SocioeconomicStatus{}
+		//e := echo.New()
+		socioeconomicJSON, err := json.Marshal(socioeconomic)
+		assert.NoError(t, err)
 
+		request := httptest.NewRequest(http.MethodPost, "/consultar/nivelSocioeconomico/", strings.NewReader(string(socioeconomicJSON)))
+		request.Header.Set("Content-Type", "application/json")
+
+		db, mock, err := sqlmock.New()
+		assert.NoError(t, err)
+		defer db.Close()
+
+		socioeconomicRepository := repository.InitializeSocioeconomicRepository(db)
+
+		userID := 1
+
+		rows := sqlmock.NewRows([]string{"ID", "ID_USER", "FULL_NAME", "BIRTH_DATE", "NATIONALITY", "GENDER", "AGE",
+			"MARITAL_STATUS", "RESIDENCE_ADDRESS", "RESIDENCE_CITY", "POSTAL_CODE", "STATE", "SOCIOECONOMIC_STATUS",
+			"LANGUAGE", "DEGREE_ASPIRED", "LAST_DEGREE_FATHER", "LAST_DEGREE_MOTHER"}).
+			AddRow(1, 1, "Maria Flores Flores", "25/05/2001", "Mexicana", "Femenino", 23, "Soltera", "Calle Necatepec",
+				"Jiutepec", 67890, "Morelos", "Media", "Frances", "Maestria", "Bachillerato", "Secundaria")
+
+		mock.ExpectQuery(`SELECT \* FROM ENCUESTA_NIVEL_SOCIOECONOMICO`).WillReturnRows(rows)
+
+		// WHEN
+		result, err := socioeconomicRepository.GetAllOrByID(userID)
+
+		// THEN
+		assert.NoError(t, err)
+		assert.NotNil(t, result)
+		assert.Equal(t, userID, result[0].IDUser)
+	})
 }
