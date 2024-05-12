@@ -60,7 +60,7 @@ func TestCreateSocioeconomicSurvey(t *testing.T) {
 			WillReturnResult(sqlmock.NewResult(1, 1))
 
 		//WHEN
-		err = InitSocioeconomicController(socioeconomicRepository).Create((echoContext))
+		err = InitSocioeconomicController(socioeconomicRepository).Create(echoContext)
 
 		//THEN
 		if assert.NoError(t, err) {
@@ -225,7 +225,7 @@ func TestGetSocioeconomicSurvey(t *testing.T) {
 		socioeconomicJSON, err := json.Marshal(socioeconomic)
 		assert.NoError(t, err)
 
-		request := httptest.NewRequest(http.MethodPost, "/consultar/nivelSocioeconomico/", strings.NewReader(string(socioeconomicJSON)))
+		request := httptest.NewRequest(http.MethodGet, "/consultar/nivelSocioeconomico", strings.NewReader(string(socioeconomicJSON)))
 		request.Header.Set("Content-Type", "application/json")
 
 		db, mock, err := sqlmock.New()

@@ -201,7 +201,7 @@ func TestGetEconomicSurvey(t *testing.T) {
 		economicJSON, err := json.Marshal(economic)
 		assert.NoError(t, err)
 
-		request := httptest.NewRequest(http.MethodPost, "/consultar/nivelEconomico", strings.NewReader(string(economicJSON)))
+		request := httptest.NewRequest(http.MethodGet, "/consultar/nivelEconomico", strings.NewReader(string(economicJSON)))
 		request.Header.Set("Content-Type", "application/json")
 
 		db, mock, err := sqlmock.New()

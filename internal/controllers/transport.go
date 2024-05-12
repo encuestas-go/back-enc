@@ -60,8 +60,8 @@ func (t *TransportController) Update(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusCreated, ControllerMessageResponse{
-		StatusCode: http.StatusCreated,
+	return c.JSON(http.StatusOK, ControllerMessageResponse{
+		StatusCode: http.StatusOK,
 		Message:    "Transport Management survey succesfully updated",
 	})
 }
@@ -83,8 +83,8 @@ func (t *TransportController) Delete(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusCreated, ControllerMessageResponse{
-		StatusCode: http.StatusCreated,
+	return c.JSON(http.StatusOK, ControllerMessageResponse{
+		StatusCode: http.StatusOK,
 		Message:    "Transport Management survey succesfully deleted",
 	})
 }
