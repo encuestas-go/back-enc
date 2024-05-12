@@ -43,10 +43,10 @@ func Test_Socioeconomic_Insert(t *testing.T) {
 			socioeconomic.LastDegreeFather, socioeconomic.LastDegreeMother).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
-	// THEN
+	// WHEN
 	err = socioeconomicRepository.Insert(socioeconomic)
 
-	// EXPECT
+	// THEN
 	assert.NoError(t, err)
 }
 
@@ -84,10 +84,10 @@ func Test_Socioeconomic_Update(t *testing.T) {
 			socioeconomic.IDUser).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
-	// THEN
+	// WHEN
 	err = socioeconomicRepository.Update(socioeconomic)
 
-	// EXPECT
+	// THEN
 	assert.NoError(t, err)
 }
 
@@ -105,10 +105,10 @@ func Test_Socioeconomic_Delete(t *testing.T) {
 		WithArgs(userID).
 		WillReturnResult(sqlmock.NewResult(0, 1))
 
-	// THEN
+	// WHEN
 	err = socioeconomicRepository.Delete(userID)
 
-	// EXPECT
+	// THEN
 	assert.NoError(t, err)
 }
 
@@ -130,10 +130,10 @@ func Test_Socioeconomic_Get(t *testing.T) {
 
 	mock.ExpectQuery(`SELECT \* FROM ENCUESTA_NIVEL_SOCIOECONOMICO`).WillReturnRows(rows)
 
-	// THEN
+	// WHEN
 	result, err := socioeconomicRepository.GetAllOrByID(userID)
 
-	// EXPECT
+	// THEN
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
 	assert.Equal(t, userID, result[0].IDUser)
