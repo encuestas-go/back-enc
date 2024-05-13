@@ -178,7 +178,7 @@ func TestDeleteSocioeconomicSurvey(t *testing.T) {
 		//GIVEN
 		e := echo.New()
 
-		request := httptest.NewRequest(http.MethodPost, "/eliminar/nivelSocioeconomico?user_id=1", nil)
+		request := httptest.NewRequest(http.MethodDelete, "/eliminar/nivelSocioeconomico?user_id=1", nil)
 		request.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		recorder := httptest.NewRecorder()
 		echoContext := e.NewContext(request, recorder)
