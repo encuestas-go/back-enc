@@ -80,7 +80,7 @@ func (t *TransportRespositoryService) Update(transport domain.TransportManagemen
 }
 
 func (t *TransportRespositoryService) Delete(idUser int) error {
-	result, err := t.db.Exec("DELETE FROM ENCUESTA_TRANSPORTE WHERE ID_USUARIO =?;")
+	result, err := t.db.Exec("DELETE FROM ENCUESTA_TRANSPORTE WHERE ID_USUARIO = ?;", idUser)
 	if err != nil {
 		log.Println("Could not delete the ID on ENCUESTA_TRANSPORTE table, the error was: ", err)
 		return err
@@ -93,10 +93,10 @@ func (t *TransportRespositoryService) Delete(idUser int) error {
 	}
 
 	if rowsDeleted > 0 {
-		log.Printf("ID %v was successfully deleted from ENCUESTA_NIVEL_ECONOMICO table", idUser)
+		log.Printf("ID %v was successfully deleted from ENCUESTA_TRANSPORTE table", idUser)
 		return nil
 	} else if rowsDeleted == 0 {
-		return errors.New("could not delete the requested ID in the ENCUESTA_NIVEL_ECONOMICO table")
+		return errors.New("could not delete the requested ID in the ENCUESTA_TRANSPORTE table")
 	}
 	return nil
 }

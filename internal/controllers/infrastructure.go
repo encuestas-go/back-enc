@@ -61,8 +61,8 @@ func (h *HouseInfrastructureController) Update(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusCreated, ControllerMessageResponse{
-		StatusCode: http.StatusCreated,
+	return c.JSON(http.StatusOK, ControllerMessageResponse{
+		StatusCode: http.StatusOK,
 		Message:    "Household Infrastructure survey succesfully updated",
 	})
 }
@@ -85,8 +85,8 @@ func (h *HouseInfrastructureController) Delete(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusCreated, ControllerMessageResponse{
-		StatusCode: http.StatusCreated,
+	return c.JSON(http.StatusOK, ControllerMessageResponse{
+		StatusCode: http.StatusOK,
 		Message:    "Household Infrastructure survey succesfully deleted",
 	})
 }

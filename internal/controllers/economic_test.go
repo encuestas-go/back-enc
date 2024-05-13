@@ -47,10 +47,10 @@ func TestCreateEconomicSurvey(t *testing.T) {
 				economic.EmploymentType, economic.Salary, economic.AmountType, economic.WorkBenefitsType).
 			WillReturnResult(sqlmock.NewResult(1, 1))
 
-		//THEN
+		//WHEN
 		err = InitEconomicController(economicRepository).Create((echoContext))
 
-		//WHEN
+		//THEN
 		if assert.NoError(t, err) {
 			assert.Equal(t, http.StatusCreated, recorder.Code)
 
@@ -80,7 +80,6 @@ func TestCreateEconomicSurvey(t *testing.T) {
 		assert.Nil(t, err)
 		assert.Equal(t, http.StatusInternalServerError, recorder.Result().StatusCode)
 	})
-
 }
 
 func TestUpdateEconomicSurvey(t *testing.T) {
@@ -154,7 +153,7 @@ func TestDeleteEconomicSurvey(t *testing.T) {
 		//GIVEN
 		e := echo.New()
 
-		request := httptest.NewRequest(http.MethodPost, "/eliminar/Economico?user_id=1", nil)
+		request := httptest.NewRequest(http.MethodDelete, "/eliminar/Economico?user_id=1", nil)
 		request.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 		recorder := httptest.NewRecorder()
 		echoContext := e.NewContext(request, recorder)
@@ -201,7 +200,7 @@ func TestGetEconomicSurvey(t *testing.T) {
 		economicJSON, err := json.Marshal(economic)
 		assert.NoError(t, err)
 
-		request := httptest.NewRequest(http.MethodPost, "/consultar/nivelEconomico", strings.NewReader(string(economicJSON)))
+		request := httptest.NewRequest(http.MethodGet, "/consultar/nivelEconomico", strings.NewReader(string(economicJSON)))
 		request.Header.Set("Content-Type", "application/json")
 
 		db, mock, err := sqlmock.New()

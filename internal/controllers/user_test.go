@@ -198,5 +198,4 @@ func TestDeleteUser(t *testing.T) {
 		assert.Nil(t, err)
 		assert.Equal(t, http.StatusBadRequest, recorder.Result().StatusCode)
 	})
-
 }
