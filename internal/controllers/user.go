@@ -67,21 +67,22 @@ func (u *UserController) Login(c echo.Context) error {
 	cookieIDUser.Value = idUserConverted
 	cookieIDUser.Expires = expires
 	cookieIDUser.Path = "/"
-	cookieIDUser.Domain = ""
+	// cookieIDUser.Domain = "127.0.0.1"
 	cookieIDUser.HttpOnly = false
 	cookieIDUser.Secure = false
-	cookieIDUser.SameSite = http.SameSiteNoneMode
-	c.SetCookie(cookieIDUser)
+	cookieIDUser.SameSite = http.SameSiteLaxMode
 
 	cookieIDTypeUser := new(http.Cookie)
 	cookieIDTypeUser.Name = "id_type_user"
 	cookieIDTypeUser.Value = idTypeUserConverted
 	cookieIDTypeUser.Expires = expires
 	cookieIDTypeUser.Path = "/"
-	cookieIDTypeUser.Domain = ""
+	// cookieIDTypeUser.Domain = "127.0.0.1"
 	cookieIDTypeUser.HttpOnly = false
 	cookieIDTypeUser.Secure = false
-	cookieIDTypeUser.SameSite = http.SameSiteNoneMode
+	cookieIDTypeUser.SameSite = http.SameSiteLaxMode
+
+	c.SetCookie(cookieIDUser)
 	c.SetCookie(cookieIDTypeUser)
 
 	return c.JSON(http.StatusOK, userLoginResponse{

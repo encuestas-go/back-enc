@@ -129,7 +129,7 @@ func (s *SocioeconomicRepositoryService) GetAllOrByID(userID int) ([]domain.Soci
 
 	rows, err := s.db.Query(query)
 	if err != nil {
-		return nil, err
+		return []domain.SocioeconomicStatus{}, err
 	}
 
 	defer rows.Close()
@@ -142,10 +142,11 @@ func (s *SocioeconomicRepositoryService) GetAllOrByID(userID int) ([]domain.Soci
 			&socioeconomic.ResidenceAddress, &socioeconomic.ResidenceCity, &socioeconomic.PostalCode, &socioeconomic.State,
 			&socioeconomic.SocioeconomicStatus, &socioeconomic.Language, &socioeconomic.DegreeAspired,
 			&socioeconomic.LastDegreeFather, &socioeconomic.LastDegreeMother); err != nil {
-			return nil, err
+			return []domain.SocioeconomicStatus{}, err
 		}
 
 		socioeconomicSurvey = append(socioeconomicSurvey, socioeconomic)
 	}
+
 	return socioeconomicSurvey, nil
 }

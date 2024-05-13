@@ -110,17 +110,17 @@ func (t *TransportRespositoryService) GetAllOrByID(userID int) ([]domain.Transpo
 
 	rows, err := t.db.Query(query)
 	if err != nil {
-		return nil, err
+		return []domain.TransportManagement{}, err
 	}
 
 	defer rows.Close()
 
-	transportSurvey := []domain.TransportManagement{}
+	var transportSurvey []domain.TransportManagement
 	for rows.Next() {
 		transport := domain.TransportManagement{}
 		if err = rows.Scan(&transport.ID, &transport.UserID, &transport.PrimaryTransport, &transport.SecondTransport,
 			&transport.UsageFrequency, &transport.AccesiblePoints, &transport.FrequentDestination, &transport.TravelTime); err != nil {
-			return nil, err
+			return []domain.TransportManagement{}, err
 		}
 
 		transportSurvey = append(transportSurvey, transport)
