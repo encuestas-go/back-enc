@@ -112,7 +112,7 @@ func (d *DemographicRepositoryService) GetAllOrByID(userID int) ([]domain.Demogr
 
 	rows, err := d.db.Query(query)
 	if err != nil {
-		return nil, err
+		return []domain.DemographicStatus{}, err
 	}
 
 	defer rows.Close()
@@ -123,7 +123,7 @@ func (d *DemographicRepositoryService) GetAllOrByID(userID int) ([]domain.Demogr
 		if err = rows.Scan(&demographic.ID, &demographic.UserID, &demographic.HousingType, &demographic.HouseCondition,
 			&demographic.OwnTransport, &demographic.IncomeAmount, &demographic.WorkingMembers, &demographic.MembersUnderage,
 			&demographic.MonthlyExpenses, &demographic.GovermentSupport); err != nil {
-			return nil, err
+			return []domain.DemographicStatus{}, err
 		}
 
 		demographicSurvey = append(demographicSurvey, demographic)

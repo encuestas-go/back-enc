@@ -96,7 +96,7 @@ func (s ServicesRepositoryService) GetAllOrByID(userID int) ([]domain.Services, 
 
 	rows, err := s.db.Query(query)
 	if err != nil {
-		return nil, err
+		return []domain.Services{}, err
 	}
 
 	defer rows.Close()
@@ -107,7 +107,7 @@ func (s ServicesRepositoryService) GetAllOrByID(userID int) ([]domain.Services, 
 		if err = rows.Scan(&service.ID, &service.UserID, &service.EnergyProvider, &service.WaterProvider,
 			&service.InternetProvider, &service.PhoneProvider, &service.TvProvider, &service.PaymentDueDate,
 			&service.ServicesBill); err != nil {
-			return nil, err
+			return []domain.Services{}, err
 		}
 
 		services = append(services, service)

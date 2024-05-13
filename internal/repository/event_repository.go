@@ -64,7 +64,7 @@ func (e EventRepositoryService) Update(event domain.Event) error {
 func (e EventRepositoryService) GetEvents() ([]domain.Event, error) {
 	rows, err := e.db.Query(`SELECT * FROM PUBLICACION_EVENTO;`)
 	if err != nil {
-		return nil, err
+		return []domain.Event{}, err
 	}
 
 	defer rows.Close()
@@ -75,7 +75,7 @@ func (e EventRepositoryService) GetEvents() ([]domain.Event, error) {
 		var event domain.Event
 		if err = rows.Scan(&event.ID, event.EventName, &event.Place, &event.Date, &event.Hour, &event.Location,
 			&event.Description, &event.Category, &event.IDUser); err != nil {
-			return nil, err
+			return []domain.Event{}, err
 		}
 		events = append(events, event)
 	}

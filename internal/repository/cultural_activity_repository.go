@@ -87,7 +87,7 @@ func (c CulturalActivityRepositoryService) GetAllOrByID(userID int) ([]domain.Cu
 
 	rows, err := c.db.Query(query)
 	if err != nil {
-		return nil, err
+		return []domain.CulturalActivity{}, err
 	}
 
 	defer rows.Close()
@@ -98,7 +98,7 @@ func (c CulturalActivityRepositoryService) GetAllOrByID(userID int) ([]domain.Cu
 		if err = rows.Scan(&activity.ID, &activity.UserID, &activity.PreferredGame, &activity.Hobby,
 			&activity.PreferredSport, &activity.ExerciseFrequency, &activity.WorkshopType,
 			&activity.PreferredSocialEvent); err != nil {
-			return nil, err
+			return []domain.CulturalActivity{}, err
 		}
 
 		activities = append(activities, activity)

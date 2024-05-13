@@ -110,7 +110,7 @@ func (e *EconomicRepositoryService) GetAllOrByID(userID int) ([]domain.EconomicS
 
 	rows, err := e.db.Query(query)
 	if err != nil {
-		return nil, err
+		return []domain.EconomicStatus{}, err
 	}
 
 	defer rows.Close()
@@ -121,7 +121,7 @@ func (e *EconomicRepositoryService) GetAllOrByID(userID int) ([]domain.EconomicS
 		if err = rows.Scan(&economic.ID, &economic.IDUser, &economic.CurrentStatus, &economic.JobTitle,
 			&economic.EmployerEstablishment, &economic.EmploymentType, &economic.Salary, &economic.AmountType,
 			&economic.WorkBenefitsType); err != nil {
-			return nil, err
+			return []domain.EconomicStatus{}, err
 		}
 		economicSurvey = append(economicSurvey, economic)
 	}

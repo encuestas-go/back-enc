@@ -117,7 +117,7 @@ func (h *HouseInfrastructureRepositoryService) GetAllOrByID(userID int) ([]domai
 
 	rows, err := h.db.Query(query)
 	if err != nil {
-		return nil, err
+		return []domain.HouseholdInfrastructure{}, err
 	}
 
 	defer rows.Close()
@@ -129,7 +129,7 @@ func (h *HouseInfrastructureRepositoryService) GetAllOrByID(userID int) ([]domai
 			&infrastructure.InfraestructureStatus, &infrastructure.FloorType, &infrastructure.RoofType, &infrastructure.WallType,
 			&infrastructure.TotalMembers, &infrastructure.TotalRooms, &infrastructure.HouseholdEquipment,
 			&infrastructure.BasicServices, &infrastructure.OtherProperties); err != nil {
-			return nil, err
+			return []domain.HouseholdInfrastructure{}, err
 		}
 
 		infrastructureSurvey = append(infrastructureSurvey, infrastructure)
