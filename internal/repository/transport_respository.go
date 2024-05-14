@@ -115,7 +115,7 @@ func (t *TransportRespositoryService) GetAllOrByID(userID int) ([]domain.Transpo
 
 	defer rows.Close()
 
-	var transportSurvey []domain.TransportManagement
+	transportSurvey := []domain.TransportManagement{}
 	for rows.Next() {
 		transport := domain.TransportManagement{}
 		if err = rows.Scan(&transport.ID, &transport.UserID, &transport.PrimaryTransport, &transport.SecondTransport,
@@ -125,5 +125,6 @@ func (t *TransportRespositoryService) GetAllOrByID(userID int) ([]domain.Transpo
 
 		transportSurvey = append(transportSurvey, transport)
 	}
+
 	return transportSurvey, nil
 }

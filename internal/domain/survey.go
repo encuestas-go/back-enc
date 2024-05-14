@@ -38,7 +38,7 @@ type TransportManagement struct {
 	PrimaryTransport    string `json:"primary_transport,omitempty"`
 	SecondTransport     string `json:"second_transport,omitempty"`
 	UsageFrequency      string `json:"usage_frequency,omitempty"`
-	AccesiblePoints     bool   `json:"accesible_points,omitempty"`
+	AccesiblePoints     bool   `json:"accesible_points"`
 	FrequentDestination string `json:"frequent_destination,omitempty"`
 	TravelTime          string `json:"travel_time,omitempty"`
 }
