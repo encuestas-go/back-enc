@@ -56,7 +56,7 @@ type HouseholdInfrastructure struct {
 	TotalRooms            int    `json:"total_rooms,omitempty"`
 	HouseholdEquipment    string `json:"household_equipment,omitempty"`
 	BasicServices         string `json:"basic_services,omitempty"`
-	OtherProperties       bool   `json:"other_properties,omitempty"`
+	OtherProperties       bool   `json:"other_properties"`
 }
 
 type DemographicStatus struct {
@@ -64,12 +64,12 @@ type DemographicStatus struct {
 	UserID           int     `json:"user_id,omitempty"`
 	HousingType      string  `json:"housing_type,omitempty"`
 	HouseCondition   string  `json:"house_condition,omitempty"`
-	OwnTransport     bool    `json:"own_transport,omitempty"`
+	OwnTransport     bool    `json:"own_transport"`
 	IncomeAmount     float64 `json:"income_amount,omitempty"`
 	WorkingMembers   int     `json:"working_members,omitempty"`
 	MembersUnderage  int     `json:"members_underage,omitempty"`
 	MonthlyExpenses  float64 `json:"monthly_expenses,omitempty"`
-	GovermentSupport bool    `json:"goverment_support,omitempty"`
+	GovermentSupport bool    `json:"goverment_support"`
 }
 
 type CulturalActivity struct {
@@ -86,11 +86,11 @@ type CulturalActivity struct {
 type Services struct {
 	ID                 int    `json:"id,omitempty"`
 	UserID             int    `json:"user_id,omitempty"`
-	EnergyProvider     bool   `json:"energy_provider,omitempty"`
-	WaterProvider      bool   `json:"water_provider,omitempty"`
+	EnergyProvider     bool   `json:"energy_provider"`
+	WaterProvider      bool   `json:"water_provider"`
 	InternetProvider   string `json:"internet_provider,omitempty"`
-	PhoneProvider      bool   `json:"phone_provider,omitempty"`
-	TvProvider         bool   `json:"tv_provider,omitempty"`
+	PhoneProvider      bool   `json:"phone_provider"`
+	TvProvider         bool   `json:"tv_provider"`
 	PaymentDueDate     string `json:"payment_due_date,omitempty"`
 	AdditionalPayments string `json:"additional_payments,omitempty"`
 	ServicesBill       int    `json:"services_bill,omitempty"`
