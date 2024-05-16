@@ -99,10 +99,9 @@ type Services struct {
 type Event struct {
 	ID          int    `json:"id,omitempty"`
 	EventName   string `json:"event_name,omitempty"`
-	Place       string `json:"place,omitempty"`
 	Date        string `json:"date,omitempty"`
 	Hour        string `json:"hour,omitempty"`
-	Location    string `json:"location,omitempty"`
+	Place       string `json:"place,omitempty"`
 	Description string `json:"description,omitempty"`
 	Category    string `json:"category,omitempty"`
 	IDUser      int    `json:"id_user,omitempty"`

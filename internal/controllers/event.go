@@ -1,10 +1,11 @@
 package controllers
 
 import (
-	"github.com/encuestas-go/back-enc/internal/domain"
-	"github.com/encuestas-go/back-enc/internal/repository"
 	"net/http"
 	"strconv"
+
+	"github.com/encuestas-go/back-enc/internal/domain"
+	"github.com/encuestas-go/back-enc/internal/repository"
 
 	"github.com/labstack/echo/v4"
 )

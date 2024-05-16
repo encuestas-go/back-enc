@@ -19,9 +19,9 @@ func InitializeEventRepository(db *sql.DB) *EventRepositoryService {
 
 func (e EventRepositoryService) CreateEvent(event domain.Event) error {
 	res, err := e.db.Exec(`
-	INSERT INTO PUBLICACION_EVENTO(NOMBRE_EVENTO, LUGAR, FECHA, HORA, UBICACION, DESCRIPCION_EVENTO, CATEGORIA) 
+	INSERT INTO PUBLICACION_EVENTO(NOMBRE_EVENTO, FECHA, HORA, LUGAR, DESCRIPCION_EVENTO, CATEGORIA, ID_USUARIO) 
 			VALUES(?,?,?,?,?,?,?);
-	`, event.EventName, event.Place, event.Date, event.Hour, event.Location, event.Description, event.Category)
+	`, event.EventName, event.Date, event.Hour, event.Place, event.Description, event.Category, event.IDUser)
 
 	if err != nil {
 		return err
@@ -41,10 +41,10 @@ func (e EventRepositoryService) CreateEvent(event domain.Event) error {
 func (e EventRepositoryService) Update(event domain.Event) error {
 	res, err := e.db.Exec(`
 		UPDATE PUBLICACION_EVENTO SET 
-		            NOMBRE_EVENTO = ?, LUGAR = ?, FECHA = ?, HORA = ?, 
-		            UBICACION = ?, DESCRIPCION_EVENTO = ?, CATEGORIA = ? 
+		            NOMBRE_EVENTO = ?, FECHA = ?, HORA = ?, 
+		            LUGAR = ?, DESCRIPCION_EVENTO = ?, CATEGORIA = ? 
 		            WHERE ID_USUARIO = ?;
-	`, event.EventName, event.Place, event.Date, event.Hour, event.Location, event.Description, event.Category, event.IDUser)
+	`, event.EventName, event.Date, event.Hour, event.Place, event.Description, event.Category, event.IDUser)
 
 	if err != nil {
 		return err
@@ -73,7 +73,7 @@ func (e EventRepositoryService) GetEvents() ([]domain.Event, error) {
 
 	for rows.Next() {
 		var event domain.Event
-		if err = rows.Scan(&event.ID, event.EventName, &event.Place, &event.Date, &event.Hour, &event.Location,
+		if err = rows.Scan(&event.ID, event.EventName, &event.Date, &event.Hour, &event.Place,
 			&event.Description, &event.Category, &event.IDUser); err != nil {
 			return []domain.Event{}, err
 		}
