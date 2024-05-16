@@ -61,8 +61,8 @@ func (d *DemographicStatusController) Update(c echo.Context) error {
 		})
 	}
 
-	return c.JSON(http.StatusCreated, ControllerMessageResponse{
-		StatusCode: http.StatusCreated,
+	return c.JSON(http.StatusOK, ControllerMessageResponse{
+		StatusCode: http.StatusOK,
 		Message:    "Demographic Status survey succesfully updated",
 	})
 }

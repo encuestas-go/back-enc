@@ -106,7 +106,7 @@ func (s ServicesRepositoryService) GetAllOrByID(userID int) ([]domain.Services, 
 		var service domain.Services
 		if err = rows.Scan(&service.ID, &service.UserID, &service.EnergyProvider, &service.WaterProvider,
 			&service.InternetProvider, &service.PhoneProvider, &service.TvProvider, &service.PaymentDueDate,
-			&service.ServicesBill); err != nil {
+			&service.AdditionalPayments, &service.ServicesBill); err != nil {
 			return []domain.Services{}, err
 		}
 
