@@ -1,23 +1,22 @@
 package domain
 
 type SocioeconomicStatus struct {
-	ID                  int    `json:"id,omitempty"`
-	IDUser              int    `json:"id_user,omitempty"`
-	FullName            string `json:"full_name,omitempty"`
-	BirthDate           string `json:"birth_date,omitempty"`
-	Nationality         string `json:"nationality,omitempty"`
-	Gender              string `json:"gender,omitempty"`
-	Age                 int    `json:"age,omitempty"`
-	MaritalStatus       string `json:"marital_status,omitempty"`
-	ResidenceAddress    string `json:"residence_address,omitempty"`
-	ResidenceCity       string `json:"residence_city,omitempty"`
-	PostalCode          int    `json:"postal_code,omitempty"`
-	State               string `json:"state,omitempty"`
-	SocioeconomicStatus string `json:"socioeconomic_status,omitempty"`
-	Language            string `json:"language,omitempty"`
-	DegreeAspired       string `json:"degree_aspired,omitempty"`
-	LastDegreeFather    string `json:"last_degree_father,omitempty"`
-	LastDegreeMother    string `json:"last_degree_mother,omitempty"`
+	ID                  int     `json:"id,omitempty"`
+	IDUser              int     `json:"id_user,omitempty"`
+	FullName            string  `json:"full_name,omitempty"`
+	BirthDate           string  `json:"birth_date,omitempty"`
+	Nationality         string  `json:"nationality,omitempty"`
+	Gender              string  `json:"gender,omitempty"`
+	Age                 int     `json:"age,omitempty"`
+	MaritalStatus       string  `json:"marital_status,omitempty"`
+	Longitude           float64 `json:"longitude,omitempty"`
+	Latitude            float64 `json:"latitude,omitempty"`
+	ResidenceAddress    string  `json:"residence_address,omitempty"`
+	SocioeconomicStatus string  `json:"socioeconomic_status,omitempty"`
+	Language            string  `json:"language,omitempty"`
+	DegreeAspired       string  `json:"degree_aspired,omitempty"`
+	LastDegreeFather    string  `json:"last_degree_father,omitempty"`
+	LastDegreeMother    string  `json:"last_degree_mother,omitempty"`
 }
 
 type EconomicStatus struct {

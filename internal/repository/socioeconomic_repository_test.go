@@ -24,10 +24,9 @@ func Test_Socioeconomic_Insert(t *testing.T) {
 		Gender:              "Femenino",
 		Age:                 23,
 		MaritalStatus:       "Soltera",
+		Longitude:           1.547,
+		Latitude:            -2.46456,
 		ResidenceAddress:    "Calle Flores",
-		ResidenceCity:       "Jiutepec",
-		PostalCode:          67890,
-		State:               "Morelos",
 		SocioeconomicStatus: "Media",
 		Language:            "Frances",
 		DegreeAspired:       "Maestria",
@@ -38,8 +37,8 @@ func Test_Socioeconomic_Insert(t *testing.T) {
 	mock.ExpectExec(`INSERT INTO ENCUESTA_NIVEL_SOCIOECONOMICO`).
 		WithArgs(socioeconomic.IDUser, socioeconomic.FullName, socioeconomic.BirthDate,
 			socioeconomic.Nationality, socioeconomic.Gender, socioeconomic.Age, socioeconomic.MaritalStatus,
-			socioeconomic.ResidenceAddress, socioeconomic.ResidenceCity, socioeconomic.PostalCode,
-			socioeconomic.State, socioeconomic.SocioeconomicStatus, socioeconomic.Language, socioeconomic.DegreeAspired,
+			socioeconomic.Longitude, socioeconomic.Latitude, socioeconomic.ResidenceAddress,
+			socioeconomic.SocioeconomicStatus, socioeconomic.Language, socioeconomic.DegreeAspired,
 			socioeconomic.LastDegreeFather, socioeconomic.LastDegreeMother).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
@@ -65,10 +64,9 @@ func Test_Socioeconomic_Update(t *testing.T) {
 		Gender:              "Femenino",
 		Age:                 23,
 		MaritalStatus:       "Soltera",
+		Longitude:           2.67879,
+		Latitude:            5.9989464,
 		ResidenceAddress:    "Calle Necatepec",
-		ResidenceCity:       "Jiutepec",
-		PostalCode:          67890,
-		State:               "Morelos",
 		SocioeconomicStatus: "Media",
 		Language:            "Frances",
 		DegreeAspired:       "Maestria",
@@ -78,8 +76,8 @@ func Test_Socioeconomic_Update(t *testing.T) {
 
 	mock.ExpectExec(`UPDATE ENCUESTA_NIVEL_SOCIOECONOMICO`).
 		WithArgs(socioeconomic.FullName, socioeconomic.BirthDate, socioeconomic.Nationality, socioeconomic.Gender,
-			socioeconomic.Age, socioeconomic.MaritalStatus, socioeconomic.ResidenceAddress, socioeconomic.ResidenceCity,
-			socioeconomic.PostalCode, socioeconomic.State, socioeconomic.SocioeconomicStatus, socioeconomic.Language,
+			socioeconomic.Age, socioeconomic.MaritalStatus, socioeconomic.Longitude, socioeconomic.Latitude,
+			socioeconomic.ResidenceAddress, socioeconomic.SocioeconomicStatus, socioeconomic.Language,
 			socioeconomic.DegreeAspired, socioeconomic.LastDegreeFather, socioeconomic.LastDegreeMother,
 			socioeconomic.IDUser).
 		WillReturnResult(sqlmock.NewResult(1, 1))
@@ -122,11 +120,11 @@ func Test_Socioeconomic_Get(t *testing.T) {
 
 	userID := 1
 
-	rows := sqlmock.NewRows([]string{"ID", "ID_USER", "FULL_NAME", "BIRTH_DATE", "NATIONALITY", "GENDER", "AGE",
-		"MARITAL_STATUS", "RESIDENCE_ADDRESS", "RESIDENCE_CITY", "POSTAL_CODE", "STATE", "SOCIOECONOMIC_STATUS",
-		"LANGUAGE", "DEGREE_ASPIRED", "LAST_DEGREE_FATHER", "LAST_DEGREE_MOTHER"}).
-		AddRow(1, 1, "Maria Flores Flores", "25/05/2001", "Mexicana", "Femenino", 23, "Soltera", "Calle Necatepec",
-			"Jiutepec", 67890, "Morelos", "Media", "Frances", "Maestria", "Bachillerato", "Secundaria")
+	rows := sqlmock.NewRows([]string{"ID", "ID_USER", "NOMBRE_COMPLETO", "FECHA_NACIMIENTO", "NACIONALIDAD",
+		"SEXO", "EDAD", "ESTADO_CIVIL", "LONGITUD", "LATITUD", "DIRECCION_RESIDENCIA", "ESTATUS_SOCIOECONOMICO",
+		"IDIOMA", "GRADO_ESTUDIOS_ASPIRAR", "ULTIMO_GRADO_PADRE", "ULTIMO_GRADO_MADRE"}).
+		AddRow(1, 1, "Maria Flores Flores", "25/05/2001", "Mexicana", "Femenino", 23, "Soltera", 1.567, 3.658, "Calle Necatepec",
+			"Media", "Frances", "Maestria", "Bachillerato", "Secundaria")
 
 	mock.ExpectQuery(`SELECT \* FROM ENCUESTA_NIVEL_SOCIOECONOMICO`).WillReturnRows(rows)
 

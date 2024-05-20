@@ -21,16 +21,14 @@ func InitializeSocioeconomicRepository(db *sql.DB) *SocioeconomicRepositoryServi
 
 func (s *SocioeconomicRepositoryService) Insert(socioeconomic domain.SocioeconomicStatus) error {
 	result, err := s.db.Exec(`
-	INSERT INTO ENCUESTA_NIVEL_SOCIOECONOMICO(
-		ID_USUARIO, NOMBRE_COMPLETO, FECHA_NACIMIENTO,
-		NACIONALIDAD, SEXO, EDAD, ESTADO_CIVIL, 
-		DIRECCION_RESIDENCIA, CIUDAD_RESIDENCIA, CODIGO_POSTAL, 
-		ENTIDAD_FEDERATIVA, ESTATUS_SOCIOECONOMICO, 
-		IDIOMA, GRADO_ESTUDIOS_ASPIRAR, ULTIMO_GRADO_PADRE,ULTIMO_GRADO_MADRE)
-    VALUES(?,?,?,?, ?,?, ?,?,?,?,?,?,?,?,?,?);
+	INSERT INTO ENCUESTA_NIVEL_SOCIOECONOMICO(ID_USUARIO, NOMBRE_COMPLETO, FECHA_NACIMIENTO, NACIONALIDAD, 
+		SEXO, EDAD, ESTADO_CIVIL, LONGITUD, LATITUD , DIRECCION_RESIDENCIA, ESTATUS_SOCIOECONOMICO,IDIOMA, 
+		GRADO_ESTUDIOS_ASPIRAR, ULTIMO_GRADO_PADRE, ULTIMO_GRADO_MADRE)
+	VALUES(?,?,?,?, ?, ?, ?,?,?,?,?,?,?,?,?);
+	
 	`, socioeconomic.IDUser, socioeconomic.FullName, socioeconomic.BirthDate, socioeconomic.Nationality, socioeconomic.Gender,
-		socioeconomic.Age, socioeconomic.MaritalStatus, socioeconomic.ResidenceAddress, socioeconomic.ResidenceCity, socioeconomic.PostalCode,
-		socioeconomic.State, socioeconomic.SocioeconomicStatus, socioeconomic.Language, socioeconomic.DegreeAspired,
+		socioeconomic.Age, socioeconomic.MaritalStatus, socioeconomic.Longitude, socioeconomic.Latitude, socioeconomic.ResidenceAddress,
+		socioeconomic.SocioeconomicStatus, socioeconomic.Language, socioeconomic.DegreeAspired,
 		socioeconomic.LastDegreeFather, socioeconomic.LastDegreeMother)
 	if err != nil {
 		log.Println("Unable to insert into the ENCUESTA_NIVEL_SOCIOECONOMICO table, the error is:", err)
@@ -61,10 +59,9 @@ func (s *SocioeconomicRepositoryService) Update(socioeconomic domain.Socioeconom
                                      SEXO = ?,
                                      EDAD = ?,
                                      ESTADO_CIVIL = ?,
+									 LONGITUD = ?,
+                                     LATITUD = ?,
                                      DIRECCION_RESIDENCIA = ?,
-                                     CIUDAD_RESIDENCIA = ?,
-                                     CODIGO_POSTAL = ?,
-                                     ENTIDAD_FEDERATIVA = ?,
                                      ESTATUS_SOCIOECONOMICO = ?,
                                      IDIOMA = ?,
                                      GRADO_ESTUDIOS_ASPIRAR = ?,
@@ -72,8 +69,8 @@ func (s *SocioeconomicRepositoryService) Update(socioeconomic domain.Socioeconom
                                      ULTIMO_GRADO_MADRE = ?
                                      WHERE ID_USUARIO = ?;
 	`, socioeconomic.FullName, socioeconomic.BirthDate, socioeconomic.Nationality, socioeconomic.Gender,
-		socioeconomic.Age, socioeconomic.MaritalStatus, socioeconomic.ResidenceAddress, socioeconomic.ResidenceCity, socioeconomic.PostalCode,
-		socioeconomic.State, socioeconomic.SocioeconomicStatus, socioeconomic.Language, socioeconomic.DegreeAspired,
+		socioeconomic.Age, socioeconomic.MaritalStatus, socioeconomic.Longitude, socioeconomic.Latitude, socioeconomic.ResidenceAddress,
+		socioeconomic.SocioeconomicStatus, socioeconomic.Language, socioeconomic.DegreeAspired,
 		socioeconomic.LastDegreeFather, socioeconomic.LastDegreeMother, socioeconomic.IDUser)
 	if err != nil {
 		log.Println("Data could not be updated into ENCUESTA_NIVEL_SOCIOECONOMICO table, the error was:", err)
@@ -139,9 +136,9 @@ func (s *SocioeconomicRepositoryService) GetAllOrByID(userID int) ([]domain.Soci
 		socioeconomic := domain.SocioeconomicStatus{}
 		if err = rows.Scan(&socioeconomic.ID, &socioeconomic.IDUser, &socioeconomic.FullName, &socioeconomic.BirthDate,
 			&socioeconomic.Nationality, &socioeconomic.Gender, &socioeconomic.Age, &socioeconomic.MaritalStatus,
-			&socioeconomic.ResidenceAddress, &socioeconomic.ResidenceCity, &socioeconomic.PostalCode, &socioeconomic.State,
-			&socioeconomic.SocioeconomicStatus, &socioeconomic.Language, &socioeconomic.DegreeAspired,
-			&socioeconomic.LastDegreeFather, &socioeconomic.LastDegreeMother); err != nil {
+			&socioeconomic.Longitude, &socioeconomic.Latitude, &socioeconomic.ResidenceAddress, &socioeconomic.SocioeconomicStatus,
+			&socioeconomic.Language, &socioeconomic.DegreeAspired, &socioeconomic.LastDegreeFather,
+			&socioeconomic.LastDegreeMother); err != nil {
 			return []domain.SocioeconomicStatus{}, err
 		}
 
