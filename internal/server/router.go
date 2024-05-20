@@ -234,3 +234,13 @@ func (s *ServerHandler) StartForumRoutes() *ServerHandler {
 
 	return s
 }
+
+// StartForumRoutes  12.-StartGetAddressRoutes creates the route for the map, to get all users addresses
+// The routes are:
+//
+//	/direccionMapa
+func (s *ServerHandler) StartMapRoutes() *ServerHandler {
+	s.RouterGroup.GET("/direccionMapa", s.GenericController.MapAddressController.Get)
+
+	return s
+}

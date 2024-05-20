@@ -24,6 +24,7 @@ type GenericController struct {
 	TransportController           *TransportController
 	UserController                *UserController
 	ForumController               *ForumController
+	MapAddressController          *MapAddressController
 }
 
 func InitGenericController(db *sql.DB) *GenericController {
@@ -41,5 +42,6 @@ func InitGenericController(db *sql.DB) *GenericController {
 		TransportController:           InitTransportController(repositories.TransportRepository),
 		UserController:                InitUserController(repositories.UserRespository),
 		ForumController:               InitForumController(repositories.ForumRepository),
+		MapAddressController:          InitMapController(repositories.MapRepository),
 	}
 }

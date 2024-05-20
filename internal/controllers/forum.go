@@ -19,7 +19,6 @@ func InitForumController(repo *repository.ForumRepositoryService) *ForumControll
 }
 
 func (f *ForumController) Get(c echo.Context) error {
-
 	res, err := f.ForumRepository.GetAll()
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{

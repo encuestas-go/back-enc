@@ -19,6 +19,13 @@ type SocioeconomicStatus struct {
 	LastDegreeMother    string  `json:"last_degree_mother,omitempty"`
 }
 
+type UserAddressMap struct {
+	IDUser           int     `json:"id_user,omitempty"`
+	CompleteAddress  string  `json:"complete_address,omitempty"`
+	LongitudeAddress float64 `json:"longitude_address,omitempty"`
+	LatitudeAddress  float64 `json:"latitude_address,omitempty"`
+}
+
 type EconomicStatus struct {
 	ID                    int     `json:"id,omitempty"`
 	IDUser                int     `json:"id_user,omitempty"`
