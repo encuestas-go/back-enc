@@ -129,7 +129,7 @@ func (t *TransportRespositoryService) GetAllOrByID(userID int) ([]domain.Transpo
 	return transportSurvey, nil
 }
 
-func (t *TransportRespositoryService) GetMostUsedTransportReport() ([]domain.TransportManagement, error) {
+func (t *TransportRespositoryService) GetMostUsedTransportReport() ([]domain.MostUsedTransportReport, error) {
 	query := `
 	SELECT TRANSPORTE_PRINCIPAL, COUNT(*) as CANTIDAD
 	FROM ENCUESTA_TRANSPORTE
@@ -138,16 +138,15 @@ func (t *TransportRespositoryService) GetMostUsedTransportReport() ([]domain.Tra
 	`
 	rows, err := t.db.Query(query)
 	if err != nil {
-		return []domain.TransportManagement{}, err
+		return []domain.MostUsedTransportReport{}, err
 	}
 	defer rows.Close()
 
-	transportReport := []domain.TransportManagement{}
+	transportReport := []domain.MostUsedTransportReport{}
 	for rows.Next() {
-		report := domain.TransportManagement{}
-		if err = rows.Scan(&report.ID, &report.UserID, &report.PrimaryTransport, &report.SecondTransport,
-			&report.UsageFrequency, &report.AccesiblePoints, &report.FrequentDestination, &report.TravelTime); err != nil {
-			return []domain.TransportManagement{}, err
+		report := domain.MostUsedTransportReport{}
+		if err = rows.Scan(&report.PrimaryTransport, &report.Quantity); err != nil {
+			return []domain.MostUsedTransportReport{}, err
 		}
 		transportReport = append(transportReport, report)
 	}

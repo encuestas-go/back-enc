@@ -71,7 +71,7 @@ type DemographicStatus struct {
 	HousingType      string  `json:"housing_type,omitempty"`
 	HouseCondition   string  `json:"house_condition,omitempty"`
 	OwnTransport     bool    `json:"own_transport"`
-	IncomeAmount     string  `json:"income_amount,omitempty"`
+	IncomeAmount     float64 `json:"income_amount,omitempty"`
 	WorkingMembers   int     `json:"working_members,omitempty"`
 	MembersUnderage  int     `json:"members_underage,omitempty"`
 	MonthlyExpenses  float64 `json:"monthly_expenses,omitempty"`
@@ -132,8 +132,13 @@ type Answer struct {
 	AnswerText string `json:"answer_text,omitempty"`
 }
 
-// STRUCTS FOR CORRESPONDING REPORTS REQUIRED
-type ForTransportReport struct {
+// STRUCTS FOR CORRESPONDING REPORTS THAT ARE REQUIRED
+type MostUsedTransportReport struct {
 	PrimaryTransport string `json:"primary_transport,omitempty"`
 	Quantity         int    `json:"quantity,omitempty"`
+}
+
+type IncomeAmountReport struct {
+	IncomeAmount float64 `json:"income_amount,omitempty"`
+	Quantity     int     `json:"quantity,omitempty"`
 }

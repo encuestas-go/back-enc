@@ -131,7 +131,7 @@ func (d *DemographicRepositoryService) GetAllOrByID(userID int) ([]domain.Demogr
 	return demographicSurvey, nil
 }
 
-func (d *DemographicRepositoryService) GetIncomeAmountReport() ([]domain.DemographicStatus, error) {
+func (d *DemographicRepositoryService) GetIncomeAmountReport() ([]domain.IncomeAmountReport, error) {
 	query := `
 	SELECT MONTO_INGRESOS, COUNT(*) as CANTIDAD
 	FROM ENCUESTA_NIVEL_DEMOGRAFICO
@@ -139,17 +139,15 @@ func (d *DemographicRepositoryService) GetIncomeAmountReport() ([]domain.Demogra
 	`
 	rows, err := d.db.Query(query)
 	if err != nil {
-		return []domain.DemographicStatus{}, err
+		return []domain.IncomeAmountReport{}, err
 	}
 	defer rows.Close()
 
-	demographicReport := []domain.DemographicStatus{}
+	demographicReport := []domain.IncomeAmountReport{}
 	for rows.Next() {
-		report := domain.DemographicStatus{}
-		if err = rows.Scan(&report.ID, &report.UserID, &report.HousingType, &report.HouseCondition,
-			&report.OwnTransport, &report.IncomeAmount, &report.WorkingMembers, &report.MembersUnderage,
-			&report.MonthlyExpenses, &report.GovermentSupport); err != nil {
-			return []domain.DemographicStatus{}, err
+		report := domain.IncomeAmountReport{}
+		if err = rows.Scan(&report.IncomeAmount, &report.Quantity); err != nil {
+			return []domain.IncomeAmountReport{}, err
 		}
 		demographicReport = append(demographicReport, report)
 	}

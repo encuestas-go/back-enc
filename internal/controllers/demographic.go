@@ -130,7 +130,7 @@ func (d *DemographicStatusController) GetAllIncomeAmountReport(c echo.Context) e
 
 	return c.JSON(http.StatusOK, ControllerMessageResponse{
 		StatusCode: http.StatusOK,
-		Message:    "Demographic information successfully retrieved",
+		Message:    "Demographic information for report successfully retrieved",
 		Data:       res,
 	})
 }
