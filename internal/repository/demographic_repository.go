@@ -130,3 +130,28 @@ func (d *DemographicRepositoryService) GetAllOrByID(userID int) ([]domain.Demogr
 	}
 	return demographicSurvey, nil
 }
+
+func (d *DemographicRepositoryService) GetIncomeAmountReport() ([]domain.DemographicStatus, error) {
+	query := `
+	SELECT MONTO_INGRESOS, COUNT(*) as CANTIDAD
+	FROM ENCUESTA_NIVEL_DEMOGRAFICO
+	GROUP BY MONTO_INGRESOS;
+	`
+	rows, err := d.db.Query(query)
+	if err != nil {
+		return []domain.DemographicStatus{}, err
+	}
+	defer rows.Close()
+
+	demographicReport := []domain.DemographicStatus{}
+	for rows.Next() {
+		report := domain.DemographicStatus{}
+		if err = rows.Scan(&report.ID, &report.UserID, &report.HousingType, &report.HouseCondition,
+			&report.OwnTransport, &report.IncomeAmount, &report.WorkingMembers, &report.MembersUnderage,
+			&report.MonthlyExpenses, &report.GovermentSupport); err != nil {
+			return []domain.DemographicStatus{}, err
+		}
+		demographicReport = append(demographicReport, report)
+	}
+	return demographicReport, nil
+}

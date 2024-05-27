@@ -118,3 +118,19 @@ func (d *DemographicStatusController) Get(c echo.Context) error {
 		Data:       res,
 	})
 }
+
+func (d *DemographicStatusController) GetAllIncomeAmountReport(c echo.Context) error {
+	res, err := d.DemographicRepository.GetIncomeAmountReport()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("Error generating report: %v", err),
+		})
+	}
+
+	return c.JSON(http.StatusOK, ControllerMessageResponse{
+		StatusCode: http.StatusOK,
+		Message:    "Demographic information successfully retrieved",
+		Data:       res,
+	})
+}

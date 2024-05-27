@@ -71,7 +71,7 @@ type DemographicStatus struct {
 	HousingType      string  `json:"housing_type,omitempty"`
 	HouseCondition   string  `json:"house_condition,omitempty"`
 	OwnTransport     bool    `json:"own_transport"`
-	IncomeAmount     float64 `json:"income_amount,omitempty"`
+	IncomeAmount     string  `json:"income_amount,omitempty"`
 	WorkingMembers   int     `json:"working_members,omitempty"`
 	MembersUnderage  int     `json:"members_underage,omitempty"`
 	MonthlyExpenses  float64 `json:"monthly_expenses,omitempty"`
