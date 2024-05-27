@@ -126,6 +126,7 @@ func (t *TransportController) GetTransportReport(c echo.Context) error {
 			Message:    fmt.Sprintf("Error generating report: %v", err),
 		})
 	}
+
 	return c.JSON(http.StatusOK, ControllerMessageResponse{
 		StatusCode: http.StatusOK,
 		Message:    "Transport information successfully retrieved",
