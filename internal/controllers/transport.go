@@ -117,3 +117,19 @@ func (t *TransportController) Get(c echo.Context) error {
 		Data:       res,
 	})
 }
+
+func (t *TransportController) GetTransportReport(c echo.Context) error {
+	res, err := t.TransportRepository.GetMostUsedTransportReport()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("Error generating report: %v", err),
+		})
+	}
+
+	return c.JSON(http.StatusOK, ControllerMessageResponse{
+		StatusCode: http.StatusOK,
+		Message:    "Transport information successfully retrieved",
+		Data:       res,
+	})
+}

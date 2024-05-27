@@ -125,6 +125,8 @@ func (s *ServerHandler) StartTransportManagementRoutes() *ServerHandler {
 	s.RouterGroup.DELETE("/eliminar/medioTransporte", s.GenericController.TransportController.Delete)
 	s.RouterGroup.GET("/consultar/medioTransporte", s.GenericController.TransportController.Get)
 
+	s.RouterGroup.GET("/reporte/TransportePrincipal", s.GenericController.TransportController.GetTransportReport)
+
 	return s
 }
 
