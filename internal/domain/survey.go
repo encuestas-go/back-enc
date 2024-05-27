@@ -131,3 +131,9 @@ type Answer struct {
 	Name       string `json:"name,omitempty"`
 	AnswerText string `json:"answer_text,omitempty"`
 }
+
+// STRUCTS FOR CORRESPONDING REPORTS REQUIRED
+type ForTransportReport struct {
+	PrimaryTransport string `json:"primary_transport,omitempty"`
+	Quantity         int    `json:"quantity,omitempty"`
+}
