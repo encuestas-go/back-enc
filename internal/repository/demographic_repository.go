@@ -153,3 +153,34 @@ func (d *DemographicRepositoryService) GetIncomeAmountReport() ([]domain.IncomeA
 	}
 	return demographicReport, nil
 }
+
+func (d *DemographicRepositoryService) GetHouseTypeConditionReport() ([]domain.HouseTypeAndConditionReport, error) {
+	query := `
+	SELECT
+		TIPO_VIVIENDA,
+		TIPO_CONDICION,
+		COUNT(*) AS CANTIDAD_ALUMNOS
+	FROM
+		ENCUESTA_NIVEL_DEMOGRAFICO
+	GROUP BY
+		TIPO_VIVIENDA,
+		TIPO_CONDICION
+	ORDER BY
+		CANTIDAD_ALUMNOS ASC;
+	`
+	rows, err := d.db.Query(query)
+	if err != nil {
+		return []domain.HouseTypeAndConditionReport{}, err
+	}
+	defer rows.Close()
+
+	HouseTypeReport := []domain.HouseTypeAndConditionReport{}
+	for rows.Next() {
+		report := domain.HouseTypeAndConditionReport{}
+		if err = rows.Scan(&report.HousingType, &report.HouseCondition, &report.Quantity); err != nil {
+			return []domain.HouseTypeAndConditionReport{}, err
+		}
+		HouseTypeReport = append(HouseTypeReport, report)
+	}
+	return HouseTypeReport, nil
+}

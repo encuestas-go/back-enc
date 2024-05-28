@@ -115,3 +115,32 @@ func (s ServicesRepositoryService) GetAllOrByID(userID int) ([]domain.Services, 
 
 	return services, nil
 }
+
+func (s *ServicesRepositoryService) GetInternetProviderReport() ([]domain.InternetProviderReport, error) {
+	query := `
+	SELECT
+		PROVEEDOR_INTERNET,
+		COUNT(*) AS CANTIDAD_ALUMNOS
+	FROM
+		ENCUESTA_SERVICIO
+	GROUP BY
+		PROVEEDOR_INTERNET
+	ORDER BY
+		CANTIDAD_ALUMNOS ASC;
+	`
+	rows, err := s.db.Query(query)
+	if err != nil {
+		return []domain.InternetProviderReport{}, err
+	}
+	defer rows.Close()
+
+	internetReport := []domain.InternetProviderReport{}
+	for rows.Next() {
+		report := domain.InternetProviderReport{}
+		if err = rows.Scan(&report.InternetProvider, &report.Quantity); err != nil {
+			return []domain.InternetProviderReport{}, err
+		}
+		internetReport = append(internetReport, report)
+	}
+	return internetReport, nil
+}

@@ -160,7 +160,7 @@ func (s *ServerHandler) StartDemographicStatusRoutes() *ServerHandler {
 	s.RouterGroup.GET("/consultar/nivelDemografico", s.GenericController.DemographicController.Get)
 
 	s.RouterGroup.GET("/reporte/IngresosMensuales", s.GenericController.DemographicController.GetAllIncomeAmountReport)
-
+	s.RouterGroup.GET("/reporte/TipoViviendaCondicion", s.GenericController.DemographicController.GetHouseTypeConditionReport)
 	return s
 }
 
@@ -192,6 +192,8 @@ func (s *ServerHandler) StartServiceManagementRoutes() *ServerHandler {
 	s.RouterGroup.PUT("/actualizar/servicio", s.GenericController.ServiceManagementController.Update)
 	s.RouterGroup.DELETE("/eliminar/servicio", s.GenericController.ServiceManagementController.Delete)
 	s.RouterGroup.GET("/consultar/servicio", s.GenericController.ServiceManagementController.Get)
+
+	s.RouterGroup.GET("/reporte/ProveedorInternetReporte", s.GenericController.ServiceManagementController.GetAllInternetProvidersReport)
 
 	return s
 }

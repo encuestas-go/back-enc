@@ -142,3 +142,14 @@ type IncomeAmountReport struct {
 	IncomeAmount float64 `json:"income_amount,omitempty"`
 	Quantity     int     `json:"quantity,omitempty"`
 }
+
+type HouseTypeAndConditionReport struct {
+	HousingType    string `json:"housing_type,omitempty"`
+	HouseCondition string `json:"house_condition,omitempty"`
+	Quantity       int    `json:"quantity,omitempty"`
+}
+
+type InternetProviderReport struct {
+	InternetProvider string `json:"internet_provider,omitempty"`
+	Quantity         int    `json:"quantity,omitempty"`
+}
