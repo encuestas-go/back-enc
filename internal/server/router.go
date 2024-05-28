@@ -159,6 +159,8 @@ func (s *ServerHandler) StartDemographicStatusRoutes() *ServerHandler {
 	s.RouterGroup.DELETE("/eliminar/nivelDemografico", s.GenericController.DemographicController.Delete)
 	s.RouterGroup.GET("/consultar/nivelDemografico", s.GenericController.DemographicController.Get)
 
+	s.RouterGroup.GET("/reporte/IngresosMensuales", s.GenericController.DemographicController.GetAllIncomeAmountReport)
+
 	return s
 }
 

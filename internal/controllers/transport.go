@@ -129,7 +129,7 @@ func (t *TransportController) GetTransportReport(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, ControllerMessageResponse{
 		StatusCode: http.StatusOK,
-		Message:    "Transport information successfully retrieved",
+		Message:    "Transport information for report successfully retrieved",
 		Data:       res,
 	})
 }

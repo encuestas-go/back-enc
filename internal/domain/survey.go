@@ -132,8 +132,13 @@ type Answer struct {
 	AnswerText string `json:"answer_text,omitempty"`
 }
 
-// STRUCTS FOR CORRESPONDING REPORTS REQUIRED
-type ForTransportReport struct {
+// STRUCTS FOR CORRESPONDING REPORTS THAT ARE REQUIRED
+type MostUsedTransportReport struct {
 	PrimaryTransport string `json:"primary_transport,omitempty"`
 	Quantity         int    `json:"quantity,omitempty"`
+}
+
+type IncomeAmountReport struct {
+	IncomeAmount float64 `json:"income_amount,omitempty"`
+	Quantity     int     `json:"quantity,omitempty"`
 }
