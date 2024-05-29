@@ -54,17 +54,17 @@ func (h *HouseInfrastructureRepositoryService) Update(infrastructure domain.Hous
                                           ZONA = ?,
                                           PERMANENCIA = ?,
                                           ESTADO_INFRAESTRUCTURA = ?,
-                                          TIPO_PARED = ?,
-                                          TIPO_TECHO = ?,
                                           TIPO_SUELO = ?,
+                                          TIPO_TECHO = ?,
+										  TIPO_PARED = ?,
                                           NUMERO_INTEGRANTES = ?,
                                           NUMERO_HABITACIONES = ?,
                                           EQUIPAMIENTO_HOGAR = ?,
                                           SERVICIOS_BASICOS = ?,
                                           OTRAS_PROPIEDADES = ?
                                           WHERE ID_USUARIO = ?;
-	`, infrastructure.Zone, infrastructure.Permanence, infrastructure.InfraestructureStatus, infrastructure.WallType, infrastructure.RoofType,
-		infrastructure.FloorType, infrastructure.TotalMembers, infrastructure.TotalRooms, infrastructure.HouseholdEquipment, infrastructure.BasicServices,
+	`, infrastructure.Zone, infrastructure.Permanence, infrastructure.InfraestructureStatus, infrastructure.FloorType, infrastructure.RoofType,
+		infrastructure.WallType, infrastructure.TotalMembers, infrastructure.TotalRooms, infrastructure.HouseholdEquipment, infrastructure.BasicServices,
 		infrastructure.OtherProperties, infrastructure.UserID)
 	if err != nil {
 		log.Println("Unable to update data into ENCUESTA_INFRAESTRUCTURA_HOGAR table, the error is:", err)
