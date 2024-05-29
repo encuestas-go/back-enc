@@ -96,7 +96,7 @@ func Test_Update_Infraestructure(t *testing.T) {
 			Permanence:            "Largo plazo",
 			InfraestructureStatus: "Regular",
 			FloorType:             "Cemento",
-			RoofType:              "Concreto",
+			RoofType:              "Lamina",
 			WallType:              "Concreto",
 			TotalMembers:          4,
 			TotalRooms:            3,

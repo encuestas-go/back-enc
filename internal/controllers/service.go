@@ -2,10 +2,11 @@ package controllers
 
 import (
 	"fmt"
-	"github.com/encuestas-go/back-enc/internal/domain"
-	"github.com/encuestas-go/back-enc/internal/repository"
 	"net/http"
 	"strconv"
+
+	"github.com/encuestas-go/back-enc/internal/domain"
+	"github.com/encuestas-go/back-enc/internal/repository"
 
 	"github.com/labstack/echo/v4"
 )
@@ -109,5 +110,21 @@ func (sm *ServiceManagementController) Get(c echo.Context) error {
 		StatusCode: http.StatusOK,
 		Message:    "service retrieved",
 		Data:       services,
+	})
+}
+
+func (sm *ServiceManagementController) GetAllInternetProvidersReport(c echo.Context) error {
+	res, err := sm.ServiceRepository.GetInternetProviderReport()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("Error generating report: %v", err),
+		})
+	}
+
+	return c.JSON(http.StatusOK, ControllerMessageResponse{
+		StatusCode: http.StatusOK,
+		Message:    "Information of internet providers report successfully retrieved",
+		Data:       res,
 	})
 }

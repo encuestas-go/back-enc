@@ -66,7 +66,7 @@ func Test_Update_Infrastructure(t *testing.T) {
 
 	mock.ExpectExec(`UPDATE ENCUESTA_INFRAESTRUCTURA_HOGAR`).
 		WithArgs(infrastructure.Zone, infrastructure.Permanence, infrastructure.InfraestructureStatus,
-			infrastructure.WallType, infrastructure.RoofType, infrastructure.FloorType, infrastructure.TotalMembers,
+			infrastructure.FloorType, infrastructure.RoofType, infrastructure.WallType, infrastructure.TotalMembers,
 			infrastructure.TotalRooms, infrastructure.HouseholdEquipment, infrastructure.BasicServices,
 			infrastructure.OtherProperties, infrastructure.UserID).
 		WillReturnResult(sqlmock.NewResult(1, 1))
