@@ -121,7 +121,17 @@ func (e *EconomicStatusController) Get(c echo.Context) error {
 }
 
 func (e *EconomicStatusController) GetStudentSituationReport(c echo.Context) error {
-	res, err := e.EconomicRepository.GetAllStudentSituationReport()
+	startDate := c.QueryParam("start_date")
+	endDate := c.QueryParam("end_date")
+
+	if startDate == "" || endDate == "" {
+		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    "Start date and end date are required",
+		})
+	}
+
+	res, err := e.EconomicRepository.GetAllStudentSituationReport(startDate, endDate)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
 			StatusCode: http.StatusInternalServerError,

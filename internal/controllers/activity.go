@@ -120,7 +120,6 @@ func (a *ActivityManagementController) Get(c echo.Context) error {
 }
 
 func (a *ActivityManagementController) GetCulturalActivitiesReports(c echo.Context) error {
-
 	startDate := c.QueryParam("start_date")
 	endDate := c.QueryParam("end_date")
 
@@ -131,7 +130,7 @@ func (a *ActivityManagementController) GetCulturalActivitiesReports(c echo.Conte
 		})
 	}
 
-	res, err := a.ActivityRepository.GetCulturalActivitiesReport()
+	res, err := a.ActivityRepository.GetCulturalActivitiesReport(startDate, endDate)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
 			StatusCode: http.StatusInternalServerError,

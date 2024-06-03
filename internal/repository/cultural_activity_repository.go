@@ -107,78 +107,30 @@ func (c CulturalActivityRepositoryService) GetAllOrByID(userID int) ([]domain.Cu
 	return activities, nil
 }
 
-func (c *CulturalActivityRepositoryService) GetCulturalActivitiesReport() ([]domain.CulturalActivitiesReport, error) {
+func (c *CulturalActivityRepositoryService) GetCulturalActivitiesReport(startDate, endDate string) ([]domain.CulturalActivitiesReport, error) {
 	query := `
-	SELECT 'PASATIEMPOS' AS CATEGORIA, 'Baile' AS ACTIVIDAD, DATE_FORMAT(FECHA, '%Y-%m') AS Mes, SUM(CASE WHEN PASATIEMPOS LIKE '%Baile%' THEN 1 ELSE 0 END) AS Conteo
+	SELECT
+		SUM(CASE WHEN PASATIEMPOS LIKE '%Baile%' THEN 1 ELSE 0 END) AS Baile,
+		SUM(CASE WHEN PASATIEMPOS  LIKE '%Tocar algún instrumento%' THEN 1 ELSE 0 END) AS Tocar_algun_instrumento,
+		SUM(CASE WHEN PASATIEMPOS  LIKE '%Pintar%' THEN 1 ELSE 0 END) AS Pintar,
+		SUM(CASE WHEN PASATIEMPOS  LIKE '%Dibujar%' THEN 1 ELSE 0 END) AS Dibujar,
+		SUM(CASE WHEN PASATIEMPOS  LIKE '%Hacer ejercicio%' THEN 1 ELSE 0 END) AS Hacer_ejercicio,
+		SUM(CASE WHEN PASATIEMPOS LIKE '%Leer%' THEN 1 ELSE 0 END) AS Leer,
+		SUM(CASE WHEN PASATIEMPOS  LIKE '%Salir a caminar%' THEN 1 ELSE 0 END) AS Salir_a_caminar,
+		SUM(CASE WHEN PASATIEMPOS  LIKE '%Series o películas%' THEN 1 ELSE 0 END) AS Series_o_peliculas,
+		SUM(CASE WHEN PASATIEMPOS LIKE '%Otros%' THEN 1 ELSE 0 END) AS Otras_actividades,
+		SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Festivales%' THEN 1 ELSE 0 END) AS Festivales,
+		SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Conciertos%' THEN 1 ELSE 0 END) AS Conciertos,
+		SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Exposiciones de arte%' THEN 1 ELSE 0 END) AS Exposiciones_de_arte,
+		SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Literatura/poesía%' THEN 1 ELSE 0 END) AS Literatura_poesia,
+		SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Bailes%' THEN 1 ELSE 0 END) AS Bailes,
+		SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Charlas/Conferencias%' THEN 1 ELSE 0 END) AS Charlas_conferencias,
+		SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Parques recreativos o de diversión%' THEN 1 ELSE 0 END) AS Parques_recreativos_diversion,
+		SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Otros%' THEN 1 ELSE 0 END) AS Otros_eventos
 	FROM ENCUESTA_ACTIVIDAD
-	GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-	UNION ALL
-	SELECT 'PASATIEMPOS', 'Tocar algún instrumento', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN PASATIEMPOS LIKE '%Tocar algún instrumento%' THEN 1 ELSE 0 END)
-	FROM ENCUESTA_ACTIVIDAD
-	GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-	UNION ALL
-	SELECT 'PASATIEMPOS', 'Pintar', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN PASATIEMPOS LIKE '%Pintar%' THEN 1 ELSE 0 END)
-	FROM ENCUESTA_ACTIVIDAD
-	GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-	UNION ALL
-	SELECT 'PASATIEMPOS', 'Dibujar', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN PASATIEMPOS LIKE '%Dibujar%' THEN 1 ELSE 0 END)
-	FROM ENCUESTA_ACTIVIDAD
-	GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-	UNION ALL
-	SELECT 'PASATIEMPOS', 'Hacer ejercicio', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN PASATIEMPOS LIKE '%Hacer ejercicio%' THEN 1 ELSE 0 END)
-	FROM ENCUESTA_ACTIVIDAD
-	GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-	UNION ALL
-	SELECT 'PASATIEMPOS', 'Leer', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN PASATIEMPOS LIKE '%Leer%' THEN 1 ELSE 0 END)
-	FROM ENCUESTA_ACTIVIDAD
-	GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-	UNION ALL
-	SELECT 'PASATIEMPOS', 'Salir a caminar', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN PASATIEMPOS LIKE '%Salir a caminar%' THEN 1 ELSE 0 END)
-	FROM ENCUESTA_ACTIVIDAD
-	GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-	UNION ALL
-	SELECT 'PASATIEMPOS', 'Series o películas', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN PASATIEMPOS LIKE '%Series o películas%' THEN 1 ELSE 0 END)
-	FROM ENCUESTA_ACTIVIDAD
-	GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-	UNION ALL
-	SELECT 'PASATIEMPOS', 'Otros', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN PASATIEMPOS LIKE '%Otros%' THEN 1 ELSE 0 END)
-	FROM ENCUESTA_ACTIVIDAD
-	GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-	UNION ALL
-	SELECT 'EVENTOS_SOCIALES', 'Festivales', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Festivales%' THEN 1 ELSE 0 END)
-	FROM ENCUESTA_ACTIVIDAD
-	GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-	UNION ALL
-	SELECT 'EVENTOS_SOCIALES', 'Conciertos', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Conciertos%' THEN 1 ELSE 0 END)
-	FROM ENCUESTA_ACTIVIDAD
-	GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-	UNION ALL
-	SELECT 'EVENTOS_SOCIALES', 'Exposiciones de arte', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Exposiciones de arte%' THEN 1 ELSE 0 END)
-	FROM ENCUESTA_ACTIVIDAD
-	GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-	UNION ALL
-	SELECT 'EVENTOS_SOCIALES', 'Literatura/poesía', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Literatura/poesía%' THEN 1 ELSE 0 END)
-	FROM ENCUESTA_ACTIVIDAD
-	GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-	UNION ALL
-	SELECT 'EVENTOS_SOCIALES', 'Bailes', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Bailes%' THEN 1 ELSE 0 END)
-	FROM ENCUESTA_ACTIVIDAD
-	GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-	UNION ALL
-	SELECT 'EVENTOS_SOCIALES', 'Charlas/Conferencias', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Charlas/Conferencias%' THEN 1 ELSE 0 END)
-	FROM ENCUESTA_ACTIVIDAD
-	GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-	UNION ALL
-	SELECT 'EVENTOS_SOCIALES', 'Parques recreativos o de diversión', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Parques recreativos o de diversión%' THEN 1 ELSE 0 END)
-	FROM ENCUESTA_ACTIVIDAD
-	GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-	UNION ALL
-	SELECT 'EVENTOS_SOCIALES', 'Otros', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Otros%' THEN 1 ELSE 0 END)
-	FROM ENCUESTA_ACTIVIDAD
-	GROUP BY DATE_FORMAT(FECHA, '%Y-%m');
+	WHERE FECHA BETWEEN ? AND ?;
 	`
-
-	rows, err := c.db.Query(query)
+	rows, err := c.db.Query(query, startDate, endDate)
 	if err != nil {
 		return []domain.CulturalActivitiesReport{}, err
 	}
@@ -187,118 +139,13 @@ func (c *CulturalActivityRepositoryService) GetCulturalActivitiesReport() ([]dom
 	internetReport := []domain.CulturalActivitiesReport{}
 	for rows.Next() {
 		report := domain.CulturalActivitiesReport{}
-		if err = rows.Scan(&report.Category, &report.Activity, &report.Month, &report.Count); err != nil {
+		if err = rows.Scan(&report.Dance, &report.PlayInstrument, &report.Paint, &report.Draw, &report.DoExercise,
+			&report.Read, &report.GoWalking, &report.Movies, &report.OtherActivities, &report.Festivals,
+			&report.Concerts, &report.ArtExposition, &report.LiteraturePoetry, &report.Dances, &report.Conferences,
+			&report.RecreationalParks, &report.OtherEvents); err != nil {
 			return []domain.CulturalActivitiesReport{}, err
 		}
 		internetReport = append(internetReport, report)
 	}
 	return internetReport, nil
 }
-
-/*
-func (c *CulturalActivityRepositoryService) GetCulturalActivitiesReport(startDate, endDate time.Time) ([]domain.CulturalActivitiesReport, error) {
-	query := `
-    SELECT 'PASATIEMPOS' AS CATEGORIA, 'Baile' AS ACTIVIDAD, DATE_FORMAT(FECHA, '%Y-%m') AS Mes, SUM(CASE WHEN PASATIEMPOS LIKE '%Baile%' THEN 1 ELSE 0 END) AS Conteo
-    FROM ENCUESTA_ACTIVIDAD
-    WHERE FECHA BETWEEN ? AND ?
-    GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-    UNION ALL
-    SELECT 'PASATIEMPOS', 'Tocar algún instrumento', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN PASATIEMPOS LIKE '%Tocar algún instrumento%' THEN 1 ELSE 0 END)
-    FROM ENCUESTA_ACTIVIDAD
-    WHERE FECHA BETWEEN ? AND ?
-    GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-    UNION ALL
-    SELECT 'PASATIEMPOS', 'Pintar', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN PASATIEMPOS LIKE '%Pintar%' THEN 1 ELSE 0 END)
-    FROM ENCUESTA_ACTIVIDAD
-    WHERE FECHA BETWEEN ? AND ?
-    GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-    UNION ALL
-    SELECT 'PASATIEMPOS', 'Dibujar', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN PASATIEMPOS LIKE '%Dibujar%' THEN 1 ELSE 0 END)
-    FROM ENCUESTA_ACTIVIDAD
-    WHERE FECHA BETWEEN ? AND ?
-    GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-    UNION ALL
-    SELECT 'PASATIEMPOS', 'Hacer ejercicio', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN PASATIEMPOS LIKE '%Hacer ejercicio%' THEN 1 ELSE 0 END)
-    FROM ENCUESTA_ACTIVIDAD
-    WHERE FECHA BETWEEN ? AND ?
-    GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-    UNION ALL
-    SELECT 'PASATIEMPOS', 'Leer', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN PASATIEMPOS LIKE '%Leer%' THEN 1 ELSE 0 END)
-    FROM ENCUESTA_ACTIVIDAD
-    WHERE FECHA BETWEEN ? AND ?
-    GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-    UNION ALL
-    SELECT 'PASATIEMPOS', 'Salir a caminar', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN PASATIEMPOS LIKE '%Salir a caminar%' THEN 1 ELSE 0 END)
-    FROM ENCUESTA_ACTIVIDAD
-    WHERE FECHA BETWEEN ? AND ?
-    GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-    UNION ALL
-    SELECT 'PASATIEMPOS', 'Series o películas', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN PASATIEMPOS LIKE '%Series o películas%' THEN 1 ELSE 0 END)
-    FROM ENCUESTA_ACTIVIDAD
-    WHERE FECHA BETWEEN ? AND ?
-    GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-    UNION ALL
-    SELECT 'PASATIEMPOS', 'Otros', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN PASATIEMPOS LIKE '%Otros%' THEN 1 ELSE 0 END)
-    FROM ENCUESTA_ACTIVIDAD
-    WHERE FECHA BETWEEN ? AND ?
-    GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-    UNION ALL
-    SELECT 'EVENTOS_SOCIALES', 'Festivales', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Festivales%' THEN 1 ELSE 0 END)
-    FROM ENCUESTA_ACTIVIDAD
-    WHERE FECHA BETWEEN ? AND ?
-    GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-    UNION ALL
-    SELECT 'EVENTOS_SOCIALES', 'Conciertos', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Conciertos%' THEN 1 ELSE 0 END)
-    FROM ENCUESTA_ACTIVIDAD
-    WHERE FECHA BETWEEN ? AND ?
-    GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-    UNION ALL
-    SELECT 'EVENTOS_SOCIALES', 'Exposiciones de arte', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Exposiciones de arte%' THEN 1 ELSE 0 END)
-    FROM ENCUESTA_ACTIVIDAD
-    WHERE FECHA BETWEEN ? AND ?
-    GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-    UNION ALL
-    SELECT 'EVENTOS_SOCIALES', 'Literatura/poesía', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Literatura/poesía%' THEN 1 ELSE 0 END)
-    FROM ENCUESTA_ACTIVIDAD
-    WHERE FECHA BETWEEN ? AND ?
-    GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-    UNION ALL
-    SELECT 'EVENTOS_SOCIALES', 'Bailes', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Bailes%' THEN 1 ELSE 0 END)
-    FROM ENCUESTA_ACTIVIDAD
-    WHERE FECHA BETWEEN ? AND ?
-    GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-    UNION ALL
-    SELECT 'EVENTOS_SOCIALES', 'Charlas/Conferencias', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Charlas/Conferencias%' THEN 1 ELSE 0 END)
-    FROM ENCUESTA_ACTIVIDAD
-    WHERE FECHA BETWEEN ? AND ?
-    GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-    UNION ALL
-    SELECT 'EVENTOS_SOCIALES', 'Parques recreativos o de diversión', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Parques recreativos o de diversión%' THEN 1 ELSE 0 END)
-    FROM ENCUESTA_ACTIVIDAD
-    WHERE FECHA BETWEEN ? AND ?
-    GROUP BY DATE_FORMAT(FECHA, '%Y-%m')
-    UNION ALL
-    SELECT 'EVENTOS_SOCIALES', 'Otros', DATE_FORMAT(FECHA, '%Y-%m'), SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Otros%' THEN 1 ELSE 0 END)
-    FROM ENCUESTA_ACTIVIDAD
-    WHERE FECHA BETWEEN ? AND ?
-    GROUP BY DATE_FORMAT(FECHA, '%Y-%m');
-    `
-
-	rows, err := c.db.Query(query)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	var reports []domain.CulturalActivitiesReport
-	for rows.Next() {
-		var report domain.CulturalActivitiesReport
-		if err := rows.Scan(&report.Category, &report.Activity, &report.Month, &report.Count); err != nil {
-			return nil, err
-		}
-		reports = append(reports, report)
-	}
-	return reports, nil
-}
-
-*/

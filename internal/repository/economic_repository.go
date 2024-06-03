@@ -128,19 +128,21 @@ func (e *EconomicRepositoryService) GetAllOrByID(userID int) ([]domain.EconomicS
 	return economicSurvey, nil
 }
 
-func (e *EconomicRepositoryService) GetAllStudentSituationReport() ([]domain.StudentSituationReport, error) {
+func (e *EconomicRepositoryService) GetAllStudentSituationReport(startDate, endDate string) ([]domain.StudentSituationReport, error) {
 	query := `
 	SELECT
-		SITUACION_ACTUAL,
-		COUNT(*) AS CANTIDAD_ALUMNOS
+   	 SITUACION_ACTUAL,
+    	COUNT(*) AS CANTIDAD_ALUMNOS
 	FROM
-		ENCUESTA_NIVEL_ECONOMICO
+    	ENCUESTA_NIVEL_ECONOMICO
+	WHERE
+    	FECHA BETWEEN ? AND ?
 	GROUP BY
-		SITUACION_ACTUAL
+    	SITUACION_ACTUAL
 	ORDER BY
-		CANTIDAD_ALUMNOS ASC;
+   	 CANTIDAD_ALUMNOS ASC;
 	`
-	rows, err := e.db.Query(query)
+	rows, err := e.db.Query(query, startDate, endDate)
 	if err != nil {
 		return []domain.StudentSituationReport{}, err
 	}

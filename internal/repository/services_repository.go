@@ -116,19 +116,21 @@ func (s ServicesRepositoryService) GetAllOrByID(userID int) ([]domain.Services, 
 	return services, nil
 }
 
-func (s *ServicesRepositoryService) GetInternetProviderReport() ([]domain.InternetProviderReport, error) {
+func (s *ServicesRepositoryService) GetInternetProviderReport(startDate, endDate string) ([]domain.InternetProviderReport, error) {
 	query := `
 	SELECT
-		PROVEEDOR_INTERNET,
-		COUNT(*) AS CANTIDAD_ALUMNOS
+    	PROVEEDOR_INTERNET,
+    	COUNT(*) AS CANTIDAD_ALUMNOS
 	FROM
-		ENCUESTA_SERVICIO
+    	ENCUESTA_SERVICIO
+	WHERE
+    	FECHA BETWEEN ? AND ?
 	GROUP BY
-		PROVEEDOR_INTERNET
+    	PROVEEDOR_INTERNET
 	ORDER BY
-		CANTIDAD_ALUMNOS ASC;
+    	CANTIDAD_ALUMNOS ASC;
 	`
-	rows, err := s.db.Query(query)
+	rows, err := s.db.Query(query, startDate, endDate)
 	if err != nil {
 		return []domain.InternetProviderReport{}, err
 	}
