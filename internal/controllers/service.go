@@ -114,7 +114,17 @@ func (sm *ServiceManagementController) Get(c echo.Context) error {
 }
 
 func (sm *ServiceManagementController) GetAllInternetProvidersReport(c echo.Context) error {
-	res, err := sm.ServiceRepository.GetInternetProviderReport()
+	startDate := c.QueryParam("start_date")
+	endDate := c.QueryParam("end_date")
+
+	if startDate == "" || endDate == "" {
+		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    "Start date and end date are required",
+		})
+	}
+
+	res, err := sm.ServiceRepository.GetInternetProviderReport(startDate, endDate)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
 			StatusCode: http.StatusInternalServerError,

@@ -153,3 +153,28 @@ type InternetProviderReport struct {
 	InternetProvider string `json:"internet_provider,omitempty"`
 	Quantity         int    `json:"quantity,omitempty"`
 }
+
+type CulturalActivitiesReport struct {
+	Dance             int `json:"dance,omitempty"`
+	PlayInstrument    int `json:"play_instrument,omitempty"`
+	Paint             int `json:"paint,omitempty"`
+	Draw              int `json:"draw,omitempty"`
+	DoExercise        int `json:"do_exercise,omitempty"`
+	Read              int `json:"read,omitempty"`
+	GoWalking         int `json:"go_walking,omitempty"`
+	Movies            int `json:"movies,omitempty"`
+	OtherActivities   int `json:"other_activities,omitempty"`
+	Festivals         int `json:"festivals,omitempty"`
+	Concerts          int `json:"concerts,omitempty"`
+	ArtExposition     int `json:"art_exposition,omitempty"`
+	LiteraturePoetry  int `json:"literature_poetry,omitempty"`
+	Dances            int `json:"dances,omitempty"`
+	Conferences       int `json:"conferences,omitempty"`
+	RecreationalParks int `json:"recreational_parks,omitempty"`
+	OtherEvents       int `json:"other_events,omitempty"`
+}
+
+type StudentSituationReport struct {
+	CurrentSituation string `json:"current_situation,omitempty"`
+	Quantity         int    `json:"quantity,omitempty"`
+}

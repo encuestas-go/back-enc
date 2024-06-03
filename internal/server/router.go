@@ -109,6 +109,8 @@ func (s *ServerHandler) StartEconomicStatusRoutes() *ServerHandler {
 	s.RouterGroup.DELETE("/eliminar/nivelEconomico", s.GenericController.EconomicStatusController.Delete)
 	s.RouterGroup.GET("/consultar/nivelEconomico", s.GenericController.EconomicStatusController.Get)
 
+	s.RouterGroup.GET("/reporte/SituacionActualEstudiante", s.GenericController.EconomicStatusController.GetStudentSituationReport)
+
 	return s
 }
 
@@ -176,6 +178,8 @@ func (s *ServerHandler) StartActivityManagementRoutes() *ServerHandler {
 	s.RouterGroup.PUT("/actualizar/actividad", s.GenericController.ActivityManagementController.Update)
 	s.RouterGroup.DELETE("/eliminar/actividad", s.GenericController.ActivityManagementController.Delete)
 	s.RouterGroup.GET("/consultar/actividad", s.GenericController.ActivityManagementController.Get)
+
+	s.RouterGroup.GET("/reporte/PreferenciasActividades", s.GenericController.ActivityManagementController.GetCulturalActivitiesReports)
 
 	return s
 }

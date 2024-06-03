@@ -131,13 +131,19 @@ func (d *DemographicRepositoryService) GetAllOrByID(userID int) ([]domain.Demogr
 	return demographicSurvey, nil
 }
 
-func (d *DemographicRepositoryService) GetIncomeAmountReport() ([]domain.IncomeAmountReport, error) {
+func (d *DemographicRepositoryService) GetIncomeAmountReport(startDate, endDate string) ([]domain.IncomeAmountReport, error) {
 	query := `
-	SELECT MONTO_INGRESOS, COUNT(*) as CANTIDAD
-	FROM ENCUESTA_NIVEL_DEMOGRAFICO
-	GROUP BY MONTO_INGRESOS;
+	SELECT
+   		MONTO_INGRESOS,
+    	COUNT(*) as CANTIDAD
+	FROM
+   		 ENCUESTA_NIVEL_DEMOGRAFICO
+	WHERE
+    	FECHA BETWEEN ? AND ?
+	GROUP BY
+    	MONTO_INGRESOS;
 	`
-	rows, err := d.db.Query(query)
+	rows, err := d.db.Query(query, startDate, endDate)
 	if err != nil {
 		return []domain.IncomeAmountReport{}, err
 	}
@@ -154,21 +160,23 @@ func (d *DemographicRepositoryService) GetIncomeAmountReport() ([]domain.IncomeA
 	return demographicReport, nil
 }
 
-func (d *DemographicRepositoryService) GetHouseTypeConditionReport() ([]domain.HouseTypeAndConditionReport, error) {
+func (d *DemographicRepositoryService) GetHouseTypeConditionReport(startDate, endDate string) ([]domain.HouseTypeAndConditionReport, error) {
 	query := `
 	SELECT
-		TIPO_VIVIENDA,
-		TIPO_CONDICION,
-		COUNT(*) AS CANTIDAD_ALUMNOS
+    	TIPO_VIVIENDA,
+    	TIPO_CONDICION,
+    	COUNT(*) AS CANTIDAD_ALUMNOS
 	FROM
-		ENCUESTA_NIVEL_DEMOGRAFICO
+    	ENCUESTA_NIVEL_DEMOGRAFICO
+	WHERE
+    	FECHA BETWEEN ? AND ?
 	GROUP BY
-		TIPO_VIVIENDA,
-		TIPO_CONDICION
+    	TIPO_VIVIENDA,
+    	TIPO_CONDICION
 	ORDER BY
-		CANTIDAD_ALUMNOS ASC;
+    	CANTIDAD_ALUMNOS ASC;
 	`
-	rows, err := d.db.Query(query)
+	rows, err := d.db.Query(query, startDate, endDate)
 	if err != nil {
 		return []domain.HouseTypeAndConditionReport{}, err
 	}
