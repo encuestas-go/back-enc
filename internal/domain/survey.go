@@ -153,3 +153,15 @@ type InternetProviderReport struct {
 	InternetProvider string `json:"internet_provider,omitempty"`
 	Quantity         int    `json:"quantity,omitempty"`
 }
+
+type CulturalActivitiesReport struct {
+	Category string `json:"category,omitempty"`
+	Activity string `json:"activity,omitempty"`
+	Month    string `json:"month,omitempty"`
+	Count    int    `json:"count,omitempty"`
+}
+
+type StudentSituationReport struct {
+	CurrentSituation string `json:"current_situation,omitempty"`
+	Quantity         int    `json:"quantity,omitempty"`
+}

@@ -118,3 +118,30 @@ func (a *ActivityManagementController) Get(c echo.Context) error {
 		Data:       res,
 	})
 }
+
+func (a *ActivityManagementController) GetCulturalActivitiesReports(c echo.Context) error {
+
+	startDate := c.QueryParam("start_date")
+	endDate := c.QueryParam("end_date")
+
+	if startDate == "" || endDate == "" {
+		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    "Start date and end date are required",
+		})
+	}
+
+	res, err := a.ActivityRepository.GetCulturalActivitiesReport()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("Error generating report: %v", err),
+		})
+	}
+
+	return c.JSON(http.StatusOK, ControllerMessageResponse{
+		StatusCode: http.StatusOK,
+		Message:    "Information about cultural activities for report successfully retrieved",
+		Data:       res,
+	})
+}

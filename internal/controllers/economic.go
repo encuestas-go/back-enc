@@ -119,3 +119,19 @@ func (e *EconomicStatusController) Get(c echo.Context) error {
 		Data:       res,
 	})
 }
+
+func (e *EconomicStatusController) GetStudentSituationReport(c echo.Context) error {
+	res, err := e.EconomicRepository.GetAllStudentSituationReport()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("Error generating report: %v", err),
+		})
+	}
+
+	return c.JSON(http.StatusOK, ControllerMessageResponse{
+		StatusCode: http.StatusOK,
+		Message:    "Economic information for report successfully retrieved",
+		Data:       res,
+	})
+}
