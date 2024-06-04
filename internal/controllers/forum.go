@@ -3,7 +3,9 @@ package controllers
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
+	"github.com/encuestas-go/back-enc/internal/domain"
 	"github.com/encuestas-go/back-enc/internal/repository"
 	"github.com/labstack/echo/v4"
 )
@@ -16,6 +18,71 @@ func InitForumController(repo *repository.ForumRepositoryService) *ForumControll
 	return &ForumController{
 		ForumRepository: repo,
 	}
+}
+
+func (f *ForumController) CreateQuestion(c echo.Context) error {
+	question := domain.Question{}
+	err := c.Bind(&question)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("An error happened trying to bind the body of the question, err: %v", err),
+		})
+	}
+
+	questionID, err := f.ForumRepository.InsertQuestion(question)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("An error happened when trying to insert the question, the body is: %v, the error is: %v", question, err),
+		})
+	}
+
+	return c.JSON(http.StatusCreated, map[string]interface{}{
+		"status_code": http.StatusCreated,
+		"message":     "Question successfully created",
+		"question_id": questionID,
+	})
+}
+
+func (f *ForumController) CreateAnswer(c echo.Context) error {
+	answer := domain.Answer{}
+	err := c.Bind(&answer)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("An error happened trying to bind the body of the answer, err: %v", err),
+		})
+	}
+
+	questionIDStr := c.QueryParam("question_id")
+	if questionIDStr == "" {
+		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    "Missing question ID",
+		})
+	}
+
+	questionID, err := strconv.Atoi(questionIDStr)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    "Invalid question ID",
+		})
+	}
+
+	err = f.ForumRepository.InsertAnswer(answer, questionID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("An error happened when trying to insert the answer, the body is: %v, the error is: %v", answer, err),
+		})
+	}
+
+	return c.JSON(http.StatusCreated, ControllerMessageResponse{
+		StatusCode: http.StatusCreated,
+		Message:    "Answer successfully created",
+	})
 }
 
 func (f *ForumController) Get(c echo.Context) error {

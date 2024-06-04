@@ -2,6 +2,7 @@ package repository
 
 import (
 	"database/sql"
+	"log"
 
 	"github.com/encuestas-go/back-enc/internal/domain"
 )
@@ -14,6 +15,55 @@ func InitializeForumRepository(db *sql.DB) *ForumRepositoryService {
 	return &ForumRepositoryService{
 		db: db,
 	}
+}
+
+func (f *ForumRepositoryService) InsertQuestion(question domain.Question) (int, error) {
+	result, err := f.db.Exec(`
+        INSERT INTO FORO_PREGUNTA(ID_USUARIO, PREGUNTA, NOMBRE)
+        VALUES(?, ?, ?);
+    `, question.IDUser, question.QuestionText, question.Name)
+	if err != nil {
+		log.Println("Unable to insert into the FORO_PREGUNTA table, the error is:", err)
+		return 0, err
+	}
+
+	questionID, err := result.LastInsertId()
+	if err != nil {
+		log.Println("Unable to get the last inserted ID for question", err)
+		return 0, err
+	}
+
+	log.Printf("Data successfully added to FORO_PREGUNTA table with ID %d", questionID)
+	return int(questionID), nil
+}
+
+func (f *ForumRepositoryService) InsertAnswer(answer domain.Answer, questionID int) error {
+	result, err := f.db.Exec(`
+        INSERT INTO FORO_RESPUESTA(ID_USUARIO, RESPUESTA, NOMBRE)
+        VALUES(?, ?, ?);
+    `, answer.IDUser, answer.AnswerText, answer.Name)
+	if err != nil {
+		log.Println("Unable to insert into the FORO_RESPUESTA table, the error is:", err)
+		return err
+	}
+
+	answerID, err := result.LastInsertId()
+	if err != nil {
+		log.Println("Unable to get the last inserted ID for answer", err)
+		return err
+	}
+
+	_, err = f.db.Exec(`
+        INSERT INTO FORO_PREGUNTA_RESPUESTA(ID_PREGUNTA, ID_RESPUESTA)
+        VALUES(?, ?);
+    `, questionID, answerID)
+	if err != nil {
+		log.Println("Unable to insert into the FORO_PREGUNTA_RESPUESTA table, the error is:", err)
+		return err
+	}
+
+	log.Printf("Data successfully added to FORO_RESPUESTA and FORO_PREGUNTA_RESPUESTA tables")
+	return nil
 }
 
 func (f *ForumRepositoryService) GetAll() (*domain.AnswerResponseForum, error) {
