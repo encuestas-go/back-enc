@@ -120,7 +120,7 @@ func (e *EconomicRepositoryService) GetAllOrByID(userID int) ([]domain.EconomicS
 		economic := domain.EconomicStatus{}
 		if err = rows.Scan(&economic.ID, &economic.IDUser, &economic.CurrentStatus, &economic.JobTitle,
 			&economic.EmployerEstablishment, &economic.EmploymentType, &economic.Salary, &economic.AmountType,
-			&economic.WorkBenefitsType); err != nil {
+			&economic.WorkBenefitsType, &economic.Date); err != nil {
 			return []domain.EconomicStatus{}, err
 		}
 		economicSurvey = append(economicSurvey, economic)
