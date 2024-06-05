@@ -20,7 +20,7 @@ func InitServer() *ServerHandler {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins:     []string{"http://127.0.0.1:5500", "http://localhost:3000", "http://localhost:5500"},
+		AllowOrigins:     []string{"http://127.0.0.1:5501", "http://localhost:3000", "http://localhost:5501"},
 		AllowHeaders:     []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 		AllowMethods:     []string{echo.GET, echo.POST, echo.HEAD, echo.PUT, echo.PATCH, echo.DELETE},
 		AllowCredentials: true,
