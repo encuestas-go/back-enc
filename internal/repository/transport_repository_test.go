@@ -95,8 +95,8 @@ func Test_Get_Transport(t *testing.T) {
 
 	userID := 1
 	rows := sqlmock.NewRows([]string{"ID", "ID_USER", "TRANSPORTE_PRINCIPAL", "TRANSPORTE_SECUNDARIO",
-		"FRECUENCIA_USO", "PUNTOS_ACCESIBLES", "LUGAR_DESTINO_FRECUENTE", "TIEMPO_TRASLADO"}).
-		AddRow(1, 1, "Caminando", "Ruta", "Dos veces por semana", true, "Universidad", "Menos de 1 hora")
+		"FRECUENCIA_USO", "PUNTOS_ACCESIBLES", "LUGAR_DESTINO_FRECUENTE", "TIEMPO_TRASLADO", "FECHA"}).
+		AddRow(1, 1, "Caminando", "Ruta", "Dos veces por semana", true, "Universidad", "Menos de 1 hora", "2024-06-05")
 
 	mock.ExpectQuery(`SELECT \* FROM ENCUESTA_TRANSPORTE`).WillReturnRows(rows)
 	//WHEN
