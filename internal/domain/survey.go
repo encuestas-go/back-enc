@@ -36,6 +36,7 @@ type EconomicStatus struct {
 	Salary                float64 `json:"salary,omitempty"`
 	AmountType            string  `json:"amount_type,omitempty"`
 	WorkBenefitsType      string  `json:"work_benefits_type,omitempty"`
+	Date                  string  `json:"date,omitempty"`
 }
 
 type TransportManagement struct {
@@ -47,6 +48,7 @@ type TransportManagement struct {
 	AccesiblePoints     bool   `json:"accesible_points"`
 	FrequentDestination string `json:"frequent_destination,omitempty"`
 	TravelTime          string `json:"travel_time,omitempty"`
+	Date                string `json:"date,omitempty"`
 }
 
 type HouseholdInfrastructure struct {
@@ -76,6 +78,7 @@ type DemographicStatus struct {
 	MembersUnderage  int     `json:"members_underage,omitempty"`
 	MonthlyExpenses  float64 `json:"monthly_expenses,omitempty"`
 	GovermentSupport bool    `json:"goverment_support"`
+	Date             string  `json:"date,omitempty"`
 }
 
 type CulturalActivity struct {
@@ -87,19 +90,21 @@ type CulturalActivity struct {
 	ExerciseFrequency    string `json:"exercise_frequency,omitempty"`
 	WorkshopType         string `json:"workshop_type,omitempty"`
 	PreferredSocialEvent string `json:"preferred_social_event,omitempty"`
+	Date                 string `json:"date,omitempty"`
 }
 
 type Services struct {
-	ID                 int    `json:"id,omitempty"`
-	UserID             int    `json:"user_id,omitempty"`
-	EnergyProvider     bool   `json:"energy_provider"`
-	WaterProvider      bool   `json:"water_provider"`
-	InternetProvider   string `json:"internet_provider,omitempty"`
-	PhoneProvider      bool   `json:"phone_provider"`
-	TvProvider         bool   `json:"tv_provider"`
-	PaymentDueDate     string `json:"payment_due_date,omitempty"`
-	AdditionalPayments string `json:"additional_payments,omitempty"`
-	ServicesBill       int    `json:"services_bill,omitempty"`
+	ID                 int     `json:"id,omitempty"`
+	UserID             int     `json:"user_id,omitempty"`
+	EnergyProvider     bool    `json:"energy_provider"`
+	WaterProvider      bool    `json:"water_provider"`
+	InternetProvider   string  `json:"internet_provider,omitempty"`
+	PhoneProvider      bool    `json:"phone_provider"`
+	TvProvider         bool    `json:"tv_provider"`
+	PaymentDueDate     string  `json:"payment_due_date,omitempty"`
+	AdditionalPayments string  `json:"additional_payments,omitempty"`
+	ServicesBill       float64 `json:"services_bill,omitempty"`
+	Date               string  `json:"date,omitempty"`
 }
 
 type Event struct {

@@ -122,7 +122,7 @@ func (d *DemographicRepositoryService) GetAllOrByID(userID int) ([]domain.Demogr
 		demographic := domain.DemographicStatus{}
 		if err = rows.Scan(&demographic.ID, &demographic.UserID, &demographic.HousingType, &demographic.HouseCondition,
 			&demographic.OwnTransport, &demographic.IncomeAmount, &demographic.WorkingMembers, &demographic.MembersUnderage,
-			&demographic.MonthlyExpenses, &demographic.GovermentSupport); err != nil {
+			&demographic.MonthlyExpenses, &demographic.GovermentSupport, &demographic.Date); err != nil {
 			return []domain.DemographicStatus{}, err
 		}
 

@@ -90,6 +90,10 @@ func (sm *ServiceManagementController) Delete(c echo.Context) error {
 
 func (sm *ServiceManagementController) Get(c echo.Context) error {
 	userIDString := c.QueryParam("user_id")
+	if userIDString == "" {
+		userIDString = "0"
+	}
+
 	userID, err := strconv.Atoi(userIDString)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
@@ -102,7 +106,7 @@ func (sm *ServiceManagementController) Get(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
 			StatusCode: http.StatusInternalServerError,
-			Message:    fmt.Sprintf("error deleting service: %s", err),
+			Message:    fmt.Sprintf("error to retrived service: %s", err),
 		})
 	}
 

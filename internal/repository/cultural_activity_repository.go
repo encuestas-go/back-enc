@@ -97,7 +97,7 @@ func (c CulturalActivityRepositoryService) GetAllOrByID(userID int) ([]domain.Cu
 		activity := domain.CulturalActivity{}
 		if err = rows.Scan(&activity.ID, &activity.UserID, &activity.PreferredGame, &activity.Hobby,
 			&activity.PreferredSport, &activity.ExerciseFrequency, &activity.WorkshopType,
-			&activity.PreferredSocialEvent); err != nil {
+			&activity.PreferredSocialEvent, &activity.Date); err != nil {
 			return []domain.CulturalActivity{}, err
 		}
 
