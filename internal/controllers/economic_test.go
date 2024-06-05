@@ -211,8 +211,8 @@ func TestGetEconomicSurvey(t *testing.T) {
 		userID := 1
 
 		rows := sqlmock.NewRows([]string{"ID", "ID_USER", "SITUACION_ACTUAL", "NOMBRE_EMPLEO",
-			"EMPRESA_ESTABLECIMIENTO", "TIPO_EMPLEO", "SALARIO", "TIPO_MONTO", "TIPO_PRESTACIONES"}).
-			AddRow(1, 1, "Empleado", "Cajero", "Sanborns", "Semanal", 2345.00, "Semanal", "Ninguna")
+			"EMPRESA_ESTABLECIMIENTO", "TIPO_EMPLEO", "SALARIO", "TIPO_MONTO", "TIPO_PRESTACIONES", "FECHA"}).
+			AddRow(1, 1, "Empleado", "Cajero", "Sanborns", "Semanal", 2345.00, "Semanal", "Ninguna", "2024-06-05")
 
 		mock.ExpectQuery(`SELECT \* FROM ENCUESTA_NIVEL_ECONOMICO`).WillReturnRows(rows)
 

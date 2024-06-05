@@ -47,7 +47,7 @@ func (s ServicesRepositoryService) Update(service domain.Services) error {
 	res, err := s.db.Exec(`
 		UPDATE ENCUESTA_SERVICIO SET PROVEEDOR_LUZ = ?, PROVEEDOR_AGUA = ?, PROVEEDOR_INTERNET = ?, PROVEEDOR_TELEFONO = ?,
                              PROVEEDOR_TELEVISION = ?, VENCIMIENTO_PAGOS = ?, PAGOS_ADICIONALES = ?, GASTOS_SERVICIOS = ?
-                            WHERE ID_USUARIO = ?;
+                             WHERE ID_USUARIO = ?;
 	`, service.EnergyProvider, service.WaterProvider, service.InternetProvider,
 		service.PhoneProvider, service.TvProvider, service.PaymentDueDate, service.AdditionalPayments,
 		service.ServicesBill, service.UserID)
@@ -106,7 +106,7 @@ func (s ServicesRepositoryService) GetAllOrByID(userID int) ([]domain.Services, 
 		var service domain.Services
 		if err = rows.Scan(&service.ID, &service.UserID, &service.EnergyProvider, &service.WaterProvider,
 			&service.InternetProvider, &service.PhoneProvider, &service.TvProvider, &service.PaymentDueDate,
-			&service.AdditionalPayments, &service.ServicesBill); err != nil {
+			&service.AdditionalPayments, &service.ServicesBill, &service.Date); err != nil {
 			return []domain.Services{}, err
 		}
 
