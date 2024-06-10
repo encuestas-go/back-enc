@@ -256,3 +256,15 @@ func (s *ServerHandler) StartMapRoutes() *ServerHandler {
 
 	return s
 }
+
+// StarBackupRoutes  13.-StartBackupRoutes creates the routes for the backup of information from database, using a date format YYYY-MM-DD to find
+// The routes are:
+//
+//	/crearBackups
+//	/obtenerBackups
+func (s *ServerHandler) StartBackupRoutes() *ServerHandler {
+	s.RouterGroup.POST("/crearBackups", s.GenericController.BackupController.Create)
+	s.RouterGroup.GET("/obtenerBackups", s.GenericController.BackupController.Get)
+
+	return s
+}
