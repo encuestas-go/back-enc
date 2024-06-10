@@ -25,6 +25,7 @@ type GenericController struct {
 	UserController                *UserController
 	ForumController               *ForumController
 	MapAddressController          *MapAddressController
+	BackupController              *BackupController
 }
 
 func InitGenericController(db *sql.DB) *GenericController {
