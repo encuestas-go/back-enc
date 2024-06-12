@@ -2,8 +2,10 @@ package controllers
 
 import (
 	"io/fs"
+	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
 
 	"github.com/labstack/echo/v4"
@@ -25,7 +27,20 @@ type BackupFiles struct {
 
 func (b *BackupController) Create(c echo.Context) error {
 	//date := "2024-06-09"
-	return nil
+
+	cmd := exec.Command("sh", "-c", "zip -r 2024-07-11_database.zip files && mv 2024-07-11_database.zip backups/")
+
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	if err := cmd.Run(); err != nil {
+		log.Fatal(err)
+	}
+
+	return c.JSON(http.StatusCreated, ControllerMessageResponse{
+		StatusCode: http.StatusCreated,
+		Message:    "Backup file successfully created",
+	})
 }
 
 func (b *BackupController) Get(c echo.Context) error {
