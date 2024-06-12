@@ -1,29 +1,19 @@
+version: '3.8'
+
 services:
   mysql:
-    image: mysql:latest 
+    image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: rockCcLl$1_
-      MYSQL_DATABASE: ENCUESTA  
-      MYSQL_USER: lorelval 
-      MYSQL_PASSWORD: rockCcLl$1_
-    network_mode: host
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ENCUESTA
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
     ports:
-      - "3306:3306"  
+      - "3306:3306"
+    user: "${UID}:${GID}"
     volumes:
-      - mysql-data:/var/lib/mysql
-      - ./database_dump.sql:/docker-entrypoint-initdb.d/database_dump.sql
-    command: --init-file /docker-entrypoint-initdb.d/database_dump.sql
-
-  app:
-    build: .
-    depends_on:
-      - mysql
-    environment:
-      DB_HOST: mysql
-    ports:
-      - "3000:3000"
-    network_mode: host
-
+      - ./mysql-data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
 volumes:
   mysql-data:

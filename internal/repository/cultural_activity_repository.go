@@ -109,26 +109,26 @@ func (c CulturalActivityRepositoryService) GetAllOrByID(userID int) ([]domain.Cu
 
 func (c *CulturalActivityRepositoryService) GetCulturalActivitiesReport(startDate, endDate string) ([]domain.CulturalActivitiesReport, error) {
 	query := `
-	SELECT
-		SUM(CASE WHEN PASATIEMPOS LIKE '%Baile%' THEN 1 ELSE 0 END) AS Baile,
-		SUM(CASE WHEN PASATIEMPOS  LIKE '%Tocar algún instrumento%' THEN 1 ELSE 0 END) AS Tocar_algun_instrumento,
-		SUM(CASE WHEN PASATIEMPOS  LIKE '%Pintar%' THEN 1 ELSE 0 END) AS Pintar,
-		SUM(CASE WHEN PASATIEMPOS  LIKE '%Dibujar%' THEN 1 ELSE 0 END) AS Dibujar,
-		SUM(CASE WHEN PASATIEMPOS  LIKE '%Hacer ejercicio%' THEN 1 ELSE 0 END) AS Hacer_ejercicio,
-		SUM(CASE WHEN PASATIEMPOS LIKE '%Leer%' THEN 1 ELSE 0 END) AS Leer,
-		SUM(CASE WHEN PASATIEMPOS  LIKE '%Salir a caminar%' THEN 1 ELSE 0 END) AS Salir_a_caminar,
-		SUM(CASE WHEN PASATIEMPOS  LIKE '%Series o películas%' THEN 1 ELSE 0 END) AS Series_o_peliculas,
-		SUM(CASE WHEN PASATIEMPOS LIKE '%Otros%' THEN 1 ELSE 0 END) AS Otras_actividades,
-		SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Festivales%' THEN 1 ELSE 0 END) AS Festivales,
-		SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Conciertos%' THEN 1 ELSE 0 END) AS Conciertos,
-		SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Exposiciones de arte%' THEN 1 ELSE 0 END) AS Exposiciones_de_arte,
-		SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Literatura/poesía%' THEN 1 ELSE 0 END) AS Literatura_poesia,
-		SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Bailes%' THEN 1 ELSE 0 END) AS Bailes,
-		SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Charlas/Conferencias%' THEN 1 ELSE 0 END) AS Charlas_conferencias,
-		SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Parques recreativos o de diversión%' THEN 1 ELSE 0 END) AS Parques_recreativos_diversion,
-		SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Otros%' THEN 1 ELSE 0 END) AS Otros_eventos
-	FROM ENCUESTA_ACTIVIDAD
-	WHERE FECHA BETWEEN ? AND ?;
+		SELECT
+			COALESCE(SUM(CASE WHEN PASATIEMPOS LIKE '%Baile%' THEN 1 ELSE 0 END), 0) AS Baile,
+			COALESCE(SUM(CASE WHEN PASATIEMPOS LIKE '%Tocar algún instrumento%' THEN 1 ELSE 0 END), 0) AS Tocar_algun_instrumento,
+			COALESCE(SUM(CASE WHEN PASATIEMPOS LIKE '%Pintar%' THEN 1 ELSE 0 END), 0) AS Pintar,
+			COALESCE(SUM(CASE WHEN PASATIEMPOS LIKE '%Dibujar%' THEN 1 ELSE 0 END), 0) AS Dibujar,
+			COALESCE(SUM(CASE WHEN PASATIEMPOS LIKE '%Hacer ejercicio%' THEN 1 ELSE 0 END), 0) AS Hacer_ejercicio,
+			COALESCE(SUM(CASE WHEN PASATIEMPOS LIKE '%Leer%' THEN 1 ELSE 0 END), 0) AS Leer,
+			COALESCE(SUM(CASE WHEN PASATIEMPOS LIKE '%Salir a caminar%' THEN 1 ELSE 0 END), 0) AS Salir_a_caminar,
+			COALESCE(SUM(CASE WHEN PASATIEMPOS LIKE '%Series o películas%' THEN 1 ELSE 0 END), 0) AS Series_o_peliculas,
+			COALESCE(SUM(CASE WHEN PASATIEMPOS LIKE '%Otros%' THEN 1 ELSE 0 END), 0) AS Otras_actividades,
+			COALESCE(SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Festivales%' THEN 1 ELSE 0 END), 0) AS Festivales,
+			COALESCE(SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Conciertos%' THEN 1 ELSE 0 END), 0) AS Conciertos,
+			COALESCE(SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Exposiciones de arte%' THEN 1 ELSE 0 END), 0) AS Exposiciones_de_arte,
+			COALESCE(SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Literatura/poesía%' THEN 1 ELSE 0 END), 0) AS Literatura_poesia,
+			COALESCE(SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Bailes%' THEN 1 ELSE 0 END), 0) AS Bailes,
+			COALESCE(SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Charlas/Conferencias%' THEN 1 ELSE 0 END), 0) AS Charlas_conferencias,
+			COALESCE(SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Parques recreativos o de diversión%' THEN 1 ELSE 0 END), 0) AS Parques_recreativos_diversion,
+			COALESCE(SUM(CASE WHEN EVENTOS_SOCIALES LIKE '%Otros%' THEN 1 ELSE 0 END), 0) AS Otros_eventos
+		FROM ENCUESTA_ACTIVIDAD
+		WHERE FECHA BETWEEN ? AND ?;
 	`
 	rows, err := c.db.Query(query, startDate, endDate)
 	if err != nil {
