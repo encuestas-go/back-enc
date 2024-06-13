@@ -225,8 +225,8 @@ func (u *UserController) Get(c echo.Context) error {
 func (u *UserController) sendEmailToUser(c echo.Context, email string) error {
 	smtpHost := "mail.privateemail.com"
 	smtpPort := "587"
-	username := os.Getenv("back_smtpUsername")
-	password := os.Getenv("back_smtpPassword")
+	username := os.Getenv("smtp_username")
+	password := os.Getenv("smtp_password")
 
 	from := username
 	to := []string{email}
