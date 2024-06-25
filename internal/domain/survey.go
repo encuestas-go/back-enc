@@ -118,6 +118,12 @@ type Event struct {
 	IDUser      int    `json:"id_user,omitempty"`
 }
 
+type SatisfactorySurvey struct {
+	ID            int    `json:"id,omitempty"`
+	IDUser        int    `json:"id_user,omitempty"`
+	ScheduledDate string `json:"scheduled_date,omitempty"`
+}
+
 type AnswerResponseForum struct {
 	Questions []Question `json:"questions,omitempty"`
 }
