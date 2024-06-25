@@ -44,7 +44,12 @@ func (s *SatisfactorySurveyRepositoryService) Insert(survey domain.SatisfactoryS
 }
 
 func (s *SatisfactorySurveyRepositoryService) Get() (domain.SatisfactorySurvey, error) {
-	query := `SELECT ID, ID_USUARIO, FECHA_PROGRAMADA FROM ENCUESTA_SATISFACCION ORDER BY FECHA_PROGRAMADA DESC LIMIT 1;`
+	query := `
+	SELECT ID, ID_USUARIO, FECHA_PROGRAMADA
+	FROM ENCUESTA_SATISFACCION
+	ORDER BY ID DESC
+	LIMIT 1;
+	`
 	row := s.db.QueryRow(query)
 
 	survey := domain.SatisfactorySurvey{}
