@@ -37,7 +37,7 @@ func InitGenericController(db *sql.DB) *GenericController {
 		EconomicStatusController:      InitEconomicController(repositories.EconomicRepository),
 		EventManagementController:     InitEventManagementController(repositories.EventRepository),
 		HouseInfrastructureController: InitHouseInfrastructureController(repositories.InfrastructureRepository),
-		SatisfactorySurveyController:  InitSatisfactorySurveyController(),
+		SatisfactorySurveyController:  InitSatisfactorySurveyController(repositories.SatisfactoryRepository),
 		ServiceManagementController:   InitServiceManagementController(repositories.ServicesRepository),
 		SocioeconomicStatusController: InitSocioeconomicController(repositories.SocioeconomicRepository),
 		TransportController:           InitTransportController(repositories.TransportRepository),
