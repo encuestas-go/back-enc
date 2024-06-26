@@ -136,11 +136,11 @@ func (u *UserRepositoryService) UpdateOnlyPassword(email string, password string
 }
 
 func (u *UserRepositoryService) GetAllOrByID(id int) ([]domain.User, error) {
-	var query = `SELECT NOMBRE, APELLIDO_PATERNO, APELLIDO_MATERNO, CORREO_ELECTRONICO, NUMERO_TELEFONO, 
+	var query = `SELECT ID, NOMBRE, APELLIDO_PATERNO, APELLIDO_MATERNO, CORREO_ELECTRONICO, NUMERO_TELEFONO, 
 				USUARIO,ID_TIPO_USUARIO FROM USUARIO;`
 
 	if id > 0 {
-		query = fmt.Sprintf(`SELECT NOMBRE, APELLIDO_PATERNO, APELLIDO_MATERNO, CORREO_ELECTRONICO,
+		query = fmt.Sprintf(`SELECT ID, NOMBRE, APELLIDO_PATERNO, APELLIDO_MATERNO, CORREO_ELECTRONICO,
 							 NUMERO_TELEFONO, USUARIO,ID_TIPO_USUARIO FROM USUARIO WHERE ID = %v;`, id)
 	}
 
@@ -154,7 +154,7 @@ func (u *UserRepositoryService) GetAllOrByID(id int) ([]domain.User, error) {
 	users := []domain.User{}
 	for rows.Next() {
 		user := domain.User{}
-		if err = rows.Scan(&user.Name, &user.MiddleName, &user.LastName, &user.Email,
+		if err = rows.Scan(&user.ID, &user.Name, &user.MiddleName, &user.LastName, &user.Email,
 			&user.PhoneNumber, &user.Username, &user.IDUserType); err != nil {
 			return nil, err
 		}
