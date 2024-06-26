@@ -16,6 +16,7 @@ type RepositoryStorage struct {
 	EventRepository            *EventRepositoryService
 	ForumRepository            *ForumRepositoryService
 	MapRepository              *MapRepositoryService
+	SatisfactoryRepository     *SatisfactorySurveyRepositoryService
 }
 
 func GetRepository(db *sql.DB) *RepositoryStorage {
@@ -30,6 +31,7 @@ func GetRepository(db *sql.DB) *RepositoryStorage {
 	eventRepositoryStorage := InitializeEventRepository(db)
 	forumRepositoryStorage := InitializeForumRepository(db)
 	mapRepositoryStorage := InitializeMapRepository(db)
+	satisfactoryRepositoryStorage := InitializeSatisfactorySurveyRepository(db)
 
 	return &RepositoryStorage{
 		UserRespository:            userRespositoryStorage,
@@ -43,5 +45,6 @@ func GetRepository(db *sql.DB) *RepositoryStorage {
 		EventRepository:            eventRepositoryStorage,
 		ForumRepository:            forumRepositoryStorage,
 		MapRepository:              mapRepositoryStorage,
+		SatisfactoryRepository:     satisfactoryRepositoryStorage,
 	}
 }
