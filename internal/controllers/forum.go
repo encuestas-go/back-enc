@@ -2,12 +2,10 @@ package controllers
 
 import (
 	"fmt"
-	"net/http"
-	"strconv"
-
 	"github.com/encuestas-go/back-enc/internal/domain"
 	"github.com/encuestas-go/back-enc/internal/repository"
 	"github.com/labstack/echo/v4"
+	"net/http"
 )
 
 type ForumController struct {
@@ -55,23 +53,7 @@ func (f *ForumController) CreateAnswer(c echo.Context) error {
 		})
 	}
 
-	questionIDStr := c.QueryParam("question_id")
-	if questionIDStr == "" {
-		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
-			StatusCode: http.StatusBadRequest,
-			Message:    "Missing question ID",
-		})
-	}
-
-	questionID, err := strconv.Atoi(questionIDStr)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
-			StatusCode: http.StatusBadRequest,
-			Message:    "Invalid question ID",
-		})
-	}
-
-	err = f.ForumRepository.InsertAnswer(answer, questionID)
+	err = f.ForumRepository.InsertAnswer(answer)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
 			StatusCode: http.StatusInternalServerError,

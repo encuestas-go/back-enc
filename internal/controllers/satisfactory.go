@@ -73,8 +73,44 @@ func (s *SatisfactorySurveyController) Create(c echo.Context) error {
 	})
 }
 
+func (s *SatisfactorySurveyController) CreateLikertSurvey(c echo.Context) error {
+	survey := domain.SatisfactoryLikertSurvey{}
+	err := c.Bind(&survey)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    fmt.Sprintf("Invalid request body: %v", err),
+		})
+	}
+
+	if err := s.SatisfactoryRepository.InsertLikert(survey); err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("An error occurred: %v", err),
+		})
+	}
+
+	return c.JSON(http.StatusCreated, ControllerMessageResponse{
+		StatusCode: http.StatusCreated,
+		Message:    "Satisfactory survey successfully created",
+	})
+}
+
 func (s *SatisfactorySurveyController) Get(c echo.Context) error {
-	survey, err := s.SatisfactoryRepository.Get()
+	userIDString := c.QueryParam("user_id")
+	if userIDString == "" {
+		userIDString = "0"
+	}
+
+	userID, err := strconv.Atoi(userIDString)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    fmt.Sprintf("invalid input data: %s", err),
+		})
+	}
+
+	survey, err := s.SatisfactoryRepository.Get(userID)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
 			StatusCode: http.StatusInternalServerError,
@@ -90,9 +126,62 @@ func (s *SatisfactorySurveyController) Get(c echo.Context) error {
 }
 
 func (s *SatisfactorySurveyController) Update(c echo.Context) error {
-	return c.JSON(http.StatusOK, "Satisfactory survey succesfully updated")
+	survey := domain.SatisfactoryLikertSurvey{}
+	if err := c.Bind(&survey); err != nil {
+		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    "Invalid request body",
+		})
+	}
+
+	if err := s.SatisfactoryRepository.Update(survey); err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    "Failed to update survey",
+		})
+	}
+
+	return c.JSON(http.StatusOK, ControllerMessageResponse{
+		StatusCode: http.StatusOK,
+		Message:    "Survey updated",
+	})
 }
 
 func (s *SatisfactorySurveyController) Delete(c echo.Context) error {
-	return c.JSON(http.StatusOK, "Satisfactory survey succesfully deleted")
+	userIDS := c.QueryParam("user_id")
+	userid, err := strconv.Atoi(userIDS)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    "Invalid request parameters",
+		})
+	}
+
+	if err := s.SatisfactoryRepository.Delete(userid); err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    "Failed to delete event",
+		})
+	}
+
+	return c.JSON(http.StatusOK, ControllerMessageResponse{
+		StatusCode: http.StatusOK,
+		Message:    "Survey deleted",
+	})
+}
+
+func (s *SatisfactorySurveyController) GetSchedule(c echo.Context) error {
+	survey, err := s.SatisfactoryRepository.GetSchedule()
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    fmt.Sprintf("Failed to retrieve the survey: %v", err),
+		})
+	}
+
+	return c.JSON(http.StatusOK, ControllerMessageResponse{
+		StatusCode: http.StatusOK,
+		Message:    "Satisfactory survey successfully retrieved",
+		Data:       survey,
+	})
 }

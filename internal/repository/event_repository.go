@@ -3,6 +3,7 @@ package repository
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 
 	"github.com/encuestas-go/back-enc/internal/domain"
 )
@@ -19,9 +20,9 @@ func InitializeEventRepository(db *sql.DB) *EventRepositoryService {
 
 func (e EventRepositoryService) CreateEvent(event domain.Event) error {
 	res, err := e.db.Exec(`
-	INSERT INTO PUBLICACION_EVENTO(NOMBRE_EVENTO, FECHA, HORA, LUGAR, DESCRIPCION_EVENTO, CATEGORIA, ID_USUARIO) 
-			VALUES(?,?,?,?,?,?,?);
-	`, event.EventName, event.Date, event.Hour, event.Place, event.Description, event.Category, event.IDUser)
+	INSERT INTO PUBLICACION_EVENTO(NOMBRE_EVENTO, FECHA, HORA, LUGAR, DESCRIPCION_EVENTO, CATEGORIA, ID_USUARIO, UBICACION) 
+			VALUES(?,?,?,?,?,?,?,?);
+	`, event.EventName, event.Date, event.Hour, event.Place, event.Description, event.Category, event.IDUser, event.Place)
 
 	if err != nil {
 		return err
@@ -61,20 +62,26 @@ func (e EventRepositoryService) Update(event domain.Event) error {
 	return nil
 }
 
-func (e EventRepositoryService) GetEvents() ([]domain.Event, error) {
-	rows, err := e.db.Query(`SELECT * FROM PUBLICACION_EVENTO;`)
+func (e EventRepositoryService) GetEvents(userID int) ([]domain.Event, error) {
+	var query = `SELECT * FROM PUBLICACION_EVENTO;;`
+
+	if userID > 0 {
+		query = fmt.Sprintf(`SELECT * FROM PUBLICACION_EVENTO WHERE ID_USUARIO = %v;`, userID)
+	}
+
+	rows, err := e.db.Query(query)
 	if err != nil {
 		return []domain.Event{}, err
 	}
 
 	defer rows.Close()
 
-	var events []domain.Event
+	events := []domain.Event{}
 
 	for rows.Next() {
 		var event domain.Event
-		if err = rows.Scan(&event.ID, event.EventName, &event.Date, &event.Hour, &event.Place,
-			&event.Description, &event.Category, &event.IDUser); err != nil {
+		if err = rows.Scan(&event.ID, &event.EventName, &event.Place, &event.Date, &event.Hour,
+			&event.Location, &event.Description, &event.Category, &event.IDUser); err != nil {
 			return []domain.Event{}, err
 		}
 		events = append(events, event)

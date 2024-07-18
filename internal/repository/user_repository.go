@@ -96,24 +96,66 @@ func (u *UserRepositoryService) Update(user domain.User, id int) error {
 }
 
 func (u *UserRepositoryService) Delete(id int) error {
-	result, err := u.db.Exec("DELETE FROM USUARIO WHERE ID = ?;", id)
+	// Start a transaction
+	tx, err := u.db.Begin()
 	if err != nil {
+		log.Println("Could not start transaction: ", err)
+		return err
+	}
+
+	// Define the delete queries for related tables
+	relatedTables := []string{
+		"ENCUESTA_ACTIVIDAD",
+		"ENCUESTA_SATISFACCION",
+		"ENCUESTA_SERVICIO",
+		"ENCUESTA_INFRAESTRUCTURA_HOGAR",
+		"FORO_PREGUNTA",
+		"FORO_RESPUESTA",
+		"ENCUESTA_NIVEL_SOCIOECONOMICO",
+		"ENCUESTA_TRANSPORTE",
+		"ENCUESTA_NIVEL_DEMOGRAFICO",
+		"ENCUESTA_NIVEL_ECONOMICO",
+		"PUBLICACION_EVENTO",
+	}
+
+	for _, table := range relatedTables {
+		query := fmt.Sprintf("DELETE FROM %s WHERE ID_USUARIO = ?;", table)
+		_, err = tx.Exec(query, id)
+		if err != nil {
+			tx.Rollback()
+			log.Printf("Could not delete references in table %s: %v", table, err)
+			return err
+		}
+	}
+
+	// Now delete the user
+	result, err := tx.Exec("DELETE FROM USUARIO WHERE ID = ?;", id)
+	if err != nil {
+		tx.Rollback()
 		log.Println("Could not delete the id on user table, the error was: ", err)
 		return err
 	}
 
 	rowsDeleted, err := result.RowsAffected()
 	if err != nil {
+		tx.Rollback()
 		log.Println("Could not delete information with the requested id: ", err)
 		return err
 	}
 
 	if rowsDeleted > 0 {
+		err = tx.Commit()
+		if err != nil {
+			log.Println("Could not commit transaction: ", err)
+			return err
+		}
 		log.Printf("ID %v was successfully deleted from the user table", id)
 		return nil
 	} else if rowsDeleted == 0 {
+		tx.Rollback()
 		return errors.New("could not delete the requested ID in the user table")
 	}
+
 	return nil
 }
 
@@ -135,9 +177,16 @@ func (u *UserRepositoryService) UpdateOnlyPassword(email string, password string
 	return nil
 }
 
-func (u *UserRepositoryService) GetAllOrByID(id int) ([]domain.User, error) {
+func (u *UserRepositoryService) GetAllOrByID(id int, getOnlyStudents bool) ([]domain.User, error) {
 	var query = `SELECT ID, NOMBRE, APELLIDO_PATERNO, APELLIDO_MATERNO, CORREO_ELECTRONICO, NUMERO_TELEFONO, 
 				USUARIO,ID_TIPO_USUARIO FROM USUARIO;`
+
+	if getOnlyStudents {
+		query = fmt.Sprintf(`
+			SELECT ID, NOMBRE, APELLIDO_PATERNO, APELLIDO_MATERNO, CORREO_ELECTRONICO, NUMERO_TELEFONO,
+							USUARIO,ID_TIPO_USUARIO FROM USUARIO WHERE ID_TIPO_USUARIO = 2;
+		`)
+	}
 
 	if id > 0 {
 		query = fmt.Sprintf(`SELECT ID, NOMBRE, APELLIDO_PATERNO, APELLIDO_MATERNO, CORREO_ELECTRONICO,

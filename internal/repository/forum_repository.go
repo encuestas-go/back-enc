@@ -37,7 +37,7 @@ func (f *ForumRepositoryService) InsertQuestion(question domain.Question) (int, 
 	return int(questionID), nil
 }
 
-func (f *ForumRepositoryService) InsertAnswer(answer domain.Answer, questionID int) error {
+func (f *ForumRepositoryService) InsertAnswer(answer domain.Answer) error {
 	result, err := f.db.Exec(`
         INSERT INTO FORO_RESPUESTA(ID_USUARIO, RESPUESTA, NOMBRE)
         VALUES(?, ?, ?);
@@ -56,7 +56,7 @@ func (f *ForumRepositoryService) InsertAnswer(answer domain.Answer, questionID i
 	_, err = f.db.Exec(`
         INSERT INTO FORO_PREGUNTA_RESPUESTA(ID_PREGUNTA, ID_RESPUESTA)
         VALUES(?, ?);
-    `, questionID, answerID)
+    `, answer.QuestionID, answerID)
 	if err != nil {
 		log.Println("Unable to insert into the FORO_PREGUNTA_RESPUESTA table, the error is:", err)
 		return err
@@ -66,7 +66,7 @@ func (f *ForumRepositoryService) InsertAnswer(answer domain.Answer, questionID i
 	return nil
 }
 
-func (f *ForumRepositoryService) GetAll() (*domain.AnswerResponseForum, error) {
+func (f *ForumRepositoryService) GetAll() (domain.AnswerResponseForum, error) {
 	questionsQuery := `
 	SELECT FORO_PREGUNTA.ID, FORO_PREGUNTA.PREGUNTA, USUARIO.NOMBRE
 	FROM FORO_PREGUNTA
@@ -75,7 +75,7 @@ func (f *ForumRepositoryService) GetAll() (*domain.AnswerResponseForum, error) {
 
 	questionRows, err := f.db.Query(questionsQuery)
 	if err != nil {
-		return nil, err
+		return domain.AnswerResponseForum{}, err
 	}
 	defer questionRows.Close()
 
@@ -83,7 +83,7 @@ func (f *ForumRepositoryService) GetAll() (*domain.AnswerResponseForum, error) {
 	for questionRows.Next() {
 		question := domain.Question{}
 		if err = questionRows.Scan(&question.ID, &question.QuestionText, &question.Name); err != nil {
-			return nil, err
+			return domain.AnswerResponseForum{}, err
 		}
 		questions = append(questions, question)
 	}
@@ -100,7 +100,7 @@ func (f *ForumRepositoryService) GetAll() (*domain.AnswerResponseForum, error) {
 
 		answerRows, err := f.db.Query(answersQuery, question.ID)
 		if err != nil {
-			return nil, err
+			return domain.AnswerResponseForum{}, err
 		}
 		defer answerRows.Close()
 
@@ -108,7 +108,7 @@ func (f *ForumRepositoryService) GetAll() (*domain.AnswerResponseForum, error) {
 		for answerRows.Next() {
 			answer := domain.Answer{}
 			if err := answerRows.Scan(&answer.ID, &answer.AnswerText, &answer.Name); err != nil {
-				return nil, err
+				return domain.AnswerResponseForum{}, err
 			}
 			answers = append(answers, answer)
 		}
@@ -120,5 +120,5 @@ func (f *ForumRepositoryService) GetAll() (*domain.AnswerResponseForum, error) {
 		Questions: questions,
 	}
 
-	return &forumResponse, nil
+	return forumResponse, nil
 }

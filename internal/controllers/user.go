@@ -199,6 +199,12 @@ func (u *UserController) Get(c echo.Context) error {
 		userIDString = "0"
 	}
 
+	getOnlyStudents := false
+	onlyStudents := c.QueryParam("only_students")
+	if onlyStudents == "true" {
+		getOnlyStudents = true
+	}
+
 	userID, err := strconv.Atoi(userIDString)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
@@ -207,7 +213,7 @@ func (u *UserController) Get(c echo.Context) error {
 		})
 	}
 
-	res, err := u.UserRepository.GetAllOrByID(userID)
+	res, err := u.UserRepository.GetAllOrByID(userID, getOnlyStudents)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
 			StatusCode: http.StatusInternalServerError,
@@ -239,10 +245,7 @@ func (u *UserController) sendEmailToUser(c echo.Context, email string) error {
 
 	err := u.UserRepository.UpdateOnlyPassword(email, tmpPassword)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
-			StatusCode: http.StatusInternalServerError,
-			Message:    fmt.Sprintf("An error occurred when trying to update the user: %v", err),
-		})
+		return err
 	}
 
 	message := []byte(fmt.Sprintf("To: %v \r\n", email) +

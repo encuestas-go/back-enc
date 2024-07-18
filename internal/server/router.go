@@ -213,7 +213,7 @@ func (s *ServerHandler) StartEventManagementRoutes() *ServerHandler {
 	s.RouterGroup.POST("/crear/evento", s.GenericController.EventManagementController.Create, NeedAdmin)
 	s.RouterGroup.PUT("/actualizar/evento", s.GenericController.EventManagementController.Update, NeedAdmin)
 	s.RouterGroup.DELETE("/eliminar/evento", s.GenericController.EventManagementController.Delete, NeedAdmin)
-	s.RouterGroup.GET("/consultar/evento", s.GenericController.EconomicStatusController.Get)
+	s.RouterGroup.GET("/consultar/evento", s.GenericController.EventManagementController.Get)
 
 	return s
 }
@@ -227,9 +227,11 @@ func (s *ServerHandler) StartEventManagementRoutes() *ServerHandler {
 //	/consultar/encuestaSatisfaccion
 func (s *ServerHandler) StartSatisfactorySurveysRoutes() *ServerHandler {
 	s.RouterGroup.POST("/crear/encuestaSatisfaccion", s.GenericController.SatisfactorySurveyController.Create)
+	s.RouterGroup.POST("/crear/encuestaLikert", s.GenericController.SatisfactorySurveyController.CreateLikertSurvey)
 	s.RouterGroup.PUT("/actualizar/encuestaSatisfaccion", s.GenericController.SatisfactorySurveyController.Update)
 	s.RouterGroup.DELETE("/eliminar/encuestaSatisfaccion", s.GenericController.SatisfactorySurveyController.Delete)
 	s.RouterGroup.GET("/consultar/encuestaSatisfaccion", s.GenericController.SatisfactorySurveyController.Get)
+	s.RouterGroup.GET("/consultar/encuestaHorario", s.GenericController.SatisfactorySurveyController.GetSchedule)
 
 	return s
 }

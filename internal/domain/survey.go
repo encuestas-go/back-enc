@@ -110,12 +110,23 @@ type Services struct {
 type Event struct {
 	ID          int    `json:"id,omitempty"`
 	EventName   string `json:"event_name,omitempty"`
+	Place       string `json:"place,omitempty"`
 	Date        string `json:"date,omitempty"`
 	Hour        string `json:"hour,omitempty"`
-	Place       string `json:"place,omitempty"`
+	Location    string `json:"location,omitempty"`
 	Description string `json:"description,omitempty"`
 	Category    string `json:"category,omitempty"`
 	IDUser      int    `json:"id_user,omitempty"`
+}
+
+type SatisfactoryLikertSurvey struct {
+	ID                  int `json:"id,omitempty"`
+	FacilidadUso        int `json:"facilidad_uso,omitempty"`
+	ClaridadInstruccion int `json:"claridad_instruccion,omitempty"`
+	RelevanciaContenido int `json:"relevancia_contenido,omitempty"`
+	RapidezCarga        int `json:"rapidez_carga,omitempty"`
+	SatisfaccionGeneral int `json:"satisfaccion_general,omitempty"`
+	IDUsuario           int `json:"id_user,omitempty"`
 }
 
 type SatisfactorySurvey struct {
@@ -139,6 +150,7 @@ type Question struct {
 type Answer struct {
 	ID         int    `json:"id,omitempty"`
 	IDUser     int    `json:"id_user,omitempty"`
+	QuestionID int    `json:"question_id,omitempty"`
 	Name       string `json:"name,omitempty"`
 	AnswerText string `json:"answer_text,omitempty"`
 }

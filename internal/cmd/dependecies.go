@@ -18,7 +18,9 @@ func build() {
 		StartActivityManagementRoutes().
 		StartForumRoutes().
 		StartServiceManagementRoutes().
-		StartBackupRoutes().StartSatisfactorySurveysRoutes()
+		StartBackupRoutes().
+		StartSatisfactorySurveysRoutes().
+		StartEventManagementRoutes()
 
 	s.StartServer()
 }

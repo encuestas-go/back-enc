@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -88,7 +89,20 @@ func (em *EventManagementController) Delete(c echo.Context) error {
 }
 
 func (em *EventManagementController) Get(c echo.Context) error {
-	events, err := em.EventRepository.GetEvents()
+	userIDString := c.QueryParam("user_id")
+	if userIDString == "" {
+		userIDString = "0"
+	}
+
+	userID, err := strconv.Atoi(userIDString)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, ControllerMessageResponse{
+			StatusCode: http.StatusBadRequest,
+			Message:    fmt.Sprintf("invalid input data: %s", err),
+		})
+	}
+
+	events, err := em.EventRepository.GetEvents(userID)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, ControllerMessageResponse{
 			StatusCode: http.StatusInternalServerError,
