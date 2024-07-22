@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   db:
-    image: mysql:5.7
+    build: .
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: ENCUESTA
