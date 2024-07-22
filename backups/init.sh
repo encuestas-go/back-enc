@@ -2,7 +2,7 @@
 set -e
 
 # Define the SQL file to restore. This can be passed as an environment variable or hardcoded.
-SQL_FILE=${SQL_FILE:-"backup1.sql"}
+SQL_FILE=${SQL_FILE:-"backup.sql"}
 
 # Check if the SQL file exists
 if [ -f "/docker-entrypoint-initdb.d/$SQL_FILE" ]; then
