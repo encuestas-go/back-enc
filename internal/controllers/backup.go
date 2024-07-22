@@ -8,7 +8,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"strings"
 	"time"
 
 	"github.com/labstack/echo/v4"
@@ -33,7 +32,7 @@ func (b *BackupController) Create(c echo.Context) error {
 
 	zipFileName := currentDate + "_backup.sql"
 
-	command := fmt.Sprintf("mysqldump -h 127.0.0.1 -P 3306 -u root -proot ENCUESTA > backups/%s", zipFileName)
+	command := fmt.Sprintf("mysqldump -h 127.0.0.1 -P 3306 -u root -proot ENCUESTA > backups-files/%s", zipFileName)
 
 	cmd := exec.Command("sh", "-c", command)
 	cmd.Stdout = os.Stdout
@@ -50,7 +49,7 @@ func (b *BackupController) Create(c echo.Context) error {
 }
 
 func (b *BackupController) Get(c echo.Context) error {
-	backupsDir := filepath.Join("backups")
+	backupsDir := filepath.Join("backups-files")
 
 	dir, err := os.ReadDir(backupsDir)
 	if err != nil {
@@ -78,19 +77,24 @@ func (b *BackupController) Restore(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": "file query param is required"})
 	}
 
-	backupFilePath := filepath.Join("backups", backupFile)
+	backupFilePath := filepath.Join("backups-files", backupFile)
 	if _, err := os.Stat(backupFilePath); os.IsNotExist(err) {
 		return c.JSON(http.StatusNotFound, map[string]string{"error": "backup file not found"})
 	}
 
-	// Actualizar docker-compose.yml
-	replaceString := fmt.Sprintf(`    SQL_FILE: "%s"`, backupFile)
-	err := replaceInFile("docker-compose.yml", `    SQL_FILE: ".*"`, replaceString)
+	// Mover el archivo actual backup.sql a la carpeta tmp
+	err := os.Rename("backups/backup.sql", "backups/tmp/backup.sql")
+	if err != nil && !os.IsNotExist(err) {
+		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
+	}
+
+	// Mover el nuevo archivo a la carpeta backups con el nombre backup.sql
+	err = os.Rename(backupFilePath, "backups/backup.sql")
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
 	}
 
-	// Detener y reiniciar el contenedor
+	// Reiniciar el contenedor
 	err = restartDockerCompose()
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, map[string]string{"error": err.Error()})
@@ -100,22 +104,6 @@ func (b *BackupController) Restore(c echo.Context) error {
 		StatusCode: http.StatusOK,
 		Message:    "Backup file successfully restored",
 	})
-}
-
-func replaceInFile(filename, old, new string) error {
-	input, err := os.ReadFile(filename)
-	if err != nil {
-		return err
-	}
-
-	output := strings.Replace(string(input), old, new, 1)
-
-	err = os.WriteFile(filename, []byte(output), 0644)
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
 
 func restartDockerCompose() error {
