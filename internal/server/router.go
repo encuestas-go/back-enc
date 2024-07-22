@@ -267,6 +267,7 @@ func (s *ServerHandler) StartMapRoutes() *ServerHandler {
 func (s *ServerHandler) StartBackupRoutes() *ServerHandler {
 	s.RouterGroup.POST("/crearBackups", s.GenericController.BackupController.Create)
 	s.RouterGroup.GET("/obtenerBackups", s.GenericController.BackupController.Get)
+	s.RouterGroup.POST("/ejectuarBackup", s.GenericController.BackupController.Restore)
 
 	return s
 }
