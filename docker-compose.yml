@@ -2,13 +2,11 @@ version: '3.8'
 
 services:
   db:
-    build: .
+    image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: ENCUESTA
-      SQL_FILE: "backup.sql"
     ports:
       - "3306:3306"
     volumes:
       - ./backups:/docker-entrypoint-initdb.d
-    command: ["sh", "/docker-entrypoint-initdb.d/init.sh"]
