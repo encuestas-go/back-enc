@@ -33,7 +33,7 @@ func (b *BackupController) Create(c echo.Context) error {
 
 	zipFileName := currentDate + "_backup.sql"
 
-	command := fmt.Sprintf("mysqldump -h 127.0.0.1 -P 3306 -u root -p ENCUESTA > backups/%s", zipFileName)
+	command := fmt.Sprintf("mysqldump -h 127.0.0.1 -P 3306 -u root -proot ENCUESTA > backups/%s", zipFileName)
 
 	cmd := exec.Command("sh", "-c", command)
 	cmd.Stdout = os.Stdout
