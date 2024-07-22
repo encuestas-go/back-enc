@@ -1,14 +1,14 @@
 #!/bin/bash
 set -e
 
-# Define the SQL file to restore. This can be passed as an environment variable or hardcoded.
+# Define el archivo SQL a restaurar usando la variable de entorno SQL_FILE
 SQL_FILE=${SQL_FILE:-"backup.sql"}
 
-# Check if the SQL file exists
+# Verifica si el archivo SQL existe
 if [ -f "/docker-entrypoint-initdb.d/$SQL_FILE" ]; then
-  echo "Restoring $SQL_FILE..."
+  echo "Restaurando desde $SQL_FILE..."
   mysql -uroot -proot ENCUESTA < "/docker-entrypoint-initdb.d/$SQL_FILE"
 else
-  echo "SQL file $SQL_FILE not found!"
+  echo "Archivo SQL $SQL_FILE no encontrado!"
   exit 1
 fi
