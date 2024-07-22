@@ -6,7 +6,7 @@ SQL_FILE=${SQL_FILE:-"backup.sql"}
 
 # Función para verificar si MySQL está listo
 mysql_ready() {
-    mysqladmin ping -h"127.0.0.1" -uroot -proot --silent
+    mysqladmin --defaults-extra-file=/docker-entrypoint-initdb.d/my.cnf ping --silent
 }
 
 # Verifica si el archivo SQL existe
@@ -21,7 +21,7 @@ if [ -f "/docker-entrypoint-initdb.d/$SQL_FILE" ]; then
     done
 
     echo "Restaurando desde $SQL_FILE..."
-    mysql -h127.0.0.1 -uroot -proot ENCUESTA < "/docker-entrypoint-initdb.d/$SQL_FILE"
+    mysql --defaults-extra-file=/docker-entrypoint-initdb.d/my.cnf ENCUESTA < "/docker-entrypoint-initdb.d/$SQL_FILE"
 else
     echo "Archivo SQL $SQL_FILE no encontrado!"
     exit 1
