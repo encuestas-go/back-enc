@@ -3,6 +3,7 @@ package database
 import (
 	"database/sql"
 	"log"
+	"os"
 
 	"github.com/go-sql-driver/mysql"
 )
@@ -10,11 +11,12 @@ import (
 func ConnectToDB() *sql.DB {
 
 	cfg := mysql.Config{
-		User:   "",
-		Passwd: "",
-		Addr:   "",
-		DBName: "ENCUESTAS",
-		Net:    "tcp",
+		User:                 os.Getenv("db_user"),
+		Passwd:               os.Getenv("db_password"),
+		Addr:                 os.Getenv("db_host"),
+		DBName:               os.Getenv("db_name"),
+		Net:                  "tcp",
+		AllowNativePasswords: true,
 	}
 
 	db, err := sql.Open("mysql", cfg.FormatDSN())
